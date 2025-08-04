@@ -1,0 +1,4 @@
+@import 'tailwindcss';
+body {
+    overscroll-behavior-y: contain;
+}
