@@ -3,11 +3,22 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { configDefaults } from 'vitest/config'
 import { VitePWA } from 'vite-plugin-pwa'
+import svgr from 'vite-plugin-svgr'
 
 export default defineConfig({
     plugins: [
         react(),
         tailwindcss(),
+        svgr({
+            include: '**/*.svg?react',
+            svgrOptions: {
+                expandProps: 'end',
+                replaceAttrValues: {
+                    strokeColor: '{props.strokeColor}',
+                    bgColor: '{props.bgColor}'
+                }
+            }
+        }),
         VitePWA({
             registerType: 'autoUpdate',
             devOptions: {
