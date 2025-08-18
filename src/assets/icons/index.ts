@@ -31,46 +31,46 @@ import Challenge from './icon_challenge.svg?react'
 import Kakao from './icon_kakao.svg?react'
 import Share from './icon_share.svg?react'
 import Barcode from './icon_barcode.svg?react'
-import { ChallengeFill, ChallengeGray } from './challenge'
-import { ArrowForward, ArrowBack, ArrowUp, ArrowDown } from './directedArrow'
+import { withIconProps } from './withIconPros'
+
+export const HomeIcon = withIconProps(Home)
+export const MatchingIcon = withIconProps(Matching)
+export const DishIcon = withIconProps(Dish)
+export const MeetingIcon = withIconProps(Meeting)
+export const CommentIcon = withIconProps(Comment)
+export const RepplyIcon = withIconProps(Repply)
+export const SearchIcon = withIconProps(Search)
+export const SendIcon = withIconProps(Send)
+export const AlarmIcon = withIconProps(Alarm)
+export const BackIcon = withIconProps(Back)
+export const KebabIcon = withIconProps(Kebab)
+export const ProfileDefaultIcon = withIconProps(ProfileDefault)
+export const DeleteIcon = withIconProps(Delete)
+export const CallIcon = withIconProps(Call)
+export const HeartIcon = withIconProps(Heart)
+export const LocationIcon = withIconProps(Location)
+export const EmptyViewIcon = withIconProps(EmptyView)
+export const EmptyViewNotiIcon = withIconProps(EmptyViewNoti)
+export const TimeIcon = withIconProps(Time)
+export const LogoTextIcon = withIconProps(LogoText)
+export const TrashIcon = withIconProps(Trash)
+export const PeopleIcon = withIconProps(People)
+export const CalendarIcon = withIconProps(Calendar)
+export const MenuIcon = withIconProps(Menu)
+export const IconUpIcon = withIconProps(IconUp)
+export const IconDownIcon = withIconProps(IconDown)
+export const DeleteCircleIcon = withIconProps(DeleteCircle)
+export const BellColorIcon = withIconProps(BellColor)
+export const ArrowIcon = withIconProps(Arrow)
+export const ChallengeIcon = withIconProps(Challenge)
+export const KakaoIcon = withIconProps(Kakao)
+export const ShareIcon = withIconProps(Share)
+export const BarcodeIcon = withIconProps(Barcode)
+
+export { ChallengeFillIcon, ChallengeGrayIcon } from './challenge'
 export {
-    Home,
-    Matching,
-    Dish,
-    Meeting,
-    Comment,
-    Repply,
-    Search,
-    Send,
-    Alarm,
-    Back,
-    Kebab,
-    ProfileDefault,
-    Delete,
-    Call,
-    Heart,
-    Location,
-    EmptyView,
-    EmptyViewNoti,
-    Time,
-    LogoText,
-    Trash,
-    People,
-    Calendar,
-    Menu,
-    IconUp,
-    IconDown,
-    DeleteCircle,
-    BellColor,
-    Arrow,
-    Challenge,
-    ChallengeFill,
-    ChallengeGray,
-    Kakao,
-    Share,
-    ArrowForward,
-    ArrowBack,
-    ArrowUp,
-    ArrowDown,
-    Barcode
-}
+    ArrowForwardIcon,
+    ArrowBackIcon,
+    ArrowUpIcon,
+    ArrowDownIcon
+} from './directedArrow'

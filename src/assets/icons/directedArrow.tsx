@@ -1,17 +1,17 @@
-import { Arrow } from '@/assets/icons'
+import { ArrowIcon } from '@/assets/icons'
 
-export function ArrowForward() {
-    return <Arrow />
+export function ArrowForwardIcon() {
+    return <ArrowIcon />
 }
 
-export function ArrowBack() {
-    return <Arrow className="rotate-180" />
+export function ArrowBackIcon() {
+    return <ArrowIcon className="rotate-180" />
 }
 
-export function ArrowUp() {
-    return <Arrow className="rotate-90" />
+export function ArrowUpIcon() {
+    return <ArrowIcon className="rotate-90" />
 }
 
-export function ArrowDown() {
-    return <Arrow className="rotate-270" />
+export function ArrowDownIcon() {
+    return <ArrowIcon className="rotate-270" />
 }

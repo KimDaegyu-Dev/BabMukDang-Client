@@ -1,9 +1,9 @@
 import { COLORS } from '@/constants/colors'
-import { Challenge } from '.'
+import { ChallengeIcon } from '@/assets/icons'
 
-export const ChallengeFill = () => {
+export const ChallengeFillIcon = () => {
     return (
-        <Challenge
+        <ChallengeIcon
             className="z-1 flex h-20 w-20 items-center"
             strokecolor={COLORS.primary200}
             bgcolor={COLORS.primary400}
@@ -12,9 +12,9 @@ export const ChallengeFill = () => {
     )
 }
 
-export const ChallengeGray = () => {
+export const ChallengeGrayIcon = () => {
     return (
-        <Challenge
+        <ChallengeIcon
             className="z-1 flex h-20 w-20 items-center"
             strokecolor={COLORS.gray2}
             bgcolor={'none'}
