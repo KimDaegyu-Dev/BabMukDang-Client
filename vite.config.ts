@@ -12,10 +12,12 @@ export default defineConfig({
         svgr({
             include: '**/*.svg?react',
             svgrOptions: {
+                ref: true,
                 expandProps: 'end',
                 replaceAttrValues: {
-                    strokeColor: '{props.strokeColor}',
-                    bgColor: '{props.bgColor}'
+                    strokecolor: '{props.strokecolor}',
+                    bgcolor: '{props.bgcolor}',
+                    fillcolor: '{props.fillcolor}'
                 }
             }
         }),
@@ -73,5 +75,13 @@ export default defineConfig({
     server: {
         host: '0.0.0.0',
         port: 3001
+    },
+    build: {
+        outDir: 'dist',
+        assetsDir: 'assets',
+        sourcemap: true,
+        minify: true,
+        cssCodeSplit: true,
+        cssMinify: true
     }
 })
