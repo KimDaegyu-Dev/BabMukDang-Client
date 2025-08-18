@@ -4,7 +4,7 @@ import {
     getFCMToken,
     onForegroundMessage,
     firebaseConfig
-} from '../firebase'
+} from '../../firebase'
 
 interface DeviceInfo {
     platform: 'ios' | 'android' | 'desktop' | 'unknown'
@@ -21,7 +21,7 @@ interface FCMSubscription {
     userAgent: string
 }
 
-export default function PushNotificationPage() {
+export function PushNotificationPage() {
     const [deviceInfo, setDeviceInfo] = useState<DeviceInfo | null>(null)
     const [subscription, setSubscription] = useState<FCMSubscription | null>(
         null

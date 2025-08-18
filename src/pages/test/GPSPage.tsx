@@ -7,7 +7,7 @@ interface LocationData {
     timestamp: number
 }
 
-export default function GPSPage() {
+export function GPSPage() {
     const [location, setLocation] = useState<LocationData | null>(null)
     const [isTracking, setIsTracking] = useState(false)
     const [error, setError] = useState<string | null>(null)

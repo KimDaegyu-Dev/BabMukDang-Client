@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export default function HomePage() {
+export function TestPage() {
     const features = [
         {
             path: '/gps',
@@ -36,6 +36,27 @@ export default function HomePage() {
             description: '웹소켓 연결 및 메시징',
             icon: '🔌',
             color: 'bg-purple-500'
+        },
+        {
+            path: '/onboarding',
+            title: '온보딩 페이지',
+            description: '온보딩 페이지 테스트',
+            icon: '🚀',
+            color: 'bg-green-500'
+        },
+        {
+            path: '/socket-test/1?userId=userA&username=Alice',
+            title: '소켓 게이트웨이 테스트',
+            description: '토큰 인증, 룸 조인, 이벤트 송수신',
+            icon: '🧪',
+            color: 'bg-pink-500'
+        },
+        {
+            path: '/location-selection',
+            title: '위치 선택',
+            description: '만날 장소 선택 및 투표',
+            icon: '🗺️',
+            color: 'bg-indigo-500'
         }
     ]
 
@@ -86,18 +107,6 @@ export default function HomePage() {
                         </div>
                     </Link>
                 ))}
-            </div>
-
-            <div className="mt-8 rounded-lg bg-blue-50 p-4">
-                <h3 className="mb-2 font-semibold text-blue-900">
-                    모바일 최적화
-                </h3>
-                <ul className="space-y-1 text-sm text-blue-800">
-                    <li>• 터치 친화적 인터페이스</li>
-                    <li>• 오프라인 기능 지원</li>
-                    <li>• 배터리 효율성 고려</li>
-                    <li>• 네트워크 불안정성 대응</li>
-                </ul>
             </div>
         </div>
     )

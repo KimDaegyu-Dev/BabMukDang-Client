@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function NotificationPage() {
+export function NotificationPage() {
     const [permission, setPermission] =
         useState<NotificationPermission>('default')
     const [notificationTitle, setNotificationTitle] = useState('')
