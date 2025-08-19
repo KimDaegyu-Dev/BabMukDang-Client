@@ -12,6 +12,13 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
+            - name: Validate source directory
+              run: |
+                  echo "PWD=$(pwd)"
+                  ls -la
+                  test -d BabMukDang-Client || (echo "Missing source dir: BabMukDang-Client" && exit 1)
+                  ls -la BabMukDang-Client
+
             - name: Push BabMukDang-Client to destination repo
               uses: cpina/github-action-push-to-another-repository@main
               env:
@@ -23,3 +30,4 @@ jobs:
                   user-email: ${{ secrets.DEST_EMAIL }}
                   commit-message: ${{ github.event.head_commit.message || format('Sync from {0}@{1}', github.repository, github.sha) }}
                   target-branch: main
+                  create-target-branch-if-needed: true
