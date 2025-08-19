@@ -29,8 +29,9 @@ export function withIconProps<
             return (
                 <Comp
                     {...(rest as any)}
-                    stroke={strokecolor}
-                    fill={fillcolor}
+                    bgcolor={bgcolor}
+                    strokecolor={strokecolor}
+                    fillcolor={fillcolor}
                     className={className ? `icon-svg ${className}` : 'icon-svg'}
                     style={mergedStyle}
                 />
