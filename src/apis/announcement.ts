@@ -1,0 +1,37 @@
+import { client } from './client'
+import { BaseResponse, PostRequest, PostResponse } from './dto'
+
+export const getAnnouncements = async (): Promise<
+    BaseResponse<PostResponse[]>
+> => {
+    const res = await client.get('/posts')
+    return res.data
+}
+
+export const postAnnouncement = async (
+    data: PostRequest
+): Promise<BaseResponse<void>> => {
+    const res = await client.post('/posts', data)
+    return res.data
+}
+
+export const closeAnnouncement = async (
+    announcementId: number
+): Promise<BaseResponse<void>> => {
+    const res = await client.put(`/posts/${announcementId}/close`)
+    return res.data
+}
+
+export const joinAnnouncement = async (
+    announcementId: number
+): Promise<BaseResponse<void>> => {
+    const res = await client.post(`/participate/${announcementId}`)
+    return res.data
+}
+
+export const subscribeAnnouncement = async (
+    announcementId: number
+): Promise<BaseResponse<void>> => {
+    const res = await client.post(`/subscribe/${announcementId}`)
+    return res.data
+}

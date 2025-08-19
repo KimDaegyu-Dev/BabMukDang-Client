@@ -1,0 +1,4 @@
+export { CouponStoragePage } from './CouponStoragePage'
+export { ChallengePage } from './ChallengePage'
+export { ProfileEditPage } from './ProfileEditPage'
+export { BobCheckHistoryPage } from './BobCheckHistoryPage'
