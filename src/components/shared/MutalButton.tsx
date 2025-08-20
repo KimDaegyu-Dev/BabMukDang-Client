@@ -14,13 +14,13 @@ export function MutalButton({
 }) {
     return (
         <button
-            className={`bg-gray-7 flex w-full cursor-pointer items-center justify-center rounded-full py-14 pr-16 pl-17 ${className} `}
+            className={`bg-gray-7 relative flex w-full cursor-pointer items-center justify-center rounded-full py-14 pr-16 pl-17 ${className} `}
             onClick={onClick}
             onTouchEnd={onClick}>
             <span className="text-title2-semibold text-white">{text}</span>
             {hasArrow && (
                 <BackIcon
-                    className="rotate-180"
+                    className="absolute right-16 rotate-180"
                     strokecolor={COLORS.gray1}
                 />
             )}
