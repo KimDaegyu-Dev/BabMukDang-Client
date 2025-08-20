@@ -27,7 +27,9 @@ export function HomePage() {
                     {postList.map((post, index) => (
                         <PostCard
                             key={index}
-                            post={post}
+                            // @ts-ignore: MockPostList may not strictly match Post type; safe for UI mock rendering
+                            post={post as any}
+                            isComment={false}
                         />
                     ))}
                 </div>

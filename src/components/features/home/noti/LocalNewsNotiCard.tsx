@@ -1,6 +1,6 @@
 interface LocalNewsNoti {
     id: number
-    type: 'local'
+    type: 'school' | 'restaurant' | 'area'
     title: string
     time: string
     message: string

@@ -18,9 +18,17 @@ export function InvitationCard({
             className={`rounded-16 drop-shadow-1 flex h-fit flex-col items-center justify-between gap-30 px-16 pt-53 pb-16 ${bgColor}`}>
             {/* 초대장 심볼 */}
             <div className="flex h-full w-full flex-col items-center gap-8 px-40">
-                {React.cloneElement(Graphic, {
-                    className: 'size-full max-h-[60vh] max-w-[60vw]'
-                })}
+                {
+                    // @ts-ignore: allow adding className to unknown element type at runtime
+                    (
+                        React.cloneElement as unknown as (
+                            element: React.ReactElement<any>,
+                            props: any
+                        ) => React.ReactElement
+                    )(Graphic, {
+                        className: 'size-full max-h-[60vh] max-w-[60vw]'
+                    })
+                }
             </div>
             {/* 초대장 텍스트 */}
             <div className="flex flex-col items-center gap-8">

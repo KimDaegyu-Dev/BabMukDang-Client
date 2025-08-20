@@ -3,8 +3,16 @@ import {
     MatchingInviteNotiCard,
     EmptyNotiView
 } from '@/components'
-import { MatchingInviteNoti } from '@/types'
 
+type MatchingInviteNoti = {
+    id: number
+    type: 'invitation' | 'announcement'
+    title: string
+    time: string
+    message: string
+    period: string
+    imageUrl: string
+}
 export function MatchingInviteList({
     matchingNotis,
     handleDeleteMatchingNoti,

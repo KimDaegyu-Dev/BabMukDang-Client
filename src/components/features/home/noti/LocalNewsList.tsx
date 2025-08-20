@@ -1,6 +1,14 @@
 import { EmptyNotiView, LocalNewsNotiCard, SwipeableCard } from '@/components'
-import { LocalNewsNoti } from '@/types'
 
+interface LocalNewsNoti {
+    id: number
+    type: 'school' | 'restaurant' | 'area'
+    title: string
+    time: string
+    message: string
+    period: string
+    imageUrl?: string
+}
 export function LocalNewsList({
     localNewsNotis,
     handleDeleteLocalNewsNoti

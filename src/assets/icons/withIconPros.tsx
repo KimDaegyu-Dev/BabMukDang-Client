@@ -19,15 +19,10 @@ export function withIconProps<
     >
 >(Comp: T) {
     const Wrapped = React.forwardRef<SVGSVGElement, IconProps>(
-        ({
-            strokecolor,
-            fillcolor,
-            bgcolor,
-            className,
-            style,
-            ref,
-            ...rest
-        }) => {
+        (
+            { strokecolor, fillcolor, bgcolor, className, style, ...rest },
+            ref
+        ) => {
             const mergedStyle = {
                 ...style,
                 // (선택) CSS 변수도 같이 내려서 CSS로 강제 오버라이드할 수 있게

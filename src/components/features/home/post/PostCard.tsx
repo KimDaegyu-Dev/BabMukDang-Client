@@ -27,10 +27,10 @@ type RestaurantInfo = {
 
 export function PostCard({
     post,
-    isComment
+    isComment = false
 }: {
     post: Post
-    isComment: boolean
+    isComment?: boolean
 }) {
     const navigate = useNavigate()
     const onClickComment = () => {

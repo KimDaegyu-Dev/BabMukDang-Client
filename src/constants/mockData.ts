@@ -121,16 +121,6 @@ export const MockMatchingInviteNotis = [
         imageUrl: '' // TODO: add image if needed
     }
 ]
-type LocalNewsNoti = {
-    id: number
-    // '우리학교 제휴' | '상권 이벤트' | '지역 이벤트'
-    type: 'school' | 'restaurant' | 'area'
-    title: string
-    time: string
-    message: string
-    period: string
-    imageUrl: string
-}
 export const MockLocalNewsNotis = [
     {
         id: 2,
