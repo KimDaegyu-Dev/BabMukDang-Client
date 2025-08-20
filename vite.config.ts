@@ -32,11 +32,10 @@ export default defineConfig({
             srcDir: './src',
             filename: 'service-worker.js',
             manifest: {
-                name: 'PWA Mobile Features',
-                short_name: 'PWA Mobile',
+                name: '밥먹댕',
+                short_name: '밥먹댕',
                 id: '/',
-                description:
-                    '모바일 최적화 PWA - GPS, 카메라, 알림, 웹소켓 기능',
+                description: '밥먹댕은 밥먹댕 댕',
                 theme_color: '#2563eb',
                 background_color: '#ffffff',
                 display: 'standalone',
@@ -45,12 +44,12 @@ export default defineConfig({
                 scope: '/',
                 icons: [
                     {
-                        src: '/icon.svg',
+                        src: 'src/assets/app_logo.svg',
                         sizes: 'any',
                         type: 'image/svg+xml'
                     }
                 ],
-                categories: ['productivity', 'utilities'],
+                categories: ['food', 'group'],
                 lang: 'ko',
                 dir: 'ltr'
             }
