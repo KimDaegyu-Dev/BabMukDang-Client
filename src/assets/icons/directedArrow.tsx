@@ -1,17 +1,34 @@
 import { ArrowIcon } from '@/assets/icons'
+import type { IconProps } from './withIconPros'
+import { cn } from '@/lib'
 
-export function ArrowForwardIcon() {
-    return <ArrowIcon />
+export function ArrowForwardIcon(props: IconProps) {
+    return <ArrowIcon {...props} />
 }
 
-export function ArrowBackIcon() {
-    return <ArrowIcon className="rotate-180" />
+export function ArrowBackIcon(props: IconProps) {
+    return (
+        <ArrowIcon
+            {...props}
+            className={cn('rotate-180', props.className)}
+        />
+    )
 }
 
-export function ArrowUpIcon() {
-    return <ArrowIcon className="rotate-90" />
+export function ArrowUpIcon(props: IconProps) {
+    return (
+        <ArrowIcon
+            {...props}
+            className={cn('rotate-90', props.className)}
+        />
+    )
 }
 
-export function ArrowDownIcon() {
-    return <ArrowIcon className="rotate-270" />
+export function ArrowDownIcon(props: IconProps) {
+    return (
+        <ArrowIcon
+            {...props}
+            className={cn('rotate-270', props.className)}
+        />
+    )
 }
