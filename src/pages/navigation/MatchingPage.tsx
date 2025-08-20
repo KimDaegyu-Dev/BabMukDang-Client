@@ -14,6 +14,8 @@ import {
     FriendListSection
 } from '@/components'
 import { BOTTOM_NAVIGATION_HEIGHT } from '@/constants/bottomNav'
+import { useGetAnnouncements } from '@/query/announcementQuery'
+import { useAuthStore } from '@/store'
 
 export function MatchingPage() {
     const [activeTab, setActiveTab] = useState<'announcement' | 'invitation'>(
@@ -34,6 +36,18 @@ export function MatchingPage() {
             resetHeader()
         }
     }, [])
+
+    const { data: announcements } = useGetAnnouncements()
+    const { setTokens } = useAuthStore()
+    useEffect(() => {
+        setTokens({
+            accessToken:
+                'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzU1NjcxNjgyLCJleHAiOjE3NTU2NzUyODIsInVzZXJuYW1lIjoi6rmA64yA6recIiwiZW1haWwiOiI5dXRhbmdAbmF2ZXIuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.Cyzz7mmnfKFGh67_73GTZnMAD7TyFj5DtrcNiU9xBrM',
+            refreshToken:
+                'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzU1NjcxNjgyLCJleHAiOjE3NTU2NzUyODIsInVzZXJuYW1lIjoi6rmA64yA6recIiwiZW1haWwiOiI5dXRhbmdAbmF2ZXIuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.Cyzz7mmnfKFGh67_73GTZnMAD7TyFj5DtrcNiU9xBrM'
+        })
+        console.log(announcements)
+    }, [announcements])
 
     return (
         <div className="absolute top-0 left-0 flex h-full w-screen flex-col">
