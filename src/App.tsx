@@ -30,9 +30,13 @@ import {
     BobCheckHistoryPage,
     AllergicMenuPage,
     PreferMenuPage,
-    MakeProfilePage
+    MakeProfilePage,
+    StartRegisterPage,
+    FinishRegisterPage,
+    ChallengePage,
+    FriendProfilePage
 } from '@/pages'
-import { Layout, OnboardingLayout } from '@/components'
+import { Layout, OnboardingLayout, RegisterLayout } from '@/components'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -84,8 +88,8 @@ function App() {
                             element={<UploadPage />}
                         />
                         <Route
-                            path="/restaurant"
-                            element={<RestaurantPage />}
+                            path="/post/:postId"
+                            element={<CommentPage />}
                         />
 
                         {/* 매치 페이지 */}
@@ -111,20 +115,38 @@ function App() {
                             path="/bob-check-history"
                             element={<BobCheckHistoryPage />}
                         />
+                        <Route
+                            path="/challenge"
+                            element={<ChallengePage />}
+                        />
+                        <Route
+                            path="/friend-profile"
+                            element={<FriendProfilePage />}
+                        />
 
                         {/* 회원가입 온보딩 페이지 */}
-                        <Route
-                            path="/allergic-menu"
-                            element={<AllergicMenuPage />}
-                        />
-                        <Route
-                            path="/prefer-menu"
-                            element={<PreferMenuPage />}
-                        />
-                        <Route
-                            path="/make-profile"
-                            element={<MakeProfilePage />}
-                        />
+                        <Route element={<RegisterLayout />}>
+                            <Route
+                                path="/allergic-menu"
+                                element={<AllergicMenuPage />}
+                            />
+                            <Route
+                                path="/prefer-menu"
+                                element={<PreferMenuPage />}
+                            />
+                            <Route
+                                path="/make-profile"
+                                element={<MakeProfilePage />}
+                            />
+                            <Route
+                                path="/start-register"
+                                element={<StartRegisterPage />}
+                            />
+                            <Route
+                                path="/finish-register"
+                                element={<FinishRegisterPage />}
+                            />
+                        </Route>
 
                         {/* 매칭 온보딩 페이지 */}
                         <Route element={<OnboardingLayout />}>

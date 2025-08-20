@@ -26,7 +26,7 @@ export function Layout() {
     }, [setItems])
 
     return (
-        <div className="flex h-screen min-h-screen w-screen min-w-screen flex-col bg-gray-50">
+        <div className="bg-gray-1 flex h-screen min-h-screen w-screen min-w-screen flex-col">
             {/* Header */}
             <Header />
             {/* Main Content */}

@@ -1,10 +1,14 @@
 import { DeleteCircleIcon, SearchIcon } from '@/assets/icons'
 import { useState } from 'react'
 
-export function SearchLocationInput({
-    handleSearch
+export function SearchInput({
+    handleSearch,
+    className,
+    placeholder
 }: {
     handleSearch: (searchKeyword: string) => void
+    className?: string
+    placeholder?: string
 }) {
     const [searchKeyword, setSearchKeyword] = useState<string>('')
     // 검색어 초기화 함수
@@ -20,10 +24,11 @@ export function SearchLocationInput({
         }
     }
     return (
-        <div className="shadow-drop-1 absolute top-17 z-10 flex w-full items-center justify-between rounded-full bg-white px-16 py-8">
+        <div
+            className={`shadow-drop-1 z-10 flex w-full items-center justify-between rounded-full bg-white px-16 py-8 ${className}`}>
             <input
                 type="text"
-                placeholder="음식점 이름을 검색해 주세요."
+                placeholder={placeholder}
                 className="text-body1-medium text-gray-7 placeholder:text-gray-3 flex-1 bg-transparent focus:outline-none"
                 value={searchKeyword}
                 onChange={e => setSearchKeyword(e.target.value)}

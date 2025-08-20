@@ -1,7 +1,11 @@
 import { DeleteIcon } from '@/assets/icons'
 import { COLORS } from '@/constants/colors'
 
-import { BaseModal, type BaseModalChildrenProps } from '@/components'
+import {
+    BaseModal,
+    type BaseModalChildrenProps,
+    GoodBadChip
+} from '@/components'
 
 type CouponNotifyProps = {
     restaurantName: string
@@ -10,6 +14,7 @@ type CouponNotifyProps = {
     canUseAgain: boolean
     expirationDate: string
     couponType: string
+    couponImageUrl: string
 }
 
 export function CouponModal({
@@ -22,7 +27,8 @@ export function CouponModal({
     serviceItem,
     canUseAgain,
     expirationDate,
-    couponType
+    couponType,
+    couponImageUrl
 }: CouponNotifyProps & BaseModalChildrenProps) {
     return (
         <BaseModal
@@ -37,6 +43,7 @@ export function CouponModal({
                 canUseAgain={canUseAgain}
                 expirationDate={expirationDate}
                 couponType={couponType}
+                couponImageUrl={couponImageUrl}
             />
         </BaseModal>
     )
@@ -50,7 +57,8 @@ function CouponModalContent({
     serviceItem,
     canUseAgain,
     expirationDate,
-    couponType
+    couponType,
+    couponImageUrl
 }: BaseModalChildrenProps & CouponNotifyProps) {
     return (
         <div className="shadow-drop-1 rounded-16 relative mx-auto w-full max-w-400 bg-white px-20 py-24">
@@ -65,24 +73,33 @@ function CouponModalContent({
             <div className="flex w-full flex-col items-center gap-16">
                 {/* 상단 음식점 정보 */}
                 <div className="flex w-full items-center justify-center gap-12">
-                    <img className="rounded-5 size-62 flex-none" />
-                    <div className="flex flex-col items-center gap-6">
+                    <img
+                        className="rounded-5 size-62 flex-none"
+                        src={couponImageUrl}
+                    />
+                    <div className="flex flex-col items-start gap-6">
                         <span className="text-title2-semibold text-center text-black">
                             {restaurantName}
                         </span>
-                        <div className="flex items-center gap-6">
+                        <div className="flex items-start gap-6">
                             <span className="text-body1-semibold text-gray-7">
                                 {serviceItem}
                             </span>
-                            {/* todo: 쿠폰 타입 칩 추가 */}
+                            <GoodBadChip
+                                text={couponType}
+                                isGood={true}
+                            />
                         </div>
                     </div>
                 </div>
                 <div className="flex w-full flex-col items-center gap-10">
                     {/* 쿠폰 이미지 */}
-                    <img className="h-106 w-full flex-none" />
+                    <img
+                        className="h-106 w-full flex-none"
+                        src="src/assets/images/test/barcode.png"
+                    />
                     {/* 하단 쿠폰 정보 */}
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-start gap-2">
                         <span className="text-caption-medium text-gray-4">
                             사용조건: {condition}
                         </span>

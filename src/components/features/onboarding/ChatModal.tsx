@@ -7,6 +7,7 @@ import {
 } from '@/assets/icons'
 import { COLORS } from '@/constants/colors'
 import { useSocket } from '@/contexts/SocketContext'
+import { ChatInput } from '@/components/shared'
 interface ChatMessageDto {
     messageId: string
     roomId: string
@@ -111,62 +112,20 @@ export function ChatModal({
                 </div>
 
                 {/* 입력 영역 */}
-                <ChatInput
-                    inputRef={inputRef}
-                    newMessage={newMessage}
-                    setNewMessage={setNewMessage}
-                    handleKeyPress={handleKeyPress}
-                    handleSendMessage={handleSendMessage}
-                />
-            </div>
-        </div>
-    )
-}
-
-const ChatInput = ({
-    inputRef,
-    newMessage,
-    setNewMessage,
-    handleKeyPress,
-    handleSendMessage
-}: {
-    inputRef: (node: HTMLInputElement | null) => void
-    newMessage: string
-    setNewMessage: (value: string) => void
-    handleKeyPress: (e: React.KeyboardEvent) => void
-    handleSendMessage: () => void
-}) => {
-    return (
-        <div className="absolute right-0 bottom-40 left-0 px-20">
-            <div className="shadow-drop-1 flex w-full items-center justify-between rounded-full bg-white px-16 py-8">
-                <input
-                    ref={inputRef}
-                    type="text"
-                    placeholder="메시지를 입력해 주세요."
-                    className="text-body1-medium text-gray-7 placeholder:text-gray-3 flex-1 bg-transparent focus:outline-none"
-                    value={newMessage}
-                    onChange={e => setNewMessage(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                />
-                {/* 스크롤된 상태로 채팅창 표시 */}
-                <div className="flex items-center gap-10">
-                    {newMessage && (
-                        <button
-                            onClick={() => setNewMessage('')}
-                            className="flex h-13 w-13 items-center justify-center">
-                            <DeleteCircleIcon />
-                        </button>
-                    )}
-                    <div
-                        className="flex h-20 w-20 items-center justify-center"
-                        onClick={() => handleSendMessage()}>
-                        <SendIcon />
-                    </div>
+                <div className="absolute right-0 bottom-40 left-0 px-20">
+                    <ChatInput
+                        inputRef={inputRef}
+                        newMessage={newMessage}
+                        setNewMessage={setNewMessage}
+                        handleKeyPress={handleKeyPress}
+                        handleSendMessage={handleSendMessage}
+                    />
                 </div>
             </div>
         </div>
     )
 }
+
 const ChatHeader = ({ onClose }: { onClose: () => void }) => {
     return (
         <div>

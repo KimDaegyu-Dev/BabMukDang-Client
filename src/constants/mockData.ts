@@ -1,6 +1,6 @@
 // Types for matching announcements
 import { MatchingAnnouncement } from '@/types'
-export const mockAnnouncements: MatchingAnnouncement[] = [
+export const MockAnnouncements: MatchingAnnouncement[] = [
     {
         id: 1,
         title: '7시 학교 앞에서\n밥 먹을 사람!',
@@ -67,40 +67,41 @@ export const mockAnnouncements: MatchingAnnouncement[] = [
     }
 ]
 
-export const userProfile = {
-    name: '서은우',
-    profileImage: '/src/assets/icons/icon_profile_default.svg',
-    description: '기억이 아닌 추억으로',
-    preferredMenus: ['한식', '일식', '양식', '분식'],
-    cantEat: ['향신료', '락토', '락토 오보', '락토 오보 오보']
-}
-export const couponList = [
+export const MockCouponList = [
     {
         isUsed: true,
-        name: '동학 주점',
+        restaurantName: '동학 주점',
         discount: 2000,
-        expirationDate: '2025년 9월 16일까지'
+        couponImageUrl: 'src/assets/images/test/coupon-restaurant.png',
+        expirationDate: '2025년 9월 16일까지',
+        couponType: '서비스'
     },
     {
         isUsed: true,
-        name: '동학 주점',
+        restaurantName: '동학 주점',
         discount: 2000,
-        expirationDate: '2025년 9월 16일까지'
+        couponImageUrl: 'src/assets/images/test/coupon-restaurant.png',
+        expirationDate: '2025년 9월 16일까지',
+        couponType: '할인'
     },
     {
-        isUsed: true,
-        name: '동학 주점',
+        isUsed: false,
+        restaurantName: '동학 주점',
         discount: 2000,
-        expirationDate: '2025년 9월 16일까지'
+        couponImageUrl: 'src/assets/images/test/coupon-restaurant.png',
+        expirationDate: '2025년 9월 16일까지',
+        couponType: '서비스'
     },
     {
-        isUsed: true,
-        name: '동학 주점',
+        isUsed: false,
+        restaurantName: '동학 주점',
         discount: 2000,
-        expirationDate: '2025년 9월 16일까지'
+        couponImageUrl: 'src/assets/images/test/coupon-restaurant.png',
+        expirationDate: '2025년 9월 16일까지',
+        couponType: '서비스'
     }
 ]
-export const mockMatchingInviteNotis = [
+export const MockMatchingInviteNotis = [
     {
         id: 1,
         type: 'invitation',
@@ -120,10 +121,20 @@ export const mockMatchingInviteNotis = [
         imageUrl: '' // TODO: add image if needed
     }
 ]
-export const mockLocalNewsNotis = [
+type LocalNewsNoti = {
+    id: number
+    // '우리학교 제휴' | '상권 이벤트' | '지역 이벤트'
+    type: 'school' | 'restaurant' | 'area'
+    title: string
+    time: string
+    message: string
+    period: string
+    imageUrl: string
+}
+export const MockLocalNewsNotis = [
     {
         id: 2,
-        type: 'local',
+        type: 'school',
         title: '여기 꼬치네 공릉역점',
         time: '20분 전',
         message: '여름 방학 맞이 사장님이 아이스크림 쏜다!',
@@ -132,11 +143,268 @@ export const mockLocalNewsNotis = [
     },
     {
         id: 3,
-        type: 'local',
+        type: 'restaurant',
         title: '여기 꼬치네 공릉역점',
         time: '20분 전',
         message: '여름 방학 맞이 사장님이 아이스크림 쏜다!',
         period: '~2025.6.31까지 · 종료',
         imageUrl: ''
+    }
+]
+
+type MyProfileData = {
+    profileImgUrl: string
+    name: string
+    description: string
+    preferredMenus: string[]
+    cantEat: string[]
+}
+export const MockMyProfileData = {
+    profileImgUrl: '/src/assets/icons/icon_profile_default.svg',
+    name: '서은우',
+    description: '기억이 아닌 추억으로',
+    preferredMenus: ['한식', '일식', '양식', '분식'],
+    cantEat: ['향신료', '락토', '락토 오보', '락토 오보 오보'],
+    friends: 100,
+    completedMeetings: 100,
+    uncompletedMeetings: 100,
+    challengeCount: 6
+}
+type FriendProfileData = {
+    profileImgUrl: string
+    name: string
+    description: string
+    preferredMenus: string[]
+    cantEat: string[]
+}
+
+export const MockFriendProfileData = {
+    profileImgUrl: '/src/assets/icons/icon_profile_default.svg',
+    name: '유가은',
+    description: '반갑습니다',
+    preferredMenus: ['한식', '일식', '양식', '분식'],
+    cantEat: ['향신료', '락토', '락토 오보', '락토 오보 오보'],
+    friends: 100,
+    completedMeetings: 100,
+    uncompletedMeetings: 100,
+    posts: [
+        {
+            id: 1,
+            content: '안녕하세요! 서은우입니다.',
+            createdAt: '2025-01-01'
+        }
+    ]
+}
+type Meeting = {
+    id: number
+    participants: { name: string; userId: number }[]
+    location: string
+    time: string
+    restaurant: string
+    isCompleted: boolean
+    restaurantType: string
+}
+
+export const MockMeetingList = [
+    {
+        id: 1,
+        participants: [
+            { name: '서은우', userId: 1 },
+            { name: '유가은', userId: 2 }
+        ],
+        location: '서울과학기술대학교 정문 앞',
+        time: '8월 27일 오후 2:30',
+        restaurant: '동학 주점',
+        isCompleted: false,
+        restaurantType: '한식'
+    },
+    {
+        id: 2,
+        participants: [
+            { name: '서은우', userId: 1 },
+            { name: '유가은', userId: 2 }
+        ],
+        location: '상상관 1층 앞',
+        time: '8월 27일 오후 2:30',
+        restaurant: '오하이요',
+        isCompleted: false,
+        restaurantType: '일식'
+    },
+    {
+        id: 3,
+        participants: [
+            { name: '서은우', userId: 1 },
+            { name: '유가은', userId: 2 }
+        ],
+        location: '서울과학기술대학교 정문 앞',
+        time: '8월 27일 오후 2:30',
+        restaurant: '동학 주점',
+        isCompleted: true,
+        restaurantType: '한식'
+    }
+]
+
+type Friend = {
+    userId: number
+    name: string
+    lastActive: string
+    isHungry: boolean
+}
+export const MockFriendList = [
+    {
+        userId: 1,
+        name: '유가은',
+        lastActive: '2025-01-01 12:00',
+        isHungry: true
+    },
+    {
+        userId: 2,
+        name: '서은우',
+        lastActive: '2025-01-01 12:00',
+        isHungry: false
+    },
+    {
+        userId: 3,
+        name: '김대규',
+        lastActive: '2025-01-01 12:00',
+        isHungry: true
+    },
+    {
+        userId: 4,
+        name: '김성휘',
+        lastActive: '2025-01-01 12:00',
+        isHungry: false
+    },
+    {
+        userId: 5,
+        name: '이민수',
+        lastActive: '2025-01-01 12:00',
+        isHungry: true
+    },
+    {
+        userId: 6,
+        name: '박소영',
+        lastActive: '2025-01-01 12:00',
+        isHungry: false
+    }
+]
+
+export const MockPostList = [
+    {
+        postId: 1,
+        author: '유가은',
+        tags: ['김대규', '김성휘', '이민수'],
+        postedAt: '1시간 전',
+        postImageUrl: 'src/assets/images/test/card-post.png',
+        postType: 'mornings',
+        restaurantInfo: {
+            restaurantImageUrl: 'src/assets/images/test/post-restaurant.png',
+            restaurantName: '더 맛있는 일식집',
+            restaurantType: '일식집',
+            restaurantLocation: '서울시 노원구 공릉동 30-2',
+            restaurantDistance: '300m'
+        },
+        comments: [
+            {
+                id: 1,
+                profileImageUrl: 'https://picsum.photos/200/300',
+                name: '유가은',
+                comment: '댓글 1',
+                createdAt: '2025-01-01 12:00',
+                isReply: false
+            },
+
+            {
+                id: 2,
+                profileImageUrl: 'https://picsum.photos/200/300',
+                name: '유가은',
+                comment: '댓글 1',
+                createdAt: '2025-01-01 12:00',
+                isReply: true
+            },
+            {
+                id: 3,
+                profileImageUrl: 'https://picsum.photos/200/300',
+                name: '유가은',
+                comment: '댓글 1',
+                createdAt: '2025-01-01 12:00',
+                isReply: false
+            }
+        ]
+    },
+    {
+        postId: 2,
+        author: '유가은',
+        tags: ['김대규', '김성휘', '이민수', '박소영'],
+        postedAt: '2025-01-01 12:00',
+        postImageUrl: 'src/assets/images/test/card-post.png',
+        postType: 'lunch',
+        restaurantInfo: {
+            restaurantImageUrl: 'src/assets/images/test/post-restaurant.png',
+            restaurantName: '더 맛있는 일식집',
+            restaurantType: '일식집',
+            restaurantLocation: '서울시 노원구 공릉동 30-2',
+            restaurantDistance: '300m'
+        },
+        comments: [
+            {
+                id: 1,
+                profileImageUrl: 'https://picsum.photos/200/300',
+                name: '유가은',
+                comment: '댓글 1',
+                createdAt: '2025-01-01 12:00',
+                isReply: true
+            }
+        ]
+    },
+    {
+        postId: 3,
+        author: '유가은',
+        tags: ['김대규', '김성휘', '이민수', '박소영'],
+        postedAt: '2025-01-01 12:00',
+        postImageUrl: 'src/assets/images/test/card-post.png',
+        postType: 'dinner',
+        restaurantInfo: {
+            restaurantImageUrl: 'src/assets/images/test/post-restaurant.png',
+            restaurantName: '더 맛있는 일식집',
+            restaurantType: '일식집',
+            restaurantLocation: '서울시 노원구 공릉동 30-2',
+            restaurantDistance: '300m'
+        },
+        comments: [
+            {
+                id: 1,
+                profileImageUrl: 'https://picsum.photos/200/300',
+                name: '유가은',
+                comment: '댓글 1',
+                createdAt: '2025-01-01 12:00',
+                isReply: false
+            }
+        ]
+    },
+    {
+        postId: 4,
+        author: '유가은',
+        tags: ['김대규', '김성휘', '이민수', '박소영'],
+        postedAt: '2025-01-01 12:00',
+        postImageUrl: 'src/assets/images/test/card-post.png',
+        postType: 'mornings',
+        restaurantInfo: {
+            restaurantImageUrl: 'src/assets/images/test/post-restaurant.png',
+            restaurantName: '더 맛있는 일식집',
+            restaurantType: '일식집',
+            restaurantLocation: '서울시 노원구 공릉동 30-2',
+            restaurantDistance: '300m'
+        },
+        comments: [
+            {
+                id: 1,
+                profileImageUrl: 'https://picsum.photos/200/300',
+                name: '유가은',
+                comment: '댓글 1',
+                createdAt: '2025-01-01 12:00',
+                isReply: false
+            }
+        ]
     }
 ]

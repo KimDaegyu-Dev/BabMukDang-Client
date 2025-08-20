@@ -1,30 +1,86 @@
+import {
+    InvitationCard,
+    JoinCompleteModal,
+    ModalTrigger,
+    MutalButton
+} from '@/components'
+import {
+    CardBobGraphic,
+    CardGiftboxGraphic,
+    CardMailGraphic,
+    CardPlateGraphic
+} from '@/assets/graphics'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 export function SendInvitationPage() {
+    const cardList = [
+        {
+            graphic: <CardBobGraphic />,
+            bgColor: 'bg-gradient-to-b to-[#FF5E27] from-[#FFA484]'
+        },
+        { graphic: <CardPlateGraphic />, bgColor: 'bg-[#458DFF]' },
+        { graphic: <CardGiftboxGraphic />, bgColor: 'bg-[#FFBF48]' },
+        { graphic: <CardMailGraphic />, bgColor: 'bg-[#AD50FF]' }
+    ]
+    const [selectedCard, setSelectedCard] = useState<number>(0)
+    const navigate = useNavigate()
     return (
-        <div className="flex h-full w-full flex-col gap-20">
+        <div
+            className={`flex h-full w-full flex-col justify-between gap-20 overflow-y-auto py-20`}>
             {/* 카드 리스트 */}
             <div className="flex flex-row items-center justify-between gap-10">
-                <span>초대장</span>
+                {cardList.map(
+                    (card, index) =>
+                        selectedCard !== index && (
+                            <CardItem
+                                key={index}
+                                {...card}
+                                onClick={() => setSelectedCard(index)}
+                            />
+                        )
+                )}
             </div>
             {/* 초대장 카드 */}
-            <div className="rounded-16 flex h-403 flex-col items-center justify-end gap-30 p-16">
-                {/* 초대장 심볼 */}
-                <div className="flex flex-col items-center gap-8">
-                    {/* todo: 초대장 심볼 추가 */}
-                </div>
-                {/* 초대장 텍스트 */}
-                <div className="flex flex-col items-center gap-8">
-                    <span className="text-tile1-bold text-white">초대장</span>
-                    <span className="text-body2-medium text-primary-200">
-                        초대장
-                    </span>
-                </div>
-                <button className="rounded-5 border-primary-400 w-full border-1 px-27 py-5">
-                    <span className="text-body2-medium text-primary-100">
-                        메시지 문구 수정하기
-                    </span>
-                </button>
-            </div>
+            <InvitationCard
+                Graphic={cardList[selectedCard].graphic}
+                bgColor={cardList[selectedCard].bgColor}
+                text="우리 같이 밥 먹으러 갈래?"
+                from="초대장"
+                showEditButton={true}
+            />
             {/* 보내기 버튼 */}
+            <ModalTrigger forId="send-invitation-modal">
+                <MutalButton text="초대장 보내기" />
+            </ModalTrigger>
+            <JoinCompleteModal
+                title="가은님에게 발송됩니다."
+                description="친구가 초대장을 수락하면 알려드릴게요!"
+                acceptText="알림 받기"
+                id="send-invitation-modal"
+                onClose={() => {}}
+                onAccept={() => {
+                    navigate('/matching')
+                }}
+            />
+        </div>
+    )
+}
+
+const CardItem = ({
+    graphic,
+    bgColor,
+    onClick
+}: {
+    graphic: React.ReactNode
+    bgColor: string
+    onClick: () => void
+}) => {
+    return (
+        <div
+            className={`rounded-12 flex h-111 w-111 flex-col items-center justify-center ${bgColor}`}
+            onClick={onClick}>
+            {graphic}
         </div>
     )
 }

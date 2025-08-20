@@ -32,6 +32,12 @@ import Kakao from './icon_kakao.svg?react'
 import Share from './icon_share.svg?react'
 import Barcode from './icon_barcode.svg?react'
 import { withIconProps } from './withIconPros'
+import Hungry from './icon_hungry.svg?react'
+import NotHungry from './icon_not_hungry.svg?react'
+import Invite from './icon_invite.svg?react'
+import Coupon from './icon_coupon.svg?react'
+import Album from './icon_album.svg?react'
+import Modify from './icon_modify.svg?react'
 
 export const HomeIcon = withIconProps(Home)
 export const MatchingIcon = withIconProps(Matching)
@@ -57,8 +63,8 @@ export const TrashIcon = withIconProps(Trash)
 export const PeopleIcon = withIconProps(People)
 export const CalendarIcon = withIconProps(Calendar)
 export const MenuIcon = withIconProps(Menu)
-export const IconUpIcon = withIconProps(IconUp)
-export const IconDownIcon = withIconProps(IconDown)
+export const UpIcon = withIconProps(IconUp)
+export const DownIcon = withIconProps(IconDown)
 export const DeleteCircleIcon = withIconProps(DeleteCircle)
 export const BellColorIcon = withIconProps(BellColor)
 export const ArrowIcon = withIconProps(Arrow)
@@ -66,6 +72,12 @@ export const ChallengeIcon = withIconProps(Challenge)
 export const KakaoIcon = withIconProps(Kakao)
 export const ShareIcon = withIconProps(Share)
 export const BarcodeIcon = withIconProps(Barcode)
+export const HungryIcon = withIconProps(Hungry)
+export const NotHungryIcon = withIconProps(NotHungry)
+export const InviteIcon = withIconProps(Invite)
+export const CouponIcon = withIconProps(Coupon)
+export const AlbumIcon = withIconProps(Album)
+export const ModifyIcon = withIconProps(Modify)
 
 export { ChallengeFillIcon, ChallengeGrayIcon } from './challenge'
 export {

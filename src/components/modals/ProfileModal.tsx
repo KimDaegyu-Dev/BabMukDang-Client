@@ -1,6 +1,5 @@
 import { COLORS } from '@/constants/colors'
 import { DeleteIcon } from '@/assets/icons'
-import RandomCoupon from '@/assets/icons/random_coupon_graphic.svg?react'
 
 import { BaseModal, type BaseModalChildrenProps } from '@/components'
 

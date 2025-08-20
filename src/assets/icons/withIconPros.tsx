@@ -14,10 +14,20 @@ export type IconProps = Omit<React.SVGProps<SVGSVGElement>, 'stroke' | 'fill'> &
 
 /** SVG 컴포넌트를 감싸서 커스텀 prop을 표준 SVG 속성으로 매핑 */
 export function withIconProps<
-    T extends React.ComponentType<React.SVGProps<SVGSVGElement>>
+    T extends React.ComponentType<
+        React.SVGProps<SVGSVGElement> & { ref?: React.RefObject<SVGSVGElement> }
+    >
 >(Comp: T) {
     const Wrapped = React.forwardRef<SVGSVGElement, IconProps>(
-        ({ strokecolor, fillcolor, bgcolor, className, style, ...rest }) => {
+        ({
+            strokecolor,
+            fillcolor,
+            bgcolor,
+            className,
+            style,
+            ref,
+            ...rest
+        }) => {
             const mergedStyle = {
                 ...style,
                 // (선택) CSS 변수도 같이 내려서 CSS로 강제 오버라이드할 수 있게
@@ -28,6 +38,7 @@ export function withIconProps<
 
             return (
                 <Comp
+                    ref={ref}
                     {...(rest as any)}
                     bgcolor={bgcolor}
                     strokecolor={strokecolor}

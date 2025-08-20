@@ -1,6 +1,6 @@
 import { COLORS } from '@/constants/colors'
 import { DeleteIcon, KakaoIcon, ShareIcon } from '@/assets/icons'
-import RandomCoupon from '@/assets/random_coupon_graphic.svg?react'
+import { RandomCouponGraphic } from '@/assets/graphics'
 
 import { BaseModal, type BaseModalChildrenProps } from '@/components'
 
@@ -12,6 +12,13 @@ export function FriendInviteModal({
     return (
         <BaseModal
             id={id}
+            className="px-0"
+            style={{
+                top: '100%',
+                left: '50%',
+                transform: 'translate(-50%, -100%)',
+                animation: 'modalSlideIn 300ms ease-out both'
+            }}
             onClose={onClose}
             onAccept={onAccept}>
             <FriendInviteModalContent />
@@ -34,7 +41,7 @@ function FriendInviteModalContent({ onClose }: BaseModalChildrenProps) {
                         친구 초대해서 랜덤 쿠폰 받고 같이 밥 먹어요
                     </span>
                     <div className="flex w-full flex-col items-center gap-30">
-                        <RandomCoupon />
+                        <RandomCouponGraphic />
                         <div className="flex w-full flex-col gap-10">
                             <CopyLinkButton />
                             <KakaoShareButton />

@@ -1,3 +1,5 @@
 export { AllergicMenuPage } from './AllergicMenuPage'
 export { PreferMenuPage } from './PreferMenuPage'
 export { MakeProfilePage } from './MakeProfilePage'
+export { StartRegisterPage } from './StartRegisterPage'
+export { FinishRegisterPage } from './FinishRegisterPage'

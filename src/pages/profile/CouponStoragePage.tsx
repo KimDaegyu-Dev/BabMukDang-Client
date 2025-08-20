@@ -1,21 +1,42 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { BarcodeIcon, ChallengeFillIcon } from '@/assets/icons'
-import { couponList } from '@/constants/mockData'
+import { MockCouponList } from '@/constants/mockData'
 
 import { useHeader } from '@/hooks'
-import { CouponModal, ModalTrigger } from '@/components'
+import {
+    CouponModal,
+    FilterList,
+    ModalTrigger,
+    GoodBadChip
+} from '@/components'
+import { COUPON_FILTER_LIST } from '@/constants/filters'
 
 export function CouponStoragePage() {
     const { setTitle } = useHeader()
+    const [activeFilter, setActiveFilter] = useState<{
+        key: string
+        label: string
+    }>(COUPON_FILTER_LIST[0])
+
     useEffect(() => {
         setTitle('쿠폰 보관함')
     }, [])
 
     return (
-        <div className="flex w-full flex-col gap-16">
+        <div className="flex w-full flex-col gap-16 pt-16">
             {/* todo: 사용 전, 사용후 필터 추가, 엠티 뷰 추가 */}
-            {couponList.map((coupon, index) => (
+            <FilterList
+                filterList={COUPON_FILTER_LIST}
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
+                className="self-start"
+            />
+            {MockCouponList.filter(
+                coupon =>
+                    (coupon.isUsed && activeFilter.key === 'used') ||
+                    (!coupon.isUsed && activeFilter.key === 'unused')
+            ).map((coupon, index) => (
                 <CouponCard
                     key={index}
                     {...coupon}
@@ -27,14 +48,18 @@ export function CouponStoragePage() {
 
 const CouponCard = ({
     isUsed,
-    name,
+    restaurantName,
     discount,
-    expirationDate
+    expirationDate,
+    couponType,
+    couponImageUrl
 }: {
     isUsed: boolean
-    name: string
+    restaurantName: string
     discount: number
     expirationDate: string
+    couponType: string
+    couponImageUrl: string
 }) => {
     return (
         <div className="relative w-full">
@@ -48,10 +73,14 @@ const CouponCard = ({
                     <div className="flex w-full flex-col justify-between gap-8">
                         <div className="flex flex-col gap-2">
                             {/* 음식점 정보 */}
-                            <div className="flex items-center gap-10">
+                            <div className="flex gap-7">
                                 <span className="text-body2-semibold text-black">
-                                    {name}
+                                    {restaurantName}
                                 </span>
+                                <GoodBadChip
+                                    text={couponType}
+                                    isGood={true}
+                                />
                             </div>
                             {/* 할인 정보 */}
                             <span className="text-caption-medium text-gray-5">
@@ -64,11 +93,15 @@ const CouponCard = ({
                     </div>
 
                     {/* 음식점 이미지 */}
-                    <img className="rounded-5 size-62 flex-none" />
+                    <img
+                        className="rounded-5 size-62 flex-none"
+                        src={couponImageUrl}
+                    />
                 </div>
 
                 {/* 오른쪽: 사용여부 */}
                 <ModalTrigger
+                    disabled={isUsed}
                     forId="coupon-notify-modal"
                     className={`rounded-12 shadow-drop-1 ${
                         isUsed ? 'bg-gray-2' : 'bg-white'
@@ -85,12 +118,13 @@ const CouponCard = ({
                 id="coupon-notify-modal"
                 onClose={() => {}}
                 onAccept={() => {}}
-                restaurantName={name}
+                restaurantName={restaurantName}
                 condition={`${discount}원 할인`}
-                serviceItem={name}
+                serviceItem={restaurantName}
                 canUseAgain={false}
                 expirationDate={expirationDate}
-                couponType="discount"
+                couponType={couponType}
+                couponImageUrl={couponImageUrl}
             />
         </div>
     )

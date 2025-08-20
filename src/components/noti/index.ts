@@ -1,1 +1,0 @@
-export { SwipeableCard } from './SwipeableCard'
