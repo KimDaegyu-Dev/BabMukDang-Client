@@ -96,7 +96,7 @@ function CouponModalContent({
                     {/* 쿠폰 이미지 */}
                     <img
                         className="h-106 w-full flex-none"
-                        src="src/assets/images/test/barcode.png"
+                        src="/test/barcode.png"
                     />
                     {/* 하단 쿠폰 정보 */}
                     <div className="flex flex-col items-start gap-2">

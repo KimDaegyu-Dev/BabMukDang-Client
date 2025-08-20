@@ -1,5 +1,4 @@
-import { CalendarIcon, LocationIcon } from '@/assets/icons'
-import { COLORS } from '@/constants/colors'
+import { CalendarIcon, LocationWhiteIcon } from '@/assets/icons'
 import { TagPerson } from '@/components'
 
 type Meeting = {
@@ -49,7 +48,7 @@ export function MeetingHeader({ meeting }: { meeting: Meeting }) {
                     <div className="flex w-full items-center justify-between gap-16">
                         {/* 위치 정보 */}
                         <div className="flex items-center gap-4">
-                            <LocationIcon strokecolor={COLORS.white} />
+                            <LocationWhiteIcon />
                             <span className="text-caption-medium text-gray-1">
                                 {meeting.location}
                             </span>
@@ -76,11 +75,11 @@ export function MeetingHeader({ meeting }: { meeting: Meeting }) {
                             <span className="text-caption-10 text-gray-7">
                                 약속 잡기
                             </span>
-                            <span className="text-caption-10 text-primary-400">
+                            <span className="text-caption-10 text-primary-200">
                                 만남
                             </span>
-                            <span className="text-caption-10 text-primary-400">
-                                밥 인증
+                            <span className="text-caption-10 text-primary-200">
+                                식사 완료
                             </span>
                         </div>
                     </div>

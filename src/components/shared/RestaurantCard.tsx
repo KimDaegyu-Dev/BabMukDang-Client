@@ -1,4 +1,4 @@
-import { LocationIcon, CallIcon } from '@/assets/icons'
+import { CallIcon, LocationGrayIcon } from '@/assets/icons'
 // import { Restaurant } from '@/types/restaurant'
 
 interface Restaurant {
@@ -43,7 +43,7 @@ export function RestaurantCard({
             <div className="flex flex-col items-baseline gap-6">
                 {/* 위치 정보 */}
                 <div className="flex items-center gap-3">
-                    <LocationIcon />
+                    <LocationGrayIcon />
                     {gps?.current?.latitude && gps?.current?.longitude && (
                         <span className="text-caption-medium text-gray-5">
                             {formatDistance(restaurant.distance)}{' '}

@@ -30,9 +30,9 @@ export function ThumbImg({
     onClick,
     aspectRatio
 }: {
-    item: Item
+    item: Item | undefined
     size: number | 'full'
-    className: string
+    className?: string
     onClick: () => void
     aspectRatio?: string
 }) {
@@ -41,6 +41,7 @@ export function ThumbImg({
         setIsExcluded(prev => !prev)
         onClick()
     }
+    if (!item) return null
     return (
         <div
             className={`rounded-12 relative h-${size} w-${size} overflow-hidden ${className} ${
@@ -74,9 +75,9 @@ export function ThumbImg({
                         item.images.src,
                         import.meta.env.VITE_CDN_URL
                     )}
-                    loading={item.priority ? 'eager' : 'lazy'}
+                    // loading={item.priority ? 'eager' : 'lazy'}
                     // @ts-ignore
-                    fetchpriority={item.priority ? 'high' : 'auto'}
+                    // fetchpriority={item.priority ? 'high' : 'auto'}
                     decoding="async"
                     className="absolute inset-0 h-full w-full object-cover"
                 />

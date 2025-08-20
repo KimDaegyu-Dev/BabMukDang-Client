@@ -48,7 +48,7 @@ export const OnboardingLayout = () => {
     }, [stage])
     return (
         <SocketProvider>
-            <Outlet />
+            <ContentBlocker />
             <div className="fixed bottom-38 left-0 z-50 flex h-60 w-full flex-row gap-20 rounded-full px-20">
                 {/* Next Button */}
                 <OnboardingButton />
@@ -75,9 +75,16 @@ export const OnboardingLayout = () => {
         </SocketProvider>
     )
 }
-
+const ContentBlocker = () => {
+    const { isSelfReady } = useSocket()
+    return (
+        <div className={isSelfReady ? 'pointer-events-none' : ''}>
+            <Outlet />
+        </div>
+    )
+}
 const SocketInner = ({ setStage }: { setStage: (stage: string) => void }) => {
-    const { socket, setInitialState } = useSocket()
+    const { socket, setInitialState, setParticipants } = useSocket()
     const { matchType } = useParams<{
         matchType: 'announcement' | 'invitation'
     }>()
@@ -88,6 +95,9 @@ const SocketInner = ({ setStage }: { setStage: (stage: string) => void }) => {
         })
         socket?.on('initial-state-response', data => {
             setInitialState(data)
+        })
+        socket?.on('join-room', data => {
+            setParticipants(data)
         })
         return () => {
             socket?.off('stage-changed')
