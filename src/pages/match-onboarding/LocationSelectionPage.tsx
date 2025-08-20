@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useSocket } from '@/contexts/SocketContext'
-import { OnboardingHeader, SearchLocationInput, KakaoMap } from '@/components'
+import { OnboardingHeader, KakaoMap, SearchInput } from '@/components'
 
 interface LocationCandidateDto {
     placeName: string
@@ -177,7 +177,10 @@ export function LocationSelectionPage() {
                         boxShadow:
                             '0 -4px 14px 0 rgba(0, 0, 0, 0.10) inset, 0 4px 14px 0 rgba(0, 0, 0, 0.10) inset'
                     }}></div>
-                <SearchLocationInput handleSearch={handleSearch} />
+                <SearchInput
+                    handleSearch={handleSearch}
+                    placeholder="장소 검색하기"
+                />
                 <KakaoMap
                     ref={mapRef}
                     onLocationSelect={handleMapLocationSelect}
