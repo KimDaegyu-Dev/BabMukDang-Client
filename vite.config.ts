@@ -44,7 +44,7 @@ export default defineConfig({
                 scope: '/',
                 icons: [
                     {
-                        src: 'public/app_logo.svg',
+                        src: '/app_logo.svg',
                         sizes: 'any',
                         type: 'image/svg+xml'
                     }
