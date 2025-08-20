@@ -1,11 +1,11 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useMatchStore } from '@/store/matchStore'
 import { useSocket } from '@/contexts/SocketContext'
-import { LocationIcon, PeopleIcon, TimeIcon } from '@/assets/icons'
+import { LocationGrayIcon, PeopleGrayIcon, TimeGrayIcon } from '@/assets/icons'
 
 export function WaitingPage() {
     const navigate = useNavigate()
-    // 임시 데이터 (실제로는 API나 store에서 가져와야 함)
+    const { matchType } = useSocket()
     const matchedUser = {
         id: '1',
         name: '김사자',
@@ -23,9 +23,13 @@ export function WaitingPage() {
             <div className="flex flex-col items-center">
                 {/* 매칭 완료 메시지 */}
                 <h1 className="text-title1-semibold mb-32 text-center text-black">
-                    식사 메이트 매칭이
+                    {matchType === 'announcement'
+                        ? '오늘의 한끼 멤버'
+                        : '한끼 제안,'}
                     <br />
-                    완료되었어요!
+                    {matchType === 'announcement'
+                        ? '모집 완료!🎉'
+                        : '약속이 성사됐어요🎉'}
                 </h1>
 
                 {/* 프로필 이미지 */}
@@ -74,19 +78,19 @@ export function WaitingPage() {
                 <div className="rounded-12 border-primary-400 mb-14 border p-16">
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-4">
-                            <TimeIcon />
+                            <TimeGrayIcon />
                             <span className="text-body2-semibold text-black">
                                 {meetingInfo.time}
                             </span>
                         </div>
                         <div className="flex items-center gap-4">
-                            <LocationIcon />
+                            <LocationGrayIcon />
                             <span className="text-body2-semibold text-black">
                                 {meetingInfo.location}
                             </span>
                         </div>
                         <div className="flex items-center gap-4">
-                            <PeopleIcon />
+                            <PeopleGrayIcon />
                             <span className="text-body2-semibold text-black">
                                 {meetingInfo.maxParticipants}명
                             </span>

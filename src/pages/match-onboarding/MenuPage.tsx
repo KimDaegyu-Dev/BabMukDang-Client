@@ -32,7 +32,6 @@ export function MenuPage() {
     return (
         <div className="min-h-screen">
             <OnboardingHeader
-                tags={['가은', '최강']}
                 title="오늘의 메뉴를 골라보아요."
                 progress={3}
                 voteLimit="중복 투표"
@@ -41,7 +40,7 @@ export function MenuPage() {
                 {categories.map((category, index) => (
                     <MenuCard
                         key={index}
-                        selectPeople={menu[index].selectPeople}
+                        // selectPeople={menu[index].selectPeople}
                         menuName={category.name}
                         menuCategoryId={category.id}
                         category={category}
