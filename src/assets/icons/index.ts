@@ -86,3 +86,7 @@ export {
     ArrowUpIcon,
     ArrowDownIcon
 } from './directedArrow'
+export { HeartDefaultIcon, HeartFilledIcon, HeartWhiteIcon } from './heart'
+export { LocationWhiteIcon, LocationGrayIcon } from './location'
+export { TimeWhiteIcon, TimeGrayIcon } from './time'
+export { PeopleWhiteIcon, PeopleGrayIcon } from './people'
