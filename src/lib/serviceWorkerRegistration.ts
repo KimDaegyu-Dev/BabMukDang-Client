@@ -1,13 +1,13 @@
-import { registerSW } from 'virtual:pwa-register'
+// import { registerSW } from 'virtual:pwa-register'
 
-const updateSW = registerSW({
-    onNeedRefresh() {
-        console.log('Need refresh')
-    },
-    onOfflineReady() {
-        console.log('Offline ready')
-    }
-})
+// const updateSW = registerSW({
+//     onNeedRefresh() {
+//         console.log('Need refresh')
+//     },
+//     onOfflineReady() {
+//         console.log('Offline ready')
+//     }
+// })
 
 export const register = () => {
     if ('serviceWorker' in navigator) {
