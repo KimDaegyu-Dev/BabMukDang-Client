@@ -72,7 +72,7 @@ export const MockCouponList = [
         isUsed: true,
         restaurantName: '동학 주점',
         discount: 2000,
-        couponImageUrl: 'public/test/coupon-restaurant.png',
+        couponImageUrl: '/test/coupon-restaurant.png',
         expirationDate: '2025년 9월 16일까지',
         couponType: '서비스'
     },
@@ -80,7 +80,7 @@ export const MockCouponList = [
         isUsed: true,
         restaurantName: '동학 주점',
         discount: 2000,
-        couponImageUrl: 'public/test/coupon-restaurant.png',
+        couponImageUrl: '/test/coupon-restaurant.png',
         expirationDate: '2025년 9월 16일까지',
         couponType: '할인'
     },
@@ -88,7 +88,7 @@ export const MockCouponList = [
         isUsed: false,
         restaurantName: '동학 주점',
         discount: 2000,
-        couponImageUrl: 'public/test/coupon-restaurant.png',
+        couponImageUrl: '/test/coupon-restaurant.png',
         expirationDate: '2025년 9월 16일까지',
         couponType: '서비스'
     },
@@ -96,7 +96,7 @@ export const MockCouponList = [
         isUsed: false,
         restaurantName: '동학 주점',
         discount: 2000,
-        couponImageUrl: 'public/test/coupon-restaurant.png',
+        couponImageUrl: '/test/coupon-restaurant.png',
         expirationDate: '2025년 9월 16일까지',
         couponType: '서비스'
     }
@@ -285,10 +285,10 @@ export const MockPostList = [
         author: '유가은',
         tags: ['김대규', '김성휘', '이민수'],
         postedAt: '1시간 전',
-        postImageUrl: 'public/test/card-post.png',
+        postImageUrl: '/test/card-post.png',
         postType: 'mornings',
         restaurantInfo: {
-            restaurantImageUrl: 'public/test/post-restaurant.png',
+            restaurantImageUrl: '/test/post-restaurant.png',
             restaurantName: '더 맛있는 일식집',
             restaurantType: '일식집',
             restaurantLocation: '서울시 노원구 공릉동 30-2',
@@ -327,10 +327,10 @@ export const MockPostList = [
         author: '유가은',
         tags: ['김대규', '김성휘', '이민수', '박소영'],
         postedAt: '2025-01-01 12:00',
-        postImageUrl: 'public/test/card-post.png',
+        postImageUrl: '/test/card-post.png',
         postType: 'lunch',
         restaurantInfo: {
-            restaurantImageUrl: 'public/test/post-restaurant.png',
+            restaurantImageUrl: '/test/post-restaurant.png',
             restaurantName: '더 맛있는 일식집',
             restaurantType: '일식집',
             restaurantLocation: '서울시 노원구 공릉동 30-2',
@@ -352,10 +352,10 @@ export const MockPostList = [
         author: '유가은',
         tags: ['김대규', '김성휘', '이민수', '박소영'],
         postedAt: '2025-01-01 12:00',
-        postImageUrl: 'public/test/card-post.png',
+        postImageUrl: '/test/card-post.png',
         postType: 'dinner',
         restaurantInfo: {
-            restaurantImageUrl: 'public/test/post-restaurant.png',
+            restaurantImageUrl: '/test/post-restaurant.png',
             restaurantName: '더 맛있는 일식집',
             restaurantType: '일식집',
             restaurantLocation: '서울시 노원구 공릉동 30-2',
@@ -377,10 +377,10 @@ export const MockPostList = [
         author: '유가은',
         tags: ['김대규', '김성휘', '이민수', '박소영'],
         postedAt: '2025-01-01 12:00',
-        postImageUrl: 'public/test/card-post.png',
+        postImageUrl: '/test/card-post.png',
         postType: 'mornings',
         restaurantInfo: {
-            restaurantImageUrl: 'public/test/post-restaurant.png',
+            restaurantImageUrl: '/test/post-restaurant.png',
             restaurantName: '더 맛있는 일식집',
             restaurantType: '일식집',
             restaurantLocation: '서울시 노원구 공릉동 30-2',
