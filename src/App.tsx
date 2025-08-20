@@ -37,6 +37,8 @@ import {
     FriendProfilePage
 } from '@/pages'
 import { Layout, OnboardingLayout, RegisterLayout } from '@/components'
+import { register } from '@/lib/serviceWorkerRegistration'
+import { useEffect } from 'react'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -47,6 +49,9 @@ const queryClient = new QueryClient({
     }
 })
 function App() {
+    useEffect(() => {
+        register()
+    }, [])
     return (
         <QueryClientProvider client={queryClient}>
             <Router>
