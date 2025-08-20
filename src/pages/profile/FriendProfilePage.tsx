@@ -6,10 +6,9 @@ import { MockMyProfileData } from '@/constants/mockData'
 
 import { useHeader } from '@/hooks'
 import {
-    FriendInviteModal,
     ProfileModal,
-    ProfileButtonSection,
-    ProfileSection
+    ProfileSection,
+    FriendProfileSection
 } from '@/components'
 
 type MyProfileData = {
@@ -24,15 +23,8 @@ type MyProfileData = {
     challengeCount: number
 }
 
-export function ProfilePage() {
-    const { hideHeader, resetHeader } = useHeader()
+export function FriendProfilePage() {
     const navigate = useNavigate()
-    useEffect(() => {
-        hideHeader()
-        return () => {
-            resetHeader()
-        }
-    }, [])
     return (
         <main className="relative h-full min-h-full">
             {/* 프로필 섹션 */}
@@ -42,22 +34,13 @@ export function ProfilePage() {
                 description={MockMyProfileData.description}
                 preferredMenus={MockMyProfileData.preferredMenus}
                 cantEat={MockMyProfileData.cantEat}
-                isFriend={false}
+                isFriend={true}
             />
-            <ProfileButtonSection
+            <FriendProfileSection
                 friends={MockMyProfileData.friends}
                 completedMeetings={MockMyProfileData.completedMeetings}
                 uncompletedMeetings={MockMyProfileData.uncompletedMeetings}
-                challengeCount={MockMyProfileData.challengeCount}
             />
-            <button
-                className={`text-caption-regular text-gray-3 absolute bottom-${BOTTOM_NAVIGATION_HEIGHT} right-0 left-0`}
-                onClick={() => {
-                    navigate('/start-register')
-                }}>
-                로그아웃
-            </button>
-            <FriendInviteModal id="friend-invite-notify-modal" />
             <ProfileModal
                 id="profile-notify-modal"
                 preferredMenus={MockMyProfileData.preferredMenus}
