@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import React, { useEffect, useRef } from 'react'
 
 type PopoverElement = HTMLDivElement & {
@@ -8,6 +9,8 @@ type PopoverElement = HTMLDivElement & {
 interface BaseModalProps {
     open?: boolean
     id?: string
+    className?: string
+    style?: React.CSSProperties
     onClose?: () => void
     onAccept?: () => void
     children?: React.ReactElement<BaseModalChildrenProps>
@@ -22,6 +25,8 @@ export interface BaseModalChildrenProps {
 export function BaseModal({
     open,
     id = 'notify-popover',
+    className,
+    style,
     onClose,
     onAccept,
     children
@@ -54,8 +59,12 @@ export function BaseModal({
         <div
             id={id}
             ref={popoverRef}
-            className="popover-overlay w-full bg-transparent px-35"
-            popover="manual">
+            className={cn(
+                'popover-overlay w-full bg-transparent px-35',
+                className
+            )}
+            style={style}
+            popover="auto">
             {React.isValidElement(children) &&
                 React.cloneElement(children, {
                     onClose: handleClose,
