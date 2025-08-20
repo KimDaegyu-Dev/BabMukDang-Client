@@ -15,6 +15,24 @@ import {
 } from '@/components'
 import { LOCAL_NEWS_FILTER_LIST } from '@/constants/filters'
 
+type MatchingInviteNoti = {
+    id: number
+    type: 'invitation' | 'announcement'
+    title: string
+    time: string
+    message: string
+    period: string
+    imageUrl: string
+}
+interface LocalNewsNoti {
+    id: number
+    type: 'school' | 'restaurant' | 'area'
+    title: string
+    time: string
+    message: string
+    period: string
+    imageUrl?: string
+}
 export function NotiStoragePage() {
     const navigate = useNavigate()
 

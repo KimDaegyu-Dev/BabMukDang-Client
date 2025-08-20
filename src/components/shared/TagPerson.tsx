@@ -11,6 +11,7 @@ export function TagPerson({
                 orange ? 'bg-primary-200' : 'bg-white'
             }`}
             style={{
+                // @ts-expect-error: Non-standard CSS property used for text-box trimming support
                 textBox: 'trim-both cap alphabetic'
             }}>
             <span className="text-caption-medium text-gray-700">@{name}</span>
