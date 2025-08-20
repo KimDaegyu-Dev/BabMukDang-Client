@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { useImageStore } from '@/store'
-import { SearchLocationInput, RestaurantCard, MutalButton } from '@/components'
+import { RestaurantCard, MutalButton, SearchInput } from '@/components'
+import { useBottomNav } from '@/hooks'
 
 export function SearchRestaurantPage() {
     const { image } = useImageStore()
@@ -75,11 +76,23 @@ export function SearchRestaurantPage() {
         setSelectedRestaurant(restaurant)
     }
 
+    const { showBottomNav, hideBottomNav } = useBottomNav()
+    useEffect(() => {
+        hideBottomNav()
+        return () => {
+            showBottomNav()
+        }
+    }, [])
     return (
-        <div className="flex h-full flex-col">
-            <SearchLocationInput handleSearch={handleSearch} />
+        <div className="relative flex h-full w-full flex-col overflow-y-auto pt-16">
+            <div className="fixed top-66 left-0 w-full px-20">
+                <SearchInput
+                    handleSearch={handleSearch}
+                    placeholder="음식점 이름을 검색해 주세요."
+                />
+            </div>
             {/* 검색 결과 */}
-            <div className="flex flex-col items-center gap-10">
+            <div className="mt-53 flex flex-col items-center gap-10">
                 {restaurants.map(restaurant => (
                     <RestaurantCard
                         restaurant={restaurant}
@@ -93,7 +106,7 @@ export function SearchRestaurantPage() {
                     />
                 ))}
             </div>
-            <div className="fixed bottom-110 w-full px-20">
+            <div className="fixed bottom-40 left-0 w-full px-20">
                 <UploadButton disabled={false} />
             </div>
         </div>
@@ -107,12 +120,13 @@ function UploadButton({ disabled }: { disabled?: boolean }) {
 
     return (
         <Link
+            className="w-full"
             replace
             to="/">
             <MutalButton
-                text="업로드"
+                text="게시물 업로드 하기"
                 onClick={handleJoin}
-                hasArrow={false}
+                hasArrow={true}
             />
         </Link>
     )
