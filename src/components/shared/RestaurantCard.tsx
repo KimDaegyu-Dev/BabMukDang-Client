@@ -14,7 +14,7 @@ interface Restaurant {
 interface RestaurantCardProps {
     restaurant: Restaurant
     gps?: any
-    onClick?: () => void
+    onClick: (restaurant: Restaurant) => void
     className?: string
 }
 
@@ -27,7 +27,7 @@ export function RestaurantCard({
     return (
         <div
             className={`shadow-drop-1 flex w-full flex-col gap-11 rounded-lg p-12 ${className}`}
-            onClick={onClick}>
+            onClick={() => onClick(restaurant)}>
             {/* 레스토랑 이름과 카테고리 */}
             <div className="flex items-center gap-8">
                 <span className="text-body1-bold text-black">

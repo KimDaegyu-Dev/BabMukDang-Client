@@ -2,20 +2,50 @@ import { useEffect, useState } from 'react'
 
 import { useSocket } from '@/contexts/SocketContext'
 import { TagPerson, OnboardingHeader, ThumbImg } from '@/components'
+import { useAuthStore } from '@/store'
 
-interface UserCategory {
+type CategoryId = string
+interface ExcludeMenuUpdateItem {
     userId: string
-    availableCategoryIds: string[]
+    exclusions: CategoryId[]
+}
+type ExcludeMenuUpdate = ExcludeMenuUpdateItem[]
+
+type InitialState = UserRecentMenus[]
+interface UserRecentMenus {
+    userId: string
+    categoryIds: CategoryId[]
+    excludedCategoryIds?: CategoryId[]
 }
 export function MenuExcludePage() {
-    const [userCategories, setUserCategories] = useState<UserCategory[]>([])
-    const { initialState } = useSocket()
+    const [userRecentMenus, setUserRecentMenus] = useState<InitialState>([])
+    const { initialState, socket } = useSocket()
     useEffect(() => {
         if (initialState && initialState.stage === 'exclude-menu') {
-            setUserCategories(initialState.initialState)
+            setUserRecentMenus(initialState.initialState)
             console.log('categories', initialState.initialState)
         }
     }, [initialState])
+
+    useEffect(() => {
+        socket?.on('menu-exclusion-updated', (data: ExcludeMenuUpdate) => {
+            setUserRecentMenus(prev =>
+                prev.map(item => {
+                    const updateItem = data.find(
+                        update => update.userId === item.userId
+                    )
+                    console.log('updateItem', updateItem)
+                    if (updateItem) {
+                        return {
+                            ...item,
+                            excludedCategoryIds: updateItem.exclusions
+                        }
+                    }
+                    return item
+                })
+            )
+        })
+    }, [socket])
     return (
         <div className="min-h-screen">
             <OnboardingHeader
@@ -25,27 +55,35 @@ export function MenuExcludePage() {
                 voteLimit="중복 투표"
             />
             <div className="flex flex-col gap-30">
-                {userCategories.map((userCategory, index) => (
+                {userRecentMenus.map((user: UserRecentMenus, index) => (
                     <MenuExcludeList
                         key={index}
-                        menuList={userCategory.availableCategoryIds}
-                        userId={userCategory.userId}
+                        menuList={user.categoryIds}
+                        userId={user.userId}
+                        excludedCategoryIds={user.excludedCategoryIds}
                     />
                 ))}
             </div>
         </div>
     )
 }
+
+// 유저 한명의 메뉴 목록
 const MenuExcludeList = ({
     menuList,
-    userId
+    userId,
+    excludedCategoryIds
 }: {
-    menuList: string[]
+    menuList: CategoryId[]
     userId: string
+    excludedCategoryIds?: CategoryId[]
 }) => {
-    const { categories } = useSocket()
-    const handleClick = (categoryId: string) => {
-        console.log(categoryId)
+    const { categories, socket } = useSocket()
+    const { userId: currentUserId } = useAuthStore()
+    const handleClick = (categoryId: CategoryId) => {
+        if (userId === currentUserId) {
+            socket?.emit('exclude-menu', { categoryId })
+        }
     }
     return (
         <div className="flex flex-col gap-10">
@@ -64,6 +102,9 @@ const MenuExcludeList = ({
                             )}
                             size={120}
                             onClick={() => handleClick(categoryId)}
+                            isExcluded={excludedCategoryIds?.includes(
+                                categoryId
+                            )}
                         />
                     </div>
                 ))}

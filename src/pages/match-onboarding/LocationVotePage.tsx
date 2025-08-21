@@ -3,7 +3,7 @@ import { useSocket } from '@/contexts/SocketContext'
 import { useEffect, useState } from 'react'
 
 export function LocationVotePage() {
-    const { initialState } = useSocket()
+    const { initialState, socket } = useSocket()
     const [locationCandidates, setLocationCandidates] = useState<any[]>([])
     const [selectedLocation, setSelectedLocation] = useState<any>(null)
     useEffect(() => {
@@ -13,6 +13,9 @@ export function LocationVotePage() {
     }, [initialState])
     const handleLocationSelect = (id: string) => {
         setSelectedLocation(id)
+        socket?.emit('vote-location', {
+            candidateId: id
+        })
     }
     return (
         <div className="min-h-screen">

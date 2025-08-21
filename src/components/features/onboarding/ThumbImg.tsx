@@ -28,17 +28,17 @@ export function ThumbImg({
     size,
     className,
     onClick,
-    aspectRatio
+    aspectRatio,
+    isExcluded
 }: {
     item: Item | undefined
     size: number | 'full'
     className?: string
     onClick: () => void
     aspectRatio?: string
+    isExcluded?: boolean
 }) {
-    const [isExcluded, setIsExcluded] = useState(false)
     const handleClick = () => {
-        setIsExcluded(prev => !prev)
         onClick()
     }
     if (!item) return null

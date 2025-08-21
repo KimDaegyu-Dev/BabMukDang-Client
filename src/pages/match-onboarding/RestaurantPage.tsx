@@ -14,12 +14,16 @@ export function RestaurantPage() {
         address_name: '노원구 동이로 182길',
         phone: '02-970-2222'
     })
-    const { initialState } = useSocket()
+    const { initialState, socket } = useSocket()
     useEffect(() => {
         if (initialState && initialState.stage === 'restaurant') {
-            setRestaurantList(initialState.initialState.restaurants[0])
+            console.log(initialState)
+            setRestaurantList(initialState.initialState.initialRestaurants)
         }
     }, [initialState])
+    const onClickRestaurant = (restaurant: any) => {
+        socket?.emit('pick-restaurant', { restaurantId: restaurant.id })
+    }
     return (
         <div className="min-h-screen">
             <OnboardingHeader
@@ -33,6 +37,7 @@ export function RestaurantPage() {
                     <RestaurantCard
                         key={index}
                         restaurant={restaurant}
+                        onClick={onClickRestaurant}
                     />
                 ))}
             </div>
