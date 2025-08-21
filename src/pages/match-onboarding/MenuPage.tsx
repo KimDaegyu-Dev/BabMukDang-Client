@@ -5,46 +5,68 @@ import { MenuIcon } from '@/assets/icons'
 import { useSocket } from '@/contexts/SocketContext'
 import { OnboardingHeader, ThumbImg } from '@/components'
 
-interface Menu {
-    menuCategoryId: string
-    menuName: string
-    selectPeople?: string[]
-    menuImage?: string
+export interface MenuRecommendation {
+    code: string
+    label: string
+    group_score: number
+    member_scores: Record<string, number>
+    reasons: string[]
+    selectedUsers?: string[]
 }
+
+type MenuPickUpdate = {
+    menuId: string
+    selectedUsers: string[]
+}[]
 export function MenuPage() {
-    const { initialState, categories } = useSocket()
-    const [menu, setMenu] = useState<Menu[]>([])
+    const { initialState, categories, socket } = useSocket()
+    const [menuRecommendations, setMenuRecommendations] = useState<
+        MenuRecommendation[]
+    >([])
     useEffect(() => {
         if (initialState && initialState.stage === 'menu') {
-            setMenu(initialState.initialState)
+            setMenuRecommendations(initialState.initialState)
         }
     }, [initialState])
     const handleSelectPeople = (index: number) => {
-        setMenu(prev => {
-            const newMenu = [...prev]
-            newMenu[index].selectPeople = [
-                ...(newMenu[index].selectPeople || []),
-                '가은'
-            ]
-            return newMenu
-        })
+        socket?.emit('pick-menu', { menuId: categories[index].id })
     }
+
+    useEffect(() => {
+        socket?.on('menu-pick-updated', (data: MenuPickUpdate) => {
+            setMenuRecommendations(prev =>
+                prev.map(item => {
+                    const updateItem = data.find(
+                        update => update.menuId === item.label
+                    )
+                    if (updateItem) {
+                        return {
+                            ...item,
+                            selectedUsers: updateItem.selectedUsers
+                        }
+                    }
+                    return item
+                })
+            )
+        })
+    }, [socket])
     return (
         <div className="min-h-screen">
             <OnboardingHeader
-                tags={['가은', '최강']}
                 title="오늘의 메뉴를 골라보아요."
                 progress={3}
                 voteLimit="중복 투표"
             />
             <div className="grid grid-cols-3 gap-10">
-                {categories.map((category, index) => (
+                {menuRecommendations.map((menu, index) => (
                     <MenuCard
                         key={index}
-                        selectPeople={menu[index].selectPeople}
-                        menuName={category.name}
-                        menuCategoryId={category.id}
-                        category={category}
+                        selectedUsers={menu?.selectedUsers}
+                        menuName={menu.label}
+                        menuCategoryId={menu.code}
+                        category={categories.find(
+                            item => item.name === menu.label
+                        )}
                         onClick={() => handleSelectPeople(index)}
                     />
                 ))}
@@ -54,13 +76,13 @@ export function MenuPage() {
 }
 
 const MenuCard = ({
-    selectPeople,
+    selectedUsers,
     menuName,
     category,
     menuCategoryId,
     onClick
 }: {
-    selectPeople?: string[]
+    selectedUsers?: string[]
     menuName: string
     menuCategoryId: string
     category: any
@@ -72,10 +94,10 @@ const MenuCard = ({
             onClick={onClick}>
             {/* 이미지 */}
             <div
-                className={`bg-gray-2 rounded-12 relative w-full overflow-hidden ${selectPeople && selectPeople.length > 0 ? 'border-primary-main border-2' : ''}`}>
-                <div className="-gap-4 absolute top-8 left-8 flex h-full w-full flex-row flex-wrap">
+                className={`bg-gray-2 rounded-12 relative w-full overflow-hidden ${selectedUsers && selectedUsers.length > 0 ? 'border-primary-main border-2' : ''}`}>
+                <div className="-gap-4 absolute top-8 left-8 z-100 flex h-full w-full flex-row flex-wrap">
                     {/* 사람 프로필 */}
-                    {selectPeople?.map((person, index) => (
+                    {selectedUsers?.map((person, index) => (
                         <div
                             key={index}
                             className="bg-gray-2 h-20 w-20 overflow-hidden rounded-full">

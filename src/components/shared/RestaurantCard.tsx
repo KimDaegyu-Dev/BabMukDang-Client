@@ -1,4 +1,4 @@
-import { LocationIcon, CallIcon } from '@/assets/icons'
+import { CallIcon, LocationGrayIcon } from '@/assets/icons'
 // import { Restaurant } from '@/types/restaurant'
 
 interface Restaurant {
@@ -14,7 +14,7 @@ interface Restaurant {
 interface RestaurantCardProps {
     restaurant: Restaurant
     gps?: any
-    onClick?: () => void
+    onClick: (restaurant: Restaurant) => void
     className?: string
 }
 
@@ -27,7 +27,7 @@ export function RestaurantCard({
     return (
         <div
             className={`shadow-drop-1 flex w-full flex-col gap-11 rounded-lg p-12 ${className}`}
-            onClick={onClick}>
+            onClick={() => onClick(restaurant)}>
             {/* 레스토랑 이름과 카테고리 */}
             <div className="flex items-center gap-8">
                 <span className="text-body1-bold text-black">
@@ -43,7 +43,7 @@ export function RestaurantCard({
             <div className="flex flex-col items-baseline gap-6">
                 {/* 위치 정보 */}
                 <div className="flex items-center gap-3">
-                    <LocationIcon />
+                    <LocationGrayIcon />
                     {gps?.current?.latitude && gps?.current?.longitude && (
                         <span className="text-caption-medium text-gray-5">
                             {formatDistance(restaurant.distance)}{' '}

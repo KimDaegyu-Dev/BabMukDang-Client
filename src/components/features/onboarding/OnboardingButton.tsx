@@ -3,25 +3,43 @@ import { useSocket } from '@/contexts/SocketContext'
 import { COLORS } from '@/constants/colors'
 
 export function OnboardingButton() {
-    const { socket } = useSocket()
-    const [isReady, setIsReady] = useState(false)
-    const [readyCount, setReadyCount] = useState(0)
-    const [participantCount, setParticipantCount] = useState(0)
+    const {
+        socket,
+        readyCount,
+        participantCount,
+        stage,
+        isSelfReady,
+        setIsSelfReady
+    } = useSocket()
+    const [countDown, setCountDown] = useState(3)
+
     useEffect(() => {
-        socket?.on('ready-state-changed', (data: any) => {
-            setReadyCount(data.readyCount)
-            setParticipantCount(data.participantCount)
-        })
-        socket?.on('stage-changed', data => {
-            setIsReady(false)
-        })
-    }, [])
+        if (!isSelfReady) {
+            setCountDown(3)
+            return
+        }
+        if (readyCount !== participantCount) {
+            return
+        }
+        if (readyCount === participantCount) {
+            const interval = setInterval(() => {
+                setCountDown(prev => {
+                    if (prev === 0) {
+                        return 0
+                    }
+                    return prev - 1
+                })
+            }, 1000)
+            return () => clearInterval(interval)
+        }
+    }, [readyCount, participantCount, isSelfReady])
+
     const onClickReady = () => {
-        setIsReady(prev => {
-            const newIsReady = !prev
+        setIsSelfReady((prev: boolean) => {
+            const next = !prev
             // 새로운 상태 값으로 소켓 이벤트 발생
-            socket?.emit('ready-state', { isReady: newIsReady })
-            return newIsReady
+            socket?.emit('ready-state', { isReady: next })
+            return next
         })
     }
     return (
@@ -44,8 +62,8 @@ export function OnboardingButton() {
                 }}
             />
             <span className="relative z-10 flex w-full items-center justify-center">
-                {isReady
-                    ? `${readyCount}/${participantCount}명 준비 완료`
+                {isSelfReady
+                    ? `${readyCount}/${participantCount}명 준비 완료 ${readyCount === participantCount ? `(${countDown}초 후 이동)` : ''}`
                     : '선택을 완료할게요'}
             </span>
         </button>

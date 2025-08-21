@@ -1,8 +1,8 @@
-import { OnboardingHeader, Calendar18 } from '@/components'
+import { OnboardingHeader, CalendarWithMultiple } from '@/components'
 
 export function DatePage() {
     return (
-        <div className="min-h-screen">
+        <div className="flex min-h-screen flex-col gap-60">
             <OnboardingHeader
                 tags={['가은', '최강']}
                 title="만날 날짜를 정해보아요."
@@ -10,7 +10,7 @@ export function DatePage() {
                 progress={1}
                 voteLimit="중복 투표"
             />
-            <Calendar18 />
+            <CalendarWithMultiple />
         </div>
     )
 }

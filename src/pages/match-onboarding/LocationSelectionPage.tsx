@@ -2,7 +2,12 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useSocket } from '@/contexts/SocketContext'
-import { OnboardingHeader, KakaoMap, SearchInput } from '@/components'
+import {
+    OnboardingHeader,
+    KakaoMap,
+    SearchInput,
+    LocationCadidateItem
+} from '@/components'
 
 interface LocationCandidateDto {
     placeName: string
@@ -47,14 +52,17 @@ interface LocationOption extends LocationCandidateDto {
 
 export function LocationSelectionPage() {
     const navigate = useNavigate()
-    const { socket, roomId, userId, username } = useSocket()
+    const { socket, initialState, matchType } = useSocket()
 
-    const [selectedLocation, setSelectedLocation] = useState<string | null>(
-        null
-    )
     const [isSearching, setIsSearching] = useState(false)
     const [locationOptions, setLocationOptions] = useState<LocationOption[]>([])
     const mapRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        if (initialState && initialState.stage === 'location') {
+            setLocationOptions(initialState.initialState.candidates)
+        }
+    }, [initialState])
+
     useEffect(() => {
         socket?.on('location-candidate-added', (data: any) => {
             setLocationOptions(data)
@@ -161,8 +169,11 @@ export function LocationSelectionPage() {
     return (
         <div className="min-h-screen">
             <OnboardingHeader
-                tags={['가은', '최강']}
-                title="만날 장소를 정해보아요."
+                title={
+                    matchType === 'announcement'
+                        ? '만날 장소를 더 구체화 해봐요.'
+                        : '만날 장소를 정해보아요.'
+                }
                 description="지도에 위치를 클릭하거나, 장소 검색을 통해 장소를 추가 할 수 있어요. 
                 장소 추가 후 투표해보아요! "
                 progress={1}
@@ -177,10 +188,12 @@ export function LocationSelectionPage() {
                         boxShadow:
                             '0 -4px 14px 0 rgba(0, 0, 0, 0.10) inset, 0 4px 14px 0 rgba(0, 0, 0, 0.10) inset'
                     }}></div>
-                <SearchInput
-                    handleSearch={handleSearch}
-                    placeholder="장소 검색하기"
-                />
+                {/* <div className="absolute top-17 left-0 z-200 w-full">
+                    <SearchInput
+                        handleSearch={handleSearch}
+                        placeholder="장소 검색하기"
+                    />
+                </div> */}
                 <KakaoMap
                     ref={mapRef}
                     onLocationSelect={handleMapLocationSelect}
@@ -188,45 +201,14 @@ export function LocationSelectionPage() {
             </div>
 
             {/* Location Options */}
-            <div className="space-y-3 px-4 py-2">
+            <div className="mt-20 flex flex-col gap-13">
                 {locationOptions.map(location => (
-                    <div
+                    <LocationCadidateItem
                         key={location.id}
-                        className={`cursor-pointer rounded-lg border p-4 transition-colors ${
-                            location.isSelected
-                                ? 'border-blue-500 bg-blue-50'
-                                : 'border-gray-200 bg-white hover:border-gray-300'
-                        }`}
-                        onClick={() => handleLocationSelect(location.id)}>
-                        <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                                <h3 className="font-medium text-gray-900">
-                                    {location.placeName}
-                                </h3>
-                                <p className="text-sm text-gray-500">
-                                    {location.address}
-                                </p>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <div
-                                    className={`flex h-5 w-5 items-center justify-center rounded-sm border-2 ${
-                                        location.isSelected
-                                            ? 'border-blue-500 bg-blue-500'
-                                            : 'border-gray-300'
-                                    }`}>
-                                    {location.isSelected && (
-                                        <div className="h-2 w-2 rounded-sm bg-white"></div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        location={location}
+                        handleLocationSelect={handleLocationSelect}
+                    />
                 ))}
-            </div>
-
-            {/* Bottom Separator */}
-            <div className="px-4 py-4">
-                <div className="h-px w-full bg-gray-200"></div>
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { TagPerson } from '@/components'
-import { LocationIcon, MenuIcon, BackIcon } from '@/assets/icons'
+import { MenuIcon, BackIcon, LocationGrayIcon } from '@/assets/icons'
 import { COLORS } from '@/constants/colors'
 
 type Meeting = {
@@ -45,7 +45,7 @@ export function MeetingCard({
                     </div>
 
                     {/* 오른쪽: 참여자 태그와 위치 */}
-                    <div className="rounded-12 shadow-drop-1 flex h-full w-full items-center justify-between bg-white p-16">
+                    <div className="rounded-12 shadow-drop-1 flex w-full items-center justify-between bg-white p-16">
                         <div className="flex w-full flex-col gap-11">
                             {/* 참여자 태그들 */}
                             <div className="flex items-center gap-8">
@@ -62,7 +62,7 @@ export function MeetingCard({
 
                             {/* 위치 정보 */}
                             <div className="flex items-center gap-4">
-                                <LocationIcon strokecolor={COLORS.white} />
+                                <LocationGrayIcon />
                                 <span className="text-caption-medium text-gray-8">
                                     {meeting.location}
                                 </span>
@@ -82,11 +82,13 @@ export function MeetingCard({
                                     </div>
 
                                     {/* 취소 버튼 */}
-                                    <button className="bg-gray-1 rounded-5 flex items-center justify-center py-5">
-                                        <span className="text-caption-medium text-gray-5">
-                                            약속 취소하기
-                                        </span>
-                                    </button>
+                                    {!meeting.isCompleted && (
+                                        <button className="bg-gray-1 rounded-5 flex items-center justify-center py-5">
+                                            <span className="text-caption-medium text-gray-5">
+                                                약속 취소하기
+                                            </span>
+                                        </button>
+                                    )}
                                 </>
                             )}
                         </div>

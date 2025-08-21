@@ -1,7 +1,8 @@
 import { TagPerson } from '@/components'
+import { useSocket } from '@/contexts/SocketContext'
+import { useEffect, useState } from 'react'
 
 export function OnboardingHeader({
-    tags,
     title,
     description,
     isSkipable = false,
@@ -9,7 +10,6 @@ export function OnboardingHeader({
     subTitle = '',
     voteLimit = ''
 }: {
-    tags?: string[]
     title: string
     description?: string
     voteLimit?: string
@@ -17,6 +17,11 @@ export function OnboardingHeader({
     progress: number
     subTitle?: string
 }) {
+    const { participants } = useSocket()
+    const [peopleTags, setPeopleTags] = useState<string[]>([])
+    useEffect(() => {
+        setPeopleTags(participants.map((item: any) => item.username))
+    }, [participants])
     return (
         <div className="mt-20 mb-20 -ml-20 flex w-screen flex-col gap-30">
             {/* 프로그레스 바 */}
@@ -25,7 +30,7 @@ export function OnboardingHeader({
                 <div className="flex flex-col gap-12">
                     {/* 태그 목록 */}
                     <div className="flex flex-row gap-8">
-                        {tags?.map(tag => (
+                        {peopleTags.map(tag => (
                             <TagPerson
                                 key={tag}
                                 name={tag}
