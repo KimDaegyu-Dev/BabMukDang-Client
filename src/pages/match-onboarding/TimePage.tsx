@@ -6,7 +6,6 @@ export function TimePage() {
     return (
         <div className="min-h-screen">
             <OnboardingHeader
-                tags={['가은', '최강']}
                 title={`${new Date().getDate()} 일에 만날 시간을 정해보아요.`}
                 description="가능한 시간대를 모두 선택해주세요."
                 progress={5}

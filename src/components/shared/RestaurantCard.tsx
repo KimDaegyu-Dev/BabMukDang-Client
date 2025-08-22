@@ -30,7 +30,7 @@ export function RestaurantCard({
     const { userId } = useAuthStore()
     return (
         <div
-            className={`shadow-drop-1 flex w-full justify-between rounded-lg p-12 ${className} ${restaurant.selectUsers.includes(userId) ? 'border-primary-main bg-primary-100 border' : 'bg-white'}`}
+            className={`shadow-drop-1 flex w-full justify-between rounded-lg p-12 ${className} ${restaurant.selectUsers.includes(userId!) ? 'border-primary-main bg-primary-100 border' : 'bg-white'}`}
             onClick={() => onClick(restaurant)}>
             <div className="flex flex-col gap-11">
                 {/* 레스토랑 이름과 카테고리 */}
