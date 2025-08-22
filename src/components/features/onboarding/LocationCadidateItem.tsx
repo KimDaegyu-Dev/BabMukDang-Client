@@ -2,17 +2,17 @@ import { ModifyIcon } from '@/assets/icons'
 
 export function LocationCadidateItem({
     location,
-    handleLocationSelect
+    onClick
 }: {
     location: any
-    handleLocationSelect: (id: string) => void
+    onClick: () => void
 }) {
     return (
         <div
             className={`rounded-12 cursor-pointer p-16 transition-colors ${
                 location.isSelected ? 'bg-primary-main' : 'bg-white'
             }`}
-            onClick={() => handleLocationSelect(location.id)}>
+            onClick={onClick}>
             <div className="flex items-center justify-between">
                 <div className="flex-1">
                     <h3 className="text-body1-medium text-black">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSocket } from '@/contexts/SocketContext'
 import { COLORS } from '@/constants/colors'
+import { useNavigate } from 'react-router-dom'
 
 export function OnboardingButton() {
     const {
@@ -12,7 +13,7 @@ export function OnboardingButton() {
         setIsSelfReady
     } = useSocket()
     const [countDown, setCountDown] = useState(3)
-
+    const navigate = useNavigate()
     useEffect(() => {
         if (!isSelfReady) {
             setCountDown(3)
@@ -39,6 +40,10 @@ export function OnboardingButton() {
             const next = !prev
             // 새로운 상태 값으로 소켓 이벤트 발생
             socket?.emit('ready-state', { isReady: next })
+
+            if (stage === 'finish') {
+                navigate('/')
+            }
             return next
         })
     }
