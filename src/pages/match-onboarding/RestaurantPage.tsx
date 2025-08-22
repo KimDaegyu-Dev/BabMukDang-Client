@@ -15,16 +15,19 @@ interface Restaurant {
     id: string
     place_name: string
     category_name: string
+    category_group_name: string
     distance: string
     road_address_name: string
     address_name: string
+    phone: string
     selectUsers: string[]
 }
-interface RestaurantPickUpdatedDto {
+type RestaurantPickUpdatedDto = RestaurantPickUpdate[]
+
+interface RestaurantPickUpdate {
     restaurantId: string
     userId: string
 }
-;[]
 
 export function RestaurantPage() {
     const [restaurantList, setRestaurantList] = useState<Restaurant[]>([])
@@ -40,9 +43,10 @@ export function RestaurantPage() {
                         selectUsers:
                             initialState.initialState.restaurantUserList
                                 .filter(
-                                    item => item.restaurantId === restaurant.id
+                                    (item: any) =>
+                                        item.restaurantId === restaurant.id
                                 )
-                                .map(item => item.userId)
+                                .map((item: any) => item.userId)
                     })
                 )
             )
@@ -59,8 +63,11 @@ export function RestaurantPage() {
                     prev.map(restaurant => ({
                         ...restaurant,
                         selectUsers: data
-                            .filter(item => item.restaurantId === restaurant.id)
-                            .map(item => item.userId)
+                            .filter(
+                                (item: any) =>
+                                    item.restaurantId === restaurant.id
+                            )
+                            .map((item: any) => item.userId)
                     }))
                 )
             }
