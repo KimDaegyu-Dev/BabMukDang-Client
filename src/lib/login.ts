@@ -1,8 +1,9 @@
 import { client } from '@/apis/client'
+import axios from 'axios'
 
 export const login = async (username: string, userId: string) => {
     try {
-        const response = await client.get('/', {
+        const response = await axios.get('http://localhost:3000/', {
             params: { username, userId }
         })
 

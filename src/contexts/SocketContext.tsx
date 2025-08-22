@@ -10,6 +10,7 @@ import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 import { useAuthStore } from '@/store/authStore'
 import { useParams, useSearchParams } from 'react-router-dom'
+import { useLogin } from '@/hooks/useLogin'
 
 interface ChatMessageDto {
     messageId: string
@@ -36,12 +37,21 @@ type Category = {
 const SocketContext = createContext<{
     socket: Socket | null
     roomId: string | undefined
-    userId: string | null
-    username: string | null
     chatMessages: ChatMessageDto[]
     initialState: any
     setInitialState: (initialState: any) => void
     categories: Category[]
+    participants: any[]
+    setParticipants: (participants: any[]) => void
+    readyCount: number
+    participantCount: number
+    stage: string
+    matchType: 'announcement' | 'invitation'
+    setStage: (stage: string) => void
+    setReadyCount: (readyCount: number) => void
+    setParticipantCount: (participantCount: number) => void
+    isSelfReady: boolean
+    setIsSelfReady: (isSelfReady: boolean) => void
 } | null>(null)
 export const useSocket = () => {
     const ctx = useContext(SocketContext)
@@ -52,18 +62,19 @@ export const useSocket = () => {
 export function SocketProvider({ children }: { children: React.ReactNode }) {
     const [socket, setSocket] = useState<Socket | null>(null)
     const mounted = useRef(false)
-    const { accessToken, setTokens, setUsername, setUserId } = useAuthStore()
+    const { accessToken } = useAuthStore()
     const { roomId } = useParams<{ roomId: string }>()
     const { matchType } = useParams<{
         matchType: 'announcement' | 'invitation'
     }>()
-    const [searchParams] = useSearchParams()
-    const userId = searchParams.get('userId')
-    const username = searchParams.get('username')
     const [chatMessages, setChatMessages] = useState<ChatMessageDto[]>([])
     const [initialState, setInitialState] = useState<any>(null)
     const [categories, setCategories] = useState<Category[]>([])
-
+    const [participants, setParticipants] = useState<any[]>([])
+    const [readyCount, setReadyCount] = useState(0)
+    const [participantCount, setParticipantCount] = useState(0)
+    const [stage, setStage] = useState('waiting')
+    const [isSelfReady, setIsSelfReady] = useState(false)
     useEffect(() => {
         fetch(`${import.meta.env.VITE_CDN_URL}/categories.json`)
             .then(res => res.json())
@@ -74,11 +85,11 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
     // token이 설정된 후에 socket 생성
     useEffect(() => {
-        // if (!token) return // token이 없으면 socket 생성하지 않음
+        if (!accessToken) return // token이 없으면 socket 생성하지 않음
         const s = io(`http://localhost:3000/${matchType}`, {
             query: { roomId: roomId || '' },
             auth: {
-                token: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNzU1Mzg5MDU1LCJleHAiOjE3NTUzOTI2NTUsInVzZXJuYW1lIjoi6rmA64yA6recIiwiZW1haWwiOiI5dXRhbmdAbmF2ZXIuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.vNIq2D3t1s95Mqz-zBJci51bRrM1GBF-0Wt0MKataCs'
+                token: accessToken
             }
         })
 
@@ -97,6 +108,14 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         socket.onAny((event, ...args) => {
             console.log(event, args)
         })
+        socket?.on('ready-state-changed', (data: any) => {
+            setReadyCount(data.readyCount)
+            setParticipantCount(data.participantCount)
+        })
+        socket?.on('stage-changed', data => {
+            setStage(data.stage)
+            setIsSelfReady(false)
+        })
     }, [socket])
 
     if (!socket) return null // 초기 연결 중 스켈레톤 UI를 보여줘도 됨
@@ -105,12 +124,21 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
             value={{
                 socket,
                 roomId,
-                userId,
-                username,
                 chatMessages,
                 initialState,
                 setInitialState,
-                categories
+                categories,
+                participants,
+                setParticipants,
+                readyCount,
+                participantCount,
+                stage,
+                matchType,
+                setStage,
+                setReadyCount,
+                setParticipantCount,
+                isSelfReady,
+                setIsSelfReady
             }}>
             {children}
         </SocketContext.Provider>

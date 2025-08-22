@@ -10,13 +10,13 @@ export function RecieveInvitationList() {
                 <span className="text-body1-semibold text-gray-8">
                     받은 초대장
                 </span>
-                <span className="text-caption-medium text-right text-gray-300">
+                {/* <span className="text-caption-medium text-right text-gray-300">
                     더보기 +
-                </span>
+                </span> */}
             </div>
             {/* 하단 */}
-            <div className="flex flex-row justify-between">
-                {Array.from({ length: 5 }).map((_, index) => (
+            <div className="flex flex-row justify-between gap-18 overflow-x-auto">
+                {Array.from({ length: 10 }).map((_, index) => (
                     <Link
                         to="/read-invitation"
                         className="flex flex-col items-center justify-center gap-4">

@@ -1,4 +1,6 @@
-import { LocationIcon, CallIcon } from '@/assets/icons'
+import { CallIcon, LocationGrayIcon } from '@/assets/icons'
+import { useAuthStore } from '@/store'
+import { FriendProfileList } from '../features/onboarding'
 // import { Restaurant } from '@/types/restaurant'
 
 interface Restaurant {
@@ -10,11 +12,12 @@ interface Restaurant {
     road_address_name: string
     address_name: string
     phone: string
+    selectUsers: string[]
 }
 interface RestaurantCardProps {
     restaurant: Restaurant
     gps?: any
-    onClick?: () => void
+    onClick: (restaurant: Restaurant) => void
     className?: string
 }
 
@@ -24,46 +27,54 @@ export function RestaurantCard({
     className = '',
     gps
 }: RestaurantCardProps) {
+    const { userId } = useAuthStore()
     return (
         <div
-            className={`shadow-drop-1 flex w-full flex-col gap-11 rounded-lg p-12 ${className}`}
-            onClick={onClick}>
-            {/* 레스토랑 이름과 카테고리 */}
-            <div className="flex items-center gap-8">
-                <span className="text-body1-bold text-black">
-                    {restaurant.place_name}
-                </span>
-                <span className="text-caption-medium text-gray-3">
-                    {restaurant.category_name?.split(' > ').pop() ||
-                        restaurant.category_group_name}
-                </span>
-            </div>
-
-            {/* 위치와 전화번호 정보 */}
-            <div className="flex flex-col items-baseline gap-6">
-                {/* 위치 정보 */}
-                <div className="flex items-center gap-3">
-                    <LocationIcon />
-                    {gps?.current?.latitude && gps?.current?.longitude && (
-                        <span className="text-caption-medium text-gray-5">
-                            {formatDistance(restaurant.distance)}{' '}
-                        </span>
-                    )}
-                    <span className="text-caption-medium text-gray-5">
-                        {restaurant.road_address_name ||
-                            restaurant.address_name}
+            className={`shadow-drop-1 flex w-full justify-between rounded-lg p-12 ${className} ${restaurant.selectUsers.includes(userId) ? 'border-primary-main bg-primary-100 border' : 'bg-white'}`}
+            onClick={() => onClick(restaurant)}>
+            <div className="flex flex-col gap-11">
+                {/* 레스토랑 이름과 카테고리 */}
+                <div className="flex items-center gap-8">
+                    <span className="text-body1-bold text-black">
+                        {restaurant.place_name}
+                    </span>
+                    <span className="text-caption-medium text-gray-3">
+                        {restaurant.category_name?.split(' > ').pop() ||
+                            restaurant.category_group_name}
                     </span>
                 </div>
 
-                {/* 전화번호 */}
-                {restaurant.phone && (
-                    <div className="flex items-center gap-2">
-                        <CallIcon />
+                {/* 위치와 전화번호 정보 */}
+                <div className="flex flex-col items-baseline gap-6">
+                    {/* 위치 정보 */}
+                    <div className="flex items-center gap-3">
+                        <LocationGrayIcon />
+                        {gps?.current?.latitude && gps?.current?.longitude && (
+                            <span className="text-caption-medium text-gray-5">
+                                {formatDistance(restaurant.distance)}{' '}
+                            </span>
+                        )}
                         <span className="text-caption-medium text-gray-5">
-                            {restaurant.phone}
+                            {restaurant.road_address_name ||
+                                restaurant.address_name}
                         </span>
                     </div>
-                )}
+
+                    {/* 전화번호 */}
+                    {restaurant.phone && (
+                        <div className="flex items-center gap-2">
+                            <CallIcon />
+                            <span className="text-caption-medium text-gray-5">
+                                {restaurant.phone}
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </div>
+            <div className="flex items-center gap-2">
+                <FriendProfileList
+                    selectedUsers={restaurant.selectUsers || []}
+                />
             </div>
         </div>
     )

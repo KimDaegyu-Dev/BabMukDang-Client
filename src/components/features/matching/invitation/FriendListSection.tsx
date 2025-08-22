@@ -14,12 +14,19 @@ export function FriendListSection({ friendList }: { friendList: Friend[] }) {
         key: string
         label: string
     }>(INVITATION_FILTER_LIST[0])
+    const [filteredFriendList, setFilteredFriendList] =
+        useState<Friend[]>(friendList)
+    const handleSearch = (search: string) => {
+        setFilteredFriendList(
+            friendList.filter(friend => friend.name.includes(search))
+        )
+    }
     return (
         <div className="flex w-full flex-col gap-16">
             <div className="flex flex-col gap-16">
                 <span className="text-title2-bold text-gray-8">친구목록</span>
                 <SearchInput
-                    handleSearch={() => {}}
+                    handleSearch={handleSearch}
                     placeholder="친구 검색하기"
                 />
             </div>
@@ -31,7 +38,7 @@ export function FriendListSection({ friendList }: { friendList: Friend[] }) {
                     className="self-start"
                 />
                 <div className="flex flex-col gap-10">
-                    {friendList
+                    {filteredFriendList
                         .filter(friend =>
                             activeFilter.key === 'all'
                                 ? true

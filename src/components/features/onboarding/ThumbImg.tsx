@@ -28,19 +28,29 @@ export function ThumbImg({
     size,
     className,
     onClick,
-    aspectRatio
+    aspectRatio,
+    isExcluded
 }: {
-    item: Item
+    item: Item | undefined
     size: number | 'full'
-    className: string
+    className?: string
     onClick: () => void
     aspectRatio?: string
+    isExcluded?: boolean
 }) {
-    const [isExcluded, setIsExcluded] = useState(false)
     const handleClick = () => {
-        setIsExcluded(prev => !prev)
         onClick()
     }
+    if (!item)
+        return (
+            <div
+                onClick={handleClick}
+                className={`bg-gray-2 h-${size} w-${size} rounded-12 flex items-center justify-center`}>
+                <span className="text-body2-medium text-gray-7">
+                    이미지 준비 중
+                </span>
+            </div>
+        )
     return (
         <div
             className={`rounded-12 relative h-${size} w-${size} overflow-hidden ${className} ${
@@ -74,9 +84,9 @@ export function ThumbImg({
                         item.images.src,
                         import.meta.env.VITE_CDN_URL
                     )}
-                    loading={item.priority ? 'eager' : 'lazy'}
+                    // loading={item.priority ? 'eager' : 'lazy'}
                     // @ts-ignore
-                    fetchpriority={item.priority ? 'high' : 'auto'}
+                    // fetchpriority={item.priority ? 'high' : 'auto'}
                     decoding="async"
                     className="absolute inset-0 h-full w-full object-cover"
                 />

@@ -1,10 +1,10 @@
 import { MatchingAnnouncement } from '@/types'
 import {
     ProfileDefaultIcon,
-    TimeIcon,
-    LocationIcon,
-    PeopleIcon,
-    EmptyViewIcon
+    EmptyViewIcon,
+    LocationWhiteIcon,
+    TimeWhiteIcon,
+    PeopleWhiteIcon
 } from '@/assets/icons'
 
 export function AnnouncementCard({
@@ -50,19 +50,19 @@ export function AnnouncementCard({
             <div className="rounded-12 bg-primary-500 mb-16 p-16">
                 <div className="flex flex-col gap-8">
                     <div className="flex items-center gap-4">
-                        <TimeIcon />
+                        <TimeWhiteIcon />
                         <span className="text-body2-semibold text-white">
                             {announcement.time}
                         </span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <LocationIcon />
+                        <LocationWhiteIcon />
                         <span className="text-body2-semibold text-white">
                             {announcement.location}
                         </span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <PeopleIcon />
+                        <PeopleWhiteIcon />
                         <span className="text-body2-semibold text-white">
                             {announcement.maxParticipants}명
                         </span>
