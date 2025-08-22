@@ -178,7 +178,7 @@ const PostCardFooter = ({
                     {/* Location icon and distance */}
                     <div className="flex flex-row items-end gap-4">
                         <span className="flex items-center">
-                            <LocationGrayIcon className="h-16 w-16" />
+                            <LocationGrayIcon className="size-16" />
                         </span>
                         <span className="text-caption-medium text-gray-5">
                             {restaurantInfo.restaurantDistance}

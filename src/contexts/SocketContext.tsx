@@ -133,7 +133,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
                 readyCount,
                 participantCount,
                 stage,
-                matchType,
+                matchType: matchType as 'announcement' | 'invitation',
                 setStage,
                 setReadyCount,
                 setParticipantCount,

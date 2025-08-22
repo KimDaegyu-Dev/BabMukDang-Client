@@ -13,7 +13,6 @@ import {
     UploadPage,
     WaitingPage,
     SearchRestaurantPage,
-    SocketTestPage,
     MeetingPage,
     MenuPage,
     MenuExcludePage,
@@ -193,10 +192,6 @@ function App() {
                             <Route
                                 path="/:matchType/date/:roomId"
                                 element={<DatePage />}
-                            />
-                            <Route
-                                path="/:matchType/socket-test/:roomId"
-                                element={<SocketTestPage />}
                             />
                         </Route>
 

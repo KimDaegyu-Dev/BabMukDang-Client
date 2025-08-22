@@ -8,6 +8,7 @@ import {
 import { COLORS } from '@/constants/colors'
 import { useSocket } from '@/contexts/SocketContext'
 import { ChatInput } from '@/components/shared'
+import { useAuthStore } from '@/store'
 interface ChatMessageDto {
     messageId: string
     roomId: string
@@ -31,7 +32,8 @@ export function ChatModal({
     onClose,
     roomId = 'default-room'
 }: ChatModalProps) {
-    const { socket, chatMessages, userId } = useSocket()
+    const { socket, chatMessages } = useSocket()
+    const { userId } = useAuthStore()
     const [messages, setMessages] = useState<ChatMessageDto[]>(
         chatMessages || []
     )

@@ -36,16 +36,14 @@ export function OnboardingButton() {
     }, [readyCount, participantCount, isSelfReady])
 
     const onClickReady = () => {
-        setIsSelfReady((prev: boolean) => {
-            const next = !prev
-            // 새로운 상태 값으로 소켓 이벤트 발생
-            socket?.emit('ready-state', { isReady: next })
+        const next = !isSelfReady
+        // 새로운 상태 값으로 소켓 이벤트 발생
+        socket?.emit('ready-state', { isReady: next })
 
-            if (stage === 'finish') {
-                navigate('/')
-            }
-            return next
-        })
+        if (stage === 'finish') {
+            navigate('/')
+        }
+        setIsSelfReady(next)
     }
     return (
         <button
