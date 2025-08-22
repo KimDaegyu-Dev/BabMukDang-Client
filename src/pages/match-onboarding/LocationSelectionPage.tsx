@@ -1,13 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
 
 import { useSocket } from '@/contexts/SocketContext'
-import {
-    OnboardingHeader,
-    KakaoMap,
-    SearchInput,
-    LocationCadidateItem
-} from '@/components'
+import { OnboardingHeader, KakaoMap, LocationCadidateItem } from '@/components'
 
 interface LocationCandidateDto {
     placeName: string
@@ -16,45 +10,14 @@ interface LocationCandidateDto {
     address?: string
 }
 
-export enum ClientAction {
-    // 단계 제어
-    STAGE_MOVE = 'STAGE_MOVE',
-    STAGE_LOCK = 'STAGE_LOCK',
-
-    // 2단계 - 장소 후보
-    CANDIDATE_ADD = 'CANDIDATE_ADD',
-    CANDIDATE_REMOVE = 'CANDIDATE_REMOVE',
-    CANDIDATE_VOTE = 'CANDIDATE_VOTE',
-    CANDIDATE_UNVOTE = 'CANDIDATE_UNVOTE',
-    CANDIDATE_SELECT = 'CANDIDATE_SELECT',
-    CANDIDATE_UNSELECT = 'CANDIDATE_UNSELECT',
-
-    // 3단계 - 메뉴 제외
-    EXCLUDE_MENU_ADD = 'EXCLUDE_MENU_ADD',
-    EXCLUDE_MENU_REMOVE = 'EXCLUDE_MENU_REMOVE',
-
-    // 4단계 - 메뉴 선택
-    MENU_PICK = 'MENU_PICK',
-    MENU_UNPICK = 'MENU_UNPICK',
-
-    // 5단계 - 최종 식당 선택
-    RESTAURANT_PICK = 'RESTAURANT_PICK',
-    RESTAURANT_UNPICK = 'RESTAURANT_UNPOVE',
-
-    // 채팅
-    CHAT_SEND = 'CHAT_SEND'
-}
-
 interface LocationOption extends LocationCandidateDto {
     id: string
     isSelected: boolean
 }
 
 export function LocationSelectionPage() {
-    const navigate = useNavigate()
     const { socket, initialState, matchType } = useSocket()
 
-    const [isSearching, setIsSearching] = useState(false)
     const [locationOptions, setLocationOptions] = useState<LocationOption[]>([])
     const mapRef = useRef<HTMLDivElement>(null)
     useEffect(() => {
@@ -126,46 +89,6 @@ export function LocationSelectionPage() {
         }
     }
 
-    const handleSearch = async (searchKeyword: string) => {
-        if (searchKeyword.trim()) {
-            setIsSearching(true)
-            try {
-                var ps = new window.kakao.maps.services.Places()
-                ps.keywordSearch(
-                    searchKeyword,
-                    (data: any, status: any, pagination: any) => {
-                        if (status === window.kakao.maps.services.Status.OK) {
-                            console.log(data)
-                        }
-                    },
-                    { category_group_code: 'FD6' }
-                )
-                // const searchResults =
-                // await locationApi.searchLocations(searchQuery)
-                // console.log('검색 결과:', searchResults)
-
-                // 검색 결과를 위치 옵션에 추가
-                // const newLocations: LocationOption[] = searchResults.map(
-                //     (result: any, index: number) => ({
-                //         id: `search-${Date.now()}-${index}`,
-                //         placeName: result.name || result.place_name,
-                //         address: result.address || result.road_address_name,
-                //         isSelected: false,
-                //         lat: result.lat || result.y,
-                //         lng: result.lng || result.x
-                //     }),
-                //     { useMapBounds: true }
-                // )
-
-                // setLocationOptions(prev => [...prev, ...newLocations])
-            } catch (error) {
-                console.error('위치 검색 실패:', error)
-            } finally {
-                setIsSearching(false)
-            }
-        }
-    }
-
     return (
         <div className="min-h-screen">
             <OnboardingHeader
@@ -206,7 +129,7 @@ export function LocationSelectionPage() {
                     <LocationCadidateItem
                         key={location.id}
                         location={location}
-                        handleLocationSelect={handleLocationSelect}
+                        onClick={() => handleLocationSelect(location.id)}
                     />
                 ))}
             </div>
