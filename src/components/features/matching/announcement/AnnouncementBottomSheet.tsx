@@ -15,10 +15,10 @@ export function AnnouncementBottomSheet() {
                     나의 공고
                 </span>
                 <div className="flex w-280 flex-col gap-12">
+                    <AddAnnouncementCard />
                     {/* <CloseAnnouncementCard
                         announcement={MockAnnouncements[0]}
                     /> */}
-                    <AddAnnouncementCard />
                     <CloseAnnouncementButton />
                 </div>
             </div>

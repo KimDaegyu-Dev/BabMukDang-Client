@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { MockAnnouncements, MockFriendList } from '@/constants/mockData'
-import { MatchingAnnouncement } from '@/types'
+import { PostResponse } from '@/apis/dto'
 
 import { useHeader } from '@/hooks'
 import {
@@ -37,17 +37,19 @@ export function MatchingPage() {
         }
     }, [])
 
-    const { data: announcements } = useGetAnnouncements()
+    const [announcements, setAnnouncements] = useState<PostResponse[]>([])
+
     const { setTokens } = useAuthStore()
+    const { data: announcementsData } = useGetAnnouncements()
     useEffect(() => {
         setTokens({
             accessToken:
-                'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzU1NjcxNjgyLCJleHAiOjE3NTU2NzUyODIsInVzZXJuYW1lIjoi6rmA64yA6recIiwiZW1haWwiOiI5dXRhbmdAbmF2ZXIuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.Cyzz7mmnfKFGh67_73GTZnMAD7TyFj5DtrcNiU9xBrM',
-            refreshToken:
-                'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzU1NjcxNjgyLCJleHAiOjE3NTU2NzUyODIsInVzZXJuYW1lIjoi6rmA64yA6recIiwiZW1haWwiOiI5dXRhbmdAbmF2ZXIuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.Cyzz7mmnfKFGh67_73GTZnMAD7TyFj5DtrcNiU9xBrM'
+                'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzU1ODk4NTcwLCJleHAiOjE3NTU5MDIxNzAsInVzZXJuYW1lIjoi6rmA64yA6recIiwiZW1haWwiOiI5dXRhbmdAbmF2ZXIuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.gYC9impIDlIKSmaejT9WVdFGR2uBhu4X3SVrfNsoGBw',
+            refreshToken: ''
         })
-        console.log(announcements)
-    }, [announcements])
+        console.log('announcementsData', announcementsData)
+        setAnnouncements(announcementsData || [])
+    }, [])
 
     return (
         <div className="absolute top-0 left-0 flex h-full w-screen flex-col">
@@ -59,7 +61,7 @@ export function MatchingPage() {
                 }
             />
             {activeTab === 'announcement' ? (
-                <AnnouncementTab announcements={MockAnnouncements} />
+                <AnnouncementTab announcements={announcements} />
             ) : (
                 <InvitationTab />
             )}
@@ -67,11 +69,7 @@ export function MatchingPage() {
     )
 }
 
-function AnnouncementTab({
-    announcements
-}: {
-    announcements: MatchingAnnouncement[]
-}) {
+function AnnouncementTab({ announcements }: { announcements: PostResponse[] }) {
     return (
         <div className="bg-primary-100 flex h-full flex-col justify-center pb-90">
             <div className="flex flex-1 flex-col justify-center pb-90">

@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { useImageStore } from '@/store'
+import { useArticleStore } from '@/store'
 import { useBottomNav, useHeader } from '@/hooks'
 import { MutalButton } from '@/components'
 
 export function UploadPage() {
-    const { image: imageFile } = useImageStore()
+    const {
+        image: imageFile,
+        mealDate,
+        mealTime,
+        setMealTime,
+        setTaggedMemberIds
+    } = useArticleStore()
     const [image, setImage] = useState<string | null>(null)
     const { showBottomNav, hideBottomNav } = useBottomNav()
     const { setTitle, resetHeader } = useHeader()
@@ -20,9 +26,31 @@ export function UploadPage() {
         reader.readAsDataURL(imageFile)
     }, [imageFile])
 
+    type MealTime = keyof typeof mealTimeMap
+
+    const [mealTimeNumber, setMealTimeNumber] = useState<number>(0)
+
+    const mealTimeTextArr = ['아침', '아점', '점심', '점저', '저녁', '야식']
+
+    const mealTimeMap = {
+        아침: '09:00:00',
+        아점: '11:00:00',
+        점심: '12:00:00',
+        점저: '16:00:00',
+        저녁: '18:00:00',
+        야식: '20:00:00'
+    }
+    const handleMealTimeText = () => {
+        setMealTimeNumber(prev => (prev + 1) % mealTimeTextArr.length)
+    }
+    useEffect(() => {
+        setMealTime(mealTimeMap[mealTimeTextArr[mealTimeNumber] as MealTime])
+    }, [mealTimeNumber])
+
     useEffect(() => {
         hideBottomNav()
         setTitle('사진 업로드')
+        setTaggedMemberIds([1, 2])
         return () => {
             showBottomNav()
             resetHeader()
@@ -50,12 +78,14 @@ export function UploadPage() {
                 <div className="mb-15 flex w-full gap-16">
                     <div className="rounded-12 bg-gray-2 flex w-full items-center justify-center py-8">
                         <span className="text-body1-semibold text-gray-7">
-                            2025.08.05
+                            {mealDate}
                         </span>
                     </div>
-                    <div className="rounded-12 bg-gray-2 flex w-full items-center justify-center py-8">
+                    <div
+                        className="rounded-12 bg-gray-2 flex w-full items-center justify-center py-8"
+                        onClick={handleMealTimeText}>
                         <span className="text-body1-semibold text-gray-7">
-                            아침
+                            {mealTimeTextArr[mealTimeNumber]}
                         </span>
                     </div>
                 </div>
