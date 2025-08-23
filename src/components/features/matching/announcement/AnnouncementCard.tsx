@@ -1,4 +1,4 @@
-import { MatchingAnnouncement } from '@/types'
+import { PostResponse } from '@/apis/dto'
 import {
     ProfileDefaultIcon,
     EmptyViewIcon,
@@ -6,6 +6,7 @@ import {
     TimeWhiteIcon,
     PeopleWhiteIcon
 } from '@/assets/icons'
+import { useState } from 'react'
 
 export function AnnouncementCard({
     announcement,
@@ -14,7 +15,7 @@ export function AnnouncementCard({
     currentIndex,
     isActive
 }: {
-    announcement: MatchingAnnouncement
+    announcement: PostResponse
     cardRef: React.RefObject<HTMLDivElement>
     index: number
     currentIndex: number
@@ -31,18 +32,18 @@ export function AnnouncementCard({
                 <div className="flex items-center gap-8">
                     <ProfileDefaultIcon className="size-20" />
                     <span className="text-body1-semibold">
-                        {announcement.creator.name}
+                        {announcement.authorName}
                     </span>
                 </div>
                 <span className="text-caption-medium text-gray-5">
-                    {announcement.timeLeft}
+                    {calculateTimeLeft(announcement.createdAt)}
                 </span>
             </div>
 
             {/* Title */}
             <div className="mb-16 text-center">
                 <span className="text-title1-bold whitespace-pre-line">
-                    {announcement.title}
+                    {announcement.message}
                 </span>
             </div>
 
@@ -52,7 +53,7 @@ export function AnnouncementCard({
                     <div className="flex items-center gap-4">
                         <TimeWhiteIcon />
                         <span className="text-body2-semibold text-white">
-                            {announcement.time}
+                            {formatTime(announcement.meetingAt)}
                         </span>
                     </div>
                     <div className="flex items-center gap-4">
@@ -64,7 +65,7 @@ export function AnnouncementCard({
                     <div className="flex items-center gap-4">
                         <PeopleWhiteIcon />
                         <span className="text-body2-semibold text-white">
-                            {announcement.maxParticipants}명
+                            {announcement.targetCount}명
                         </span>
                     </div>
                 </div>
@@ -79,13 +80,13 @@ export function AnnouncementCard({
 
             <div className="rounded-50 border-primary-200 border p-8">
                 <div className="flex flex-row gap-8">
-                    {announcement.participants.map((participant, index) => (
+                    {announcement.participantNames.map((participant, index) => (
                         <div
                             key={index}
                             className="flex items-center gap-8">
                             <ProfileDefaultIcon className="size-20" />
                             <span className="text-body2-medium">
-                                {participant.name}
+                                {participant}
                             </span>
                         </div>
                     ))}
@@ -108,4 +109,28 @@ export function EmptyAnnouncementCard() {
             </div>
         </div>
     )
+}
+
+function calculateTimeLeft(createdAt: string) {
+    const createdAtDate = new Date(createdAt)
+    const expiresAtDate = new Date(createdAtDate.getTime() + 2 * 60 * 60 * 1000)
+    const now = new Date()
+    const timeLeft = expiresAtDate.getTime() - now.getTime()
+    const hours = Math.floor(timeLeft / (1000 * 60 * 60))
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))
+    const timeLeftString = `${hours}시간 ${minutes}분 후 종료`
+    return timeLeftString
+}
+
+function formatTime(meetingAt: string) {
+    // 2025-08-08T22:30 -> 8월 7일 오후 7시 30분
+    const date = new Date(meetingAt)
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours()
+    const minutes = date.getMinutes()
+
+    const ampm = date.getHours() >= 12 ? '오후' : '오전'
+    const timeString = `${month}월 ${day}일 ${ampm} ${hours}시 ${minutes}분`
+    return timeString
 }
