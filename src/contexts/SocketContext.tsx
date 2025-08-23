@@ -86,7 +86,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     // token이 설정된 후에 socket 생성
     useEffect(() => {
         if (!accessToken) return // token이 없으면 socket 생성하지 않음
-        const s = io(`http://localhost:3000/${matchType}`, {
+        const s = io(`${import.meta.env.VITE_WEBSOCKET_URL}/${matchType}`, {
             query: { roomId: roomId || '' },
             auth: {
                 token: accessToken

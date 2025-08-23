@@ -2,21 +2,24 @@ import exifr from 'exifr'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { useImageStore } from '@/store'
+import { useArticleStore } from '@/store'
 import { RestaurantCard, MutalButton, SearchInput } from '@/components'
-import { useBottomNav } from '@/hooks'
+import { useBottomNav, useKakaoMap } from '@/hooks'
+import { useUploadArticle } from '@/query'
+import { useAuthStore } from '@/store'
 
 export function SearchRestaurantPage() {
-    const { image } = useImageStore()
+    const { image, setRestaurant } = useArticleStore()
     const gps = useRef<any>(null)
     const [restaurants, setRestaurants] = useState<any[]>([])
     const [selectedRestaurant, setSelectedRestaurant] = useState<any>(null)
+    const { isLoaded, kakao, createPlaces } = useKakaoMap()
     const getGps = async () => {
         try {
             const result = await exifr.parse(image as File, { gps: true })
             gps.current = result
-            if (result.latitude && result.longitude) {
-                places.current = new window.kakao.maps.services.Places()
+            if (result.latitude && result.longitude && isLoaded) {
+                places.current = createPlaces()
                 places.current.categorySearch(
                     'FD6',
                     (data: any, status: any, pagination: any) => {
@@ -26,7 +29,7 @@ export function SearchRestaurantPage() {
                         x: result.longitude,
                         y: result.latitude,
                         radius: 1000,
-                        sort: window.kakao.maps.services.SortBy.DISTANCE
+                        sort: kakao.maps.services.SortBy.DISTANCE
                     }
                 )
             }
@@ -37,9 +40,10 @@ export function SearchRestaurantPage() {
 
     const places = useRef<any>(null)
     useEffect(() => {
-        if (!image) return
+        if (!image || !isLoaded) return
         getGps()
-    }, [image])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [image, isLoaded])
 
     const handleSearch = (searchKeyword: string) => {
         if (!searchKeyword) {
@@ -49,15 +53,14 @@ export function SearchRestaurantPage() {
                 return
             }
         }
-        places.current = new window.kakao.maps.services.Places()
+        if (!isLoaded) return
+        places.current = createPlaces()
         places.current.keywordSearch(
             searchKeyword,
             (data: any, status: any, pagination: any) => {
-                if (status === window.kakao.maps.services.Status.OK) {
+                if (status === kakao.maps.services.Status.OK) {
                     setRestaurants(data)
-                } else if (
-                    status === window.kakao.maps.services.Status.ZERO_RESULT
-                ) {
+                } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
                     setRestaurants([])
                 }
             },
@@ -67,13 +70,29 @@ export function SearchRestaurantPage() {
                 y: gps.current?.latitude ? gps.current?.latitude : null,
                 sort:
                     gps.current?.longitude && gps.current?.latitude
-                        ? window.kakao.maps.services.SortBy.DISTANCE
+                        ? kakao.maps.services.SortBy.DISTANCE
                         : null
             }
         )
     }
     const handleSelectRestaurant = (restaurant: any) => {
         setSelectedRestaurant(restaurant)
+        setRestaurant(
+            restaurant.map((item: any) => ({
+                ...item,
+                addressName: item.address_name,
+                roadAddressName: item.road_address_name,
+                phoneNumber: item.phone,
+                placeUrl: item.place_url,
+                categoryName: item.category_name,
+                categoryGroupCode: item.category_group_code,
+                categoryGroupName: item.category_group_name,
+                placeId: item.id,
+                placeName: item.place_name,
+                x: item.x,
+                y: item.y
+            }))
+        )
     }
 
     const { showBottomNav, hideBottomNav } = useBottomNav()
@@ -95,6 +114,7 @@ export function SearchRestaurantPage() {
             <div className="mt-53 flex flex-col items-center gap-10">
                 {restaurants.map(restaurant => (
                     <RestaurantCard
+                        key={restaurant.id}
                         restaurant={restaurant}
                         gps={gps}
                         onClick={() => handleSelectRestaurant(restaurant)}
@@ -107,15 +127,27 @@ export function SearchRestaurantPage() {
                 ))}
             </div>
             <div className="fixed bottom-40 left-0 w-full px-20">
-                <UploadButton disabled={false} />
+                <UploadButton />
             </div>
         </div>
     )
 }
 
-function UploadButton({ disabled }: { disabled?: boolean }) {
-    const handleJoin = () => {
-        if (disabled) return
+function UploadButton() {
+    const { image, buildRequest } = useArticleStore()
+    const { userId } = useAuthStore()
+    const { mutate: uploadAndPost, isPending } = useUploadArticle(
+        () => console.log('업로드 완료'),
+        e => console.error(e.message)
+    )
+    const onClickUpload = () => {
+        if (buildRequest) {
+            uploadAndPost({
+                currentUserId: userId!,
+                file: image as File,
+                buildRequest: buildRequest
+            })
+        }
     }
 
     return (
@@ -125,7 +157,7 @@ function UploadButton({ disabled }: { disabled?: boolean }) {
             to="/">
             <MutalButton
                 text="게시물 업로드 하기"
-                onClick={handleJoin}
+                onClick={onClickUpload}
                 hasArrow={true}
             />
         </Link>

@@ -1,5 +1,5 @@
 import { DownIcon, UpIcon } from '@/assets/icons'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 export function AddAnnouncementCard() {
     const [message, setMessage] = useState('')
@@ -9,20 +9,42 @@ export function AddAnnouncementCard() {
     const [place, setPlace] = useState('')
     const [participants, setParticipants] = useState<number>(0)
     const [unlimited, setUnlimited] = useState<boolean>(false)
-
+    const placeRef = useRef<HTMLInputElement>(null)
+    const messageRef = useRef<HTMLTextAreaElement>(null)
     const decParticipants = () =>
         setParticipants(prev => (prev > 0 ? prev - 1 : 0))
     const incParticipants = () => setParticipants(prev => prev + 1)
+    const focusInput = (
+        ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>
+    ) => {
+        if (ref.current) {
+            ref.current.focus()
+        }
+    }
+    const blurInput = (
+        ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>
+    ) => {
+        if (ref.current) {
+            ref.current.blur()
+        }
+    }
+    const blurAll = () => {
+        blurInput(messageRef)
+        blurInput(placeRef)
+    }
 
     return (
         <div
-            className={`shadow-drop-1 rounded-16 h-353 w-full bg-white px-16 pt-16 pb-14 transition-all duration-200`}>
+            className={`shadow-drop-1 rounded-16 h-353 w-full bg-white px-16 pt-16 pb-14`}>
             {/* 메시지 */}
             <div className="relative mb-16">
-                <div className="rounded-12 border-gray-2 pointer-events-none h-90 border px-12 py-12">
+                <div className="rounded-12 border-gray-2 h-90 border px-12 py-12">
                     <textarea
                         id="message"
                         value={message}
+                        ref={messageRef}
+                        onClick={() => focusInput(messageRef)}
+                        onBlur={() => blurInput(messageRef)}
                         onChange={e => setMessage(e.target.value)}
                         placeholder={`친구들에게 전할 메시지를 적어보세요\n(20자 내)`}
                         className="text-body2-medium h-full w-full resize-none"
@@ -76,6 +98,9 @@ export function AddAnnouncementCard() {
                 <input
                     value={place}
                     onChange={e => setPlace(e.target.value)}
+                    onClick={() => focusInput(placeRef)}
+                    onBlur={() => blurInput(placeRef)}
+                    ref={placeRef}
                     placeholder=""
                     className="rounded-6 text-body2-medium px-12"
                     style={{ height: 36, border: '1px solid #E4E4E4' }}
@@ -87,41 +112,43 @@ export function AddAnnouncementCard() {
                 <span className="text-body2-medium text-gray-6">인원 수</span>
                 <div className="flex items-center gap-8">
                     {/* Stepper */}
-                    <div
-                        className="rounded-6 flex items-center"
-                        style={{
-                            background: '#F4F5F7',
-                            padding: '5px 11px',
-                            height: 32,
-                            width: 144,
-                            gap: 42
-                        }}>
-                        <button
-                            type="button"
-                            aria-label="decrease"
-                            onClick={decParticipants}
-                            className="text-gray-4"
-                            style={{ width: 14, height: 14 }}>
-                            <DownIcon />
-                        </button>
-                        <span className="text-body2-medium">
-                            {participants}
-                        </span>
-                        <button
-                            type="button"
-                            aria-label="increase"
-                            onClick={incParticipants}
-                            className="text-gray-4"
-                            style={{ width: 14, height: 14 }}>
-                            <UpIcon />
-                        </button>
-                    </div>
+                    {!unlimited && (
+                        <div
+                            className="rounded-6 flex items-center"
+                            style={{
+                                background: '#F4F5F7',
+                                padding: '5px 11px',
+                                height: 32,
+                                width: 144,
+                                gap: 42
+                            }}>
+                            <button
+                                type="button"
+                                aria-label="decrease"
+                                onClick={decParticipants}
+                                className="text-gray-4"
+                                style={{ width: 14, height: 14 }}>
+                                <DownIcon />
+                            </button>
+                            <span className="text-body2-medium">
+                                {participants}
+                            </span>
+                            <button
+                                type="button"
+                                aria-label="increase"
+                                onClick={incParticipants}
+                                className="text-gray-4"
+                                style={{ width: 14, height: 14 }}>
+                                <UpIcon />
+                            </button>
+                        </div>
+                    )}
 
                     {/* Unlimited */}
                     <button
                         type="button"
                         onClick={() => setUnlimited(u => !u)}
-                        className={`rounded-6 text-body2-medium flex h-32 w-96 items-center justify-center ${unlimited ? 'bg-primary-200 text-primary-700' : ''}`}
+                        className={`rounded-6 text-body2-medium flex h-32 w-full items-center justify-center ${unlimited ? 'bg-primary-200 text-primary-700' : ''}`}
                         style={{
                             background: unlimited ? undefined : '#F4F5F7'
                         }}>
