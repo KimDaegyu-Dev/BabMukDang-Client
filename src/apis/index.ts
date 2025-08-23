@@ -11,5 +11,13 @@ export {
     getArticle,
     getArticleComments,
     getHomeArticles,
-    getArticlesByAuthor
+    getArticlesByAuthor,
+    postArticle
 } from './article'
+
+export {
+    presignArticle,
+    presignProfile,
+    uploadArticleS3,
+    uploadProfileS3
+} from './upload'

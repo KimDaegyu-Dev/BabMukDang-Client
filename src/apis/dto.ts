@@ -5,13 +5,14 @@ export interface BaseResponse<T> {
 }
 export interface Post {
     targetCount: number
-    meetingAt: string
+    meetingAt: string //2025-08-08T22:30
     location: string
     message: string
 }
 
 export interface PostRequest extends Post {}
 export interface PostResponse extends Post {
+    id: number
     authorName: string
     createdAt: string
     participantNames: string[]
@@ -21,14 +22,6 @@ export interface TokenResponse {
     accessToken: string
     refreshToken: string
     accessTokenMaxAge: number
-}
-export interface PostResponse {
-    authorName: string
-    createdAt: string
-    message: string
-    meetingAt: string
-    location: string
-    participantNames: string[]
 }
 
 export interface CommentResponse {
@@ -117,4 +110,13 @@ export interface ArticleDetailResponse {
     likedByMe: boolean
     createdAt: string
     expiresAt: string
+}
+
+export interface ArticlePostRequest {
+    imageUrl: string
+    method: 'ALBUM' | 'CAMERA'
+    mealDate: string
+    mealTime: string
+    restaurant: RestaurantInfo
+    taggedMemberIds: number[]
 }

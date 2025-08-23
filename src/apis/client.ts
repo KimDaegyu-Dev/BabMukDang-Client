@@ -36,6 +36,7 @@ client.interceptors.response.use(
                 logout()
                 return Promise.reject(error)
             }
+            const { logout, setTokens } = useAuthStore.getState()
 
             // 발급 시도 프로미스, 이미 발급 중이면 대기
             if (!isRefreshing) {
@@ -44,6 +45,7 @@ client.interceptors.response.use(
                     .post('/auth/refresh', {
                         refreshToken
                     })
+                    .post(`${import.meta.env.VITE_BASE_API_URL}/auth/refresh`)
                     .then(res => {
                         const { accessToken, refreshToken } = res.data
                         setTokens({ accessToken, refreshToken })
