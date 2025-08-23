@@ -1,4 +1,3 @@
-import { MatchingAnnouncement } from '@/types'
 import { ModalTrigger, MutalButtonSmall } from '@/components'
 
 export function JoinButton({ disabled }: { disabled?: boolean }) {

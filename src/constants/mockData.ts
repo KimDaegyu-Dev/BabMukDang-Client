@@ -1,6 +1,4 @@
-// Types for matching announcements
-import { MatchingAnnouncement } from '@/types'
-export const MockAnnouncements: MatchingAnnouncement[] = [
+export const MockAnnouncements = [
     {
         id: 1,
         title: '7시 학교 앞에서\n밥 먹을 사람!',
