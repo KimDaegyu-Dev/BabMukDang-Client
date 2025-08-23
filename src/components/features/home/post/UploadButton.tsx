@@ -1,11 +1,9 @@
 import { useNavigate } from 'react-router-dom'
-import { useImageStore } from '@/store'
-import { useState } from 'react'
+import { useArticleStore } from '@/store'
 
 export function UploadButton() {
-    const [capturedImage, setCapturedImage] = useState<string | null>(null)
     const navigate = useNavigate()
-    const { setImage } = useImageStore()
+    const { setImage } = useArticleStore()
     const selectFromGallery = () => {
         const input = document.createElement('input')
         input.type = 'file'
