@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 
+import { HomeIcon, MatchingIcon, DishIcon, MeetingIcon } from '@/assets/icons'
 export interface BottomNavConfig {
     visible: boolean
     items?: Array<{
@@ -23,14 +24,14 @@ interface BottomNavStore {
 const defaultConfig: BottomNavConfig = {
     visible: true,
     items: [
-        { path: '/', label: '홈', icon: () => null }, // 기본값은 빈 아이콘
-        { path: '/matching', label: '매칭', icon: () => null },
-        { path: '/meeting', label: '밥약', icon: () => null },
-        { path: '/profile', label: '내 밥그릇', icon: () => null }
+        { path: '/', label: '홈', icon: HomeIcon },
+        { path: '/matching', label: '매칭', icon: MatchingIcon },
+        { path: '/meeting', label: '밥약', icon: MeetingIcon },
+        { path: '/profile', label: '내 밥그릇', icon: DishIcon }
     ]
 }
 
-export const useBottomNavStore = create<BottomNavStore>((set, get) => ({
+export const useBottomNavStore = create<BottomNavStore>(set => ({
     config: defaultConfig,
 
     updateBottomNav: (newConfig: Partial<BottomNavConfig>) => {
