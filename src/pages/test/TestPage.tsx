@@ -57,6 +57,13 @@ export function TestPage() {
             description: '만날 장소 선택 및 투표',
             icon: '🗺️',
             color: 'bg-indigo-500'
+        },
+        {
+            path: 'https://babmuckdang.site/oauth2/authorization/kakao',
+            title: '로그인',
+            description: '카카오 로그인',
+            icon: '�',
+            color: 'bg-yellow-500'
         }
     ]
 

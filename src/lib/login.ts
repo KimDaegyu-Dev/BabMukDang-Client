@@ -3,9 +3,12 @@ import axios from 'axios'
 
 export const login = async (username: string, userId: string) => {
     try {
-        const response = await axios.get('http://localhost:3000/', {
-            params: { username, userId }
-        })
+        const response = await axios.get(
+            `${import.meta.env.VITE_WEBSOCKET_URL}/`,
+            {
+                params: { username, userId }
+            }
+        )
 
         // store 업데이트는 컴포넌트에서 처리
         return response.data
