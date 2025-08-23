@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
+import { useKakaoMap } from '@/hooks'
 
 interface KakaoMapProps {
     ref?: React.RefObject<any>
@@ -25,6 +26,7 @@ export function KakaoMap({
     const [map, setMap] = useState<any>(null)
     const [markers, setMarkers] = useState<any[]>([])
     const markersRef = useRef<any[]>([])
+    const { isLoaded, kakao, createMap, createGeocoder } = useKakaoMap()
 
     // markers 상태가 업데이트될 때마다 ref도 업데이트
     useEffect(() => {
@@ -32,19 +34,13 @@ export function KakaoMap({
     }, [markers])
 
     const initMap = useCallback(() => {
-        if (!mapRef.current) return
-        const { kakao } = window
-        console.log(kakao)
+        if (!mapRef.current || !isLoaded || !kakao) return
         try {
-            // 서울 중심부 좌표
-            const center = new kakao.maps.LatLng(37.5665, 126.978)
-
-            const options = {
-                center,
+            const kakaoMap = createMap(mapRef.current, {
+                center: { lat: 37.5665, lng: 126.978 },
                 level: 3
-            }
-
-            const kakaoMap = new kakao.maps.Map(mapRef.current, options)
+            })
+            if (!kakaoMap) return
             ref && (ref.current = kakaoMap)
             setMap(kakaoMap)
 
@@ -68,7 +64,8 @@ export function KakaoMap({
                     setMarkers([marker])
 
                     // 주소 검색
-                    const geocoder = new kakao.maps.services.Geocoder()
+                    const geocoder = createGeocoder()
+                    if (!geocoder) return
                     geocoder.coord2Address(
                         lng,
                         lat,
@@ -86,7 +83,7 @@ export function KakaoMap({
         } catch (error) {
             console.error('카카오맵 초기화 오류:', error)
         }
-    }, [])
+    }, [createGeocoder, createMap, isLoaded, kakao, onLocationSelect, ref])
 
     // API가 로드되면 지도 초기화
     useEffect(() => {
