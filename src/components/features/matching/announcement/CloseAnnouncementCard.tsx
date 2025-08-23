@@ -1,4 +1,4 @@
-import { MatchingAnnouncement } from '@/types'
+import { PostResponse } from '@/apis/dto'
 import {
     ProfileDefaultIcon,
     LocationWhiteIcon,
@@ -9,7 +9,7 @@ import {
 export function CloseAnnouncementCard({
     announcement
 }: {
-    announcement: MatchingAnnouncement
+    announcement: PostResponse
 }) {
     return (
         <div
@@ -19,18 +19,18 @@ export function CloseAnnouncementCard({
                 <div className="flex items-center gap-8">
                     <ProfileDefaultIcon className="size-20" />
                     <span className="text-body1-semibold">
-                        {announcement.creator.name}
+                        {announcement.authorName}
                     </span>
                 </div>
                 <span className="text-caption-medium text-gray-5">
-                    {announcement.timeLeft}
+                    {announcement.createdAt}
                 </span>
             </div>
 
             {/* Title */}
             <div className="mb-16 text-center">
                 <span className="text-title1-bold whitespace-pre-line">
-                    {announcement.title}
+                    {announcement.message}
                 </span>
             </div>
 
@@ -40,7 +40,7 @@ export function CloseAnnouncementCard({
                     <div className="flex items-center gap-4">
                         <TimeWhiteIcon />
                         <span className="text-body2-semibold text-white">
-                            {announcement.time}
+                            {announcement.meetingAt}
                         </span>
                     </div>
                     <div className="flex items-center gap-4">
@@ -52,7 +52,7 @@ export function CloseAnnouncementCard({
                     <div className="flex items-center gap-4">
                         <PeopleWhiteIcon />
                         <span className="text-body2-semibold text-white">
-                            {announcement.maxParticipants}명
+                            {announcement.targetCount}명
                         </span>
                     </div>
                 </div>
@@ -67,13 +67,13 @@ export function CloseAnnouncementCard({
 
             <div className="rounded-50 border-primary-200 border p-8">
                 <div className="flex flex-row gap-8">
-                    {announcement.participants.map((participant, index) => (
+                    {announcement.participantNames.map((participant, index) => (
                         <div
                             key={index}
                             className="flex items-center gap-8">
                             <ProfileDefaultIcon className="size-20" />
                             <span className="text-body2-medium">
-                                {participant.name}
+                                {participant}
                             </span>
                         </div>
                     ))}
