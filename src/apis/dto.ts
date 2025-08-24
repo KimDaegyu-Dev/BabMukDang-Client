@@ -119,4 +119,76 @@ export interface ArticlePostRequest {
     mealTime: string
     restaurant: RestaurantInfo
     taggedMemberIds: number[]
+    camera: boolean
+    album: boolean
 }
+export interface LikePostResponse {
+    liked: boolean
+    likeCount: number
+}
+
+export interface CommentPostRequest {
+    content: string
+    parentCommentId?: number
+}
+
+export interface Onboarding {
+    likedCodes: string[]
+    dislikedCodes: string[]
+    allergyCodes: string[]
+}
+export interface OnboardingPreferenceRequest extends Onboarding {}
+export interface OnboardingPreferenceResponse extends Onboarding {}
+// interface AnnouncementResponse {
+//     meetingId: string
+//     meetingAt: string
+//     location: string
+//     participantNames: string[]
+//     participants: [
+//         {
+//             userId: string
+//             userName: string
+//             userProfileImageURL: string
+//         }
+//     ]
+//     recentMenu: [
+//         {
+//             userId: string
+//             menu: string[]
+//         }
+//     ]
+// }
+
+// interface AnnouncementRequestBody {
+//     location: string
+//     locationDetail: {
+//         placeName: string
+//         placeAddress: string
+//         lat: number
+//         lng: number
+//     }
+//     restaurant: {
+//         restaurantId: string
+//         restaurantName: string
+//         restaurantAddress: string
+//         restaurantPhone: string
+//         restaurantPlaceURL: string
+//     }
+// }
+// interface InvitationRequestBody {
+//     location: string
+//     locationDetail: {
+//         placeName: string
+//         placeAddress: string
+//         lat: number
+//         lng: number
+//     }
+//     restaurant: {
+//         restaurantId: string
+//         restaurantName: string
+//         restaurantAddress: string
+//         restaurantPhone: string
+//         restaurantPlaceURL: string
+//     }
+//     meetingAt: string
+// }
