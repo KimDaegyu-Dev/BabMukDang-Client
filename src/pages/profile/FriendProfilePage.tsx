@@ -29,22 +29,32 @@ export function FriendProfilePage() {
         <main className="relative h-full min-h-full">
             {/* 프로필 섹션 */}
             <ProfileSection
-                profileImgUrl={MockMyProfileData.profileImgUrl}
-                name={MockMyProfileData.name}
-                description={MockMyProfileData.description}
-                preferredMenus={MockMyProfileData.preferredMenus}
-                cantEat={MockMyProfileData.cantEat}
+                profileImgUrl={MockMyProfileData.profileImageUrl}
+                name={MockMyProfileData.userName}
+                description={MockMyProfileData.bio}
+                likes={MockMyProfileData.likes.map(like => like.label)}
+                dislikes={MockMyProfileData.dislikes.map(
+                    dislike => dislike.label
+                )}
+                allergies={MockMyProfileData.allergies.map(
+                    allergy => allergy.label
+                )}
                 isFriend={true}
             />
             <FriendProfileSection
-                friends={MockMyProfileData.friends}
-                completedMeetings={MockMyProfileData.completedMeetings}
-                uncompletedMeetings={MockMyProfileData.uncompletedMeetings}
+                friends={MockMyProfileData.meetingCount}
+                completedMeetings={MockMyProfileData.meetingCount}
+                uncompletedMeetings={MockMyProfileData.meetingCount}
             />
             <ProfileModal
                 id="profile-notify-modal"
-                preferredMenus={MockMyProfileData.preferredMenus}
-                cantEat={MockMyProfileData.cantEat}
+                likes={MockMyProfileData.likes.map(like => like.label)}
+                dislikes={MockMyProfileData.dislikes.map(
+                    dislike => dislike.label
+                )}
+                allergies={MockMyProfileData.allergies.map(
+                    allergy => allergy.label
+                )}
             />
         </main>
     )

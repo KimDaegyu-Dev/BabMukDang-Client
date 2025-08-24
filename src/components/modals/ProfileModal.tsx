@@ -4,16 +4,18 @@ import { DeleteIcon } from '@/assets/icons'
 import { BaseModal, type BaseModalChildrenProps } from '@/components'
 
 type ProfileModalProps = {
-    preferredMenus: string[]
-    cantEat: string[]
+    likes: string[]
+    dislikes: string[]
+    allergies: string[]
 }
 
 export function ProfileModal({
     id,
     onClose,
     onAccept,
-    preferredMenus,
-    cantEat
+    likes,
+    dislikes,
+    allergies
 }: BaseModalChildrenProps & ProfileModalProps) {
     return (
         <BaseModal
@@ -21,8 +23,9 @@ export function ProfileModal({
             onClose={onClose}
             onAccept={onAccept}>
             <ProfileModalContent
-                preferredMenus={preferredMenus}
-                cantEat={cantEat}
+                likes={likes}
+                dislikes={dislikes}
+                allergies={allergies}
             />
         </BaseModal>
     )
@@ -30,8 +33,9 @@ export function ProfileModal({
 
 function ProfileModalContent({
     onClose,
-    preferredMenus,
-    cantEat
+    likes,
+    dislikes,
+    allergies
 }: BaseModalChildrenProps & ProfileModalProps) {
     return (
         <div className="rounded-16 relative bg-white px-16 py-16">
@@ -51,7 +55,7 @@ function ProfileModalContent({
                         좋아해요!
                     </span>
                     <div className="flex flex-wrap justify-center gap-4">
-                        {preferredMenus.map((menu, index) => (
+                        {likes.map((menu, index) => (
                             <span
                                 key={index}
                                 className="text-caption-10 text-primary-500 bg-primary-200 rounded-full border px-8 py-3"
@@ -67,7 +71,7 @@ function ProfileModalContent({
                         못먹어요!
                     </span>
                     <div className="flex flex-wrap justify-center gap-4">
-                        {cantEat.map((menu, index) => (
+                        {[...dislikes, ...allergies].map((menu, index) => (
                             <span
                                 key={index}
                                 className="text-caption-10 text-gray-4 bg-gray-2 rounded-full border px-8 py-3"

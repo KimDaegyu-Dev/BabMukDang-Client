@@ -7,15 +7,17 @@ export function ProfileSection({
     profileImgUrl,
     name,
     description,
-    preferredMenus,
-    cantEat,
+    likes,
+    dislikes,
+    allergies,
     isFriend
 }: {
     profileImgUrl: string
     name: string
     description: string
-    preferredMenus: string[]
-    cantEat: string[]
+    likes: string[]
+    dislikes: string[]
+    allergies: string[]
     isFriend: boolean
 }) {
     const navigate = useNavigate()
@@ -59,7 +61,7 @@ export function ProfileSection({
                             좋아해요!
                         </span>
                         <div className="flex flex-wrap justify-center gap-4">
-                            {preferredMenus.map(
+                            {likes.map(
                                 (menu, index) =>
                                     index < 3 && (
                                         <GoodBadChip
@@ -77,7 +79,7 @@ export function ProfileSection({
                             못먹어요!
                         </span>
                         <div className="flex flex-wrap justify-center gap-4">
-                            {cantEat.map(
+                            {[...dislikes, ...allergies].map(
                                 (menu, index) =>
                                     index < 3 && (
                                         <GoodBadChip
