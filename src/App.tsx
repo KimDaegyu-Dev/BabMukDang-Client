@@ -79,10 +79,6 @@ function App() {
 
                         {/* 홈 페이지 */}
                         <Route
-                            path="/comment/:postId"
-                            element={<CommentPage />}
-                        />
-                        <Route
                             path="/search-restaurant"
                             element={<SearchRestaurantPage />}
                         />

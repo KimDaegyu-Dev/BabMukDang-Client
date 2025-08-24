@@ -4,11 +4,13 @@ import { LogoTextIcon } from '@/assets/icons'
 import { MockPostList } from '@/constants/mockData'
 import { useHeader } from '@/hooks'
 import { PostCard, PostEmptyView, UploadButton } from '@/components'
+import { useGetHomeArticles } from '@/query'
 
 export function HomePage() {
     const { setLeftElement, hideCenterElement, resetHeader, showRightButton } =
         useHeader()
-
+    const { data: postListData } = useGetHomeArticles()
+    const postList = postListData?.content ?? MockPostList ?? []
     useEffect(() => {
         setLeftElement(<LogoTextIcon fillcolor="black" />)
         hideCenterElement()
@@ -17,7 +19,6 @@ export function HomePage() {
             resetHeader()
         }
     }, [])
-    const [postList, setPostList] = useState(MockPostList)
     return (
         <>
             {postList.length === 0 ? (
