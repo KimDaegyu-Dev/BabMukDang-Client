@@ -65,7 +65,7 @@ function CopyLinkButton({
             className={`bg-gray-8 flex w-full cursor-pointer items-center justify-center gap-12 rounded-full py-14 pr-16 pl-17 ${className} `}
             onClick={onClick}
             onTouchEnd={onClick}>
-            <ShareIcon />
+            <ShareIcon strokecolor={COLORS.white} />
             <span className="text-body1-semibold text-gray-1">
                 초대 링크 복사하기
             </span>
