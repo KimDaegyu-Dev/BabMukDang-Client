@@ -1,4 +1,5 @@
 import { CommentResponse, RestaurantInfo } from '@/apis/dto'
+import { PreferenceItem } from '@/apis/profile'
 
 export const MockAnnouncements = [
     {
@@ -144,21 +145,36 @@ export const MockLocalNewsNotis = [
 
 type MyProfileData = {
     profileImgUrl: string
-    name: string
-    description: string
-    preferredMenus: string[]
-    cantEat: string[]
+    userName: string
+    bio: string
+    likes: PreferenceItem[]
+    dislikes: PreferenceItem[]
+    allergies: PreferenceItem[]
+    meetingCount: number
 }
+
 export const MockMyProfileData = {
-    profileImgUrl: '/src/assets/icons/icon_profile_default.svg',
-    name: '서은우',
-    description: '기억이 아닌 추억으로',
-    preferredMenus: ['한식', '일식', '양식', '분식'],
-    cantEat: ['향신료', '락토', '락토 오보', '락토 오보 오보'],
-    friends: 100,
-    completedMeetings: 100,
-    uncompletedMeetings: 100,
-    challengeCount: 6
+    profileImageUrl: '/src/assets/icons/icon_profile_default.svg',
+    userName: '서은우',
+    bio: '기억이 아닌 추억으로',
+    likes: [
+        { code: '한식', label: '한식' },
+        { code: '일식', label: '일식' },
+        { code: '양식', label: '양식' },
+        { code: '분식', label: '분식' }
+    ],
+    allergies: [
+        { code: '락토', label: '락토' },
+        { code: '락토 오보', label: '락토 오보' },
+        { code: '락토 오보 오보', label: '락토 오보 오보' }
+    ],
+    dislikes: [
+        { code: '향신료', label: '향신료' },
+        { code: '락토', label: '락토' },
+        { code: '락토 오보', label: '락토 오보' },
+        { code: '락토 오보 오보', label: '락토 오보 오보' }
+    ],
+    meetingCount: 0
 }
 type FriendProfileData = {
     profileImgUrl: string

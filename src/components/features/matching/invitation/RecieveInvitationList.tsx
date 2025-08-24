@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom'
 
 import { ProfileDefaultIcon } from '@/assets/icons'
+import { InvitationResponse } from '@/apis/invitation'
 
-export function RecieveInvitationList() {
+export function RecieveInvitationList({
+    invitations
+}: {
+    invitations: InvitationResponse[]
+}) {
     return (
         <div className="rounded-12 shadow-drop-1 flex w-full flex-col gap-16 bg-white p-16">
             {/* 상단 */}
@@ -16,13 +21,13 @@ export function RecieveInvitationList() {
             </div>
             {/* 하단 */}
             <div className="flex flex-row justify-between gap-18 overflow-x-auto">
-                {Array.from({ length: 10 }).map((_, index) => (
+                {invitations.map(invitation => (
                     <Link
-                        to="/read-invitation"
+                        to={`/read-invitation/${invitation.invitationId}`}
                         className="flex flex-col items-center justify-center gap-4">
                         <ProfileDefaultIcon className="size-50" />
                         <span className="text-caption-medium text-gray-5 text-center">
-                            김대규
+                            {invitation.inviterName}
                         </span>
                     </Link>
                 ))}

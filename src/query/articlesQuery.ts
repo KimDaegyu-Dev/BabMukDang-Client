@@ -8,7 +8,11 @@ import {
     presignArticle,
     uploadArticleS3
 } from '@/apis'
-import { ArticlePostRequest, CommentPostRequest } from '@/apis/dto'
+import {
+    ArticlePostRequest,
+    CommentPostRequest,
+    LikePostResponse
+} from '@/apis/dto'
 import {
     deleteArticle,
     deleteArticleComment,
@@ -25,11 +29,11 @@ export const useGetArticle = (articleId: number) => {
 }
 
 export const useGetArticleComments = (articleId: number) => {
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, error, refetch } = useQuery({
         queryKey: ['articleComments', articleId],
         queryFn: () => getArticleComments(articleId)
     })
-    return { data: data, isLoading, error }
+    return { data: data, isLoading, error, refetch }
 }
 
 export const useGetHomeArticles = () => {
@@ -106,7 +110,7 @@ export const useUploadArticle = (
 //   });
 
 export const useLikeArticle = (
-    onSuccess: () => void,
+    onSuccess: (data: LikePostResponse) => void,
     onError: (e: Error) => void
 ) => {
     const { mutate, isPending, error } = useMutation({

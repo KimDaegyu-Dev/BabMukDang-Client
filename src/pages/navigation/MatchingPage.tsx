@@ -16,6 +16,7 @@ import {
 import { BOTTOM_NAVIGATION_HEIGHT } from '@/constants/bottomNav'
 import { useGetAnnouncements } from '@/query/announcementQuery'
 import { useAuthStore } from '@/store'
+import { useGetInvitations } from '@/query/invitationQuery'
 
 export function MatchingPage() {
     const [activeTab, setActiveTab] = useState<'announcement' | 'invitation'>(
@@ -87,13 +88,15 @@ function AnnouncementTab({ announcements }: { announcements: PostResponse[] }) {
 }
 
 function InvitationTab() {
+    const { data: invitations } = useGetInvitations()
+    console.log('invitations', invitations)
     return (
         <div
             className={`flex flex-col gap-40 px-20 pt-18 pb-${BOTTOM_NAVIGATION_HEIGHT}`}>
             {/* 식사 상태 토글 버튼 */}
             <div className="flex flex-col gap-16">
                 <InvitationToggleButton />
-                <RecieveInvitationList />
+                <RecieveInvitationList invitations={invitations?.data || []} />
             </div>
             <div className="flex flex-col items-center justify-center pb-10">
                 <FriendListSection friendList={MockFriendList} />

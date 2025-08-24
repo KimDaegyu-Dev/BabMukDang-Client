@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { useArticleStore } from '@/store'
 import { useBottomNav, useHeader } from '@/hooks'
 import { MutalButton } from '@/components'
+import { mealTimeMap, mealTimeTextArr } from '@/constants/post'
 
 export function UploadPage() {
     const {
@@ -30,16 +31,6 @@ export function UploadPage() {
 
     const [mealTimeNumber, setMealTimeNumber] = useState<number>(0)
 
-    const mealTimeTextArr = ['아침', '아점', '점심', '점저', '저녁', '야식']
-
-    const mealTimeMap = {
-        아침: '09:00:00',
-        아점: '11:00:00',
-        점심: '12:00:00',
-        점저: '16:00:00',
-        저녁: '18:00:00',
-        야식: '20:00:00'
-    }
     const handleMealTimeText = () => {
         setMealTimeNumber(prev => (prev + 1) % mealTimeTextArr.length)
     }

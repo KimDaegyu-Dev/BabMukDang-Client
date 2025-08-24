@@ -44,7 +44,7 @@ export function ReplyCommentItem({
                         </span>
                     </div>
                     <span className="text-caption-regular text-gray-3">
-                        {createdAt}
+                        {dateFormat(new Date(createdAt))}
                     </span>
                 </div>
                 <div className="flex flex-row items-center gap-4">
@@ -59,4 +59,13 @@ export function ReplyCommentItem({
             </div>
         </div>
     )
+}
+
+const dateFormat = (date: Date) => {
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    return `${year}/${month}/${day} ${hours}:${minutes}`
 }

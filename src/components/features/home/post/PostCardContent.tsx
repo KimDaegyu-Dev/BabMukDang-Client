@@ -8,21 +8,33 @@ import { useLikeArticle } from '@/query'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { COLORS } from '@/constants/colors'
+import { mealTimeMapReverse, MealTimeText } from '@/constants/post'
+import { LikePostResponse } from '@/apis/dto'
 
 export const PostCardContent = ({
     postImageUrl,
     postId,
-    postType,
-    isComment
+    isComment,
+    mealTime,
+    likedByMe,
+    likeCount,
+    commentCount
 }: {
     postImageUrl: string
     postId: number
-    postType: 'mornings' | 'lunch' | 'dinner'
-    isComment: boolean
+    isComment?: boolean
+    mealTime: MealTimeText
+    likedByMe: boolean
+    likeCount: number
+    commentCount: number
 }) => {
-    const [isLiked, setIsLiked] = useState(false)
-    const onSuccess = () => {
-        setIsLiked(true)
+    const [isLiked, setIsLiked] = useState(likedByMe)
+    const onSuccess = (data: LikePostResponse) => {
+        if (data.liked) {
+            setIsLiked(true)
+        } else {
+            setIsLiked(false)
+        }
     }
     const onError = (e: Error) => {
         setIsLiked(false)
@@ -47,26 +59,43 @@ export const PostCardContent = ({
                 className="h-full w-full object-cover"
             />
             <PostTypeChip
-                postType={postType}
+                mealTime={mealTime}
                 className="absolute top-16 left-20 z-10"
             />
             <div className="absolute bottom-16 left-16 flex flex-row items-center gap-14">
-                <div className="flex size-40 items-center justify-center rounded-full bg-white/30">
+                <div className="flex items-center justify-center rounded-full bg-white/30 px-12 py-12">
                     {isLiked ? (
-                        <div onClick={onClickLike}>
-                            <HeartFilledIcon />
+                        <div
+                            onClick={onClickLike}
+                            className="flex items-center gap-8">
+                            <HeartFilledIcon className="size-16" />
+                            {likeCount > 0 && (
+                                <span className="text-body2-semibold text-white">
+                                    {likeCount}
+                                </span>
+                            )}
                         </div>
                     ) : (
-                        <div onClick={onClickLike}>
-                            <HeartWhiteIcon />
+                        <div
+                            onClick={onClickLike}
+                            className="flex items-center gap-8">
+                            <HeartWhiteIcon className="size-16" />
+                            {likeCount > 0 && (
+                                <span className="text-body2-semibold text-white">
+                                    {likeCount}
+                                </span>
+                            )}
                         </div>
                     )}
                 </div>
                 {!isComment && (
                     <div
-                        className="flex size-40 items-center justify-center rounded-full bg-white/30"
+                        className="flex size-40 items-center justify-center rounded-full bg-white/30 p-12"
                         onClick={onClickComment}>
-                        <CommentIcon strokecolor={COLORS.gray5} />
+                        <CommentIcon
+                            strokecolor={COLORS.white}
+                            className="size-16"
+                        />
                     </div>
                 )}
             </div>
@@ -75,22 +104,17 @@ export const PostCardContent = ({
 }
 
 const PostTypeChip = ({
-    postType,
+    mealTime,
     className
 }: {
-    postType: 'mornings' | 'lunch' | 'dinner'
+    mealTime: MealTimeText
     className?: string
 }) => {
-    const postTypeText = {
-        mornings: '아침',
-        lunch: '점심',
-        dinner: '저녁'
-    }
     return (
         <div
             className={`flex items-center justify-center rounded-full bg-gray-100 px-12 py-4 ${className}`}>
             <span className="text-caption-medium text-gray-700">
-                {postTypeText[postType]}
+                {mealTimeMapReverse[mealTime]}
             </span>
         </div>
     )

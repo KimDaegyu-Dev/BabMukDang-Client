@@ -11,7 +11,7 @@ export function LocationVoteItem({
 }) {
     return (
         <div
-            className={`rounded-12 drop-shadow-1 cursor-pointer p-16 ${
+            className={`rounded-12 shadow-drop-1 cursor-pointer p-16 ${
                 isSelected
                     ? 'bg-primary-100 border-primary-main border'
                     : 'bg-white'
