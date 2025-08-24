@@ -41,17 +41,13 @@ function Calendar({
             formatters={{
                 formatMonthDropdown: date =>
                     date.toLocaleString('default', { month: 'short' }),
-                ...formatters,
-                formatCaption: date => {
-                    return (
-                        <div className="text-body1-semibold text-primary-main">
-                            {date.toLocaleString('default', {
-                                year: 'numeric',
-                                month: 'long'
-                            })}
-                        </div>
-                    )
-                }
+
+                formatCaption: (date: Date) =>
+                    date.toLocaleString('default', {
+                        year: 'numeric',
+                        month: 'long'
+                    }),
+                ...formatters
             }}
             classNames={{
                 root: cn('w-full', defaultClassNames.root),

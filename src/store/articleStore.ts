@@ -32,7 +32,7 @@ export const useArticleStore = create<ArticleStore>(set => ({
             mealTime: useArticleStore.getState().mealTime,
             restaurant: useArticleStore.getState().restaurant as RestaurantInfo,
             taggedMemberIds: useArticleStore.getState().taggedMemberIds
-        }
+        } as ArticlePostRequest
     },
     setImage: image => set({ image }),
     // setMealDate: mealDate => set({ mealDate }),

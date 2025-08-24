@@ -15,7 +15,7 @@ interface Restaurant {
     address_name: string
     phone: string
     selectUsers: string[]
-    place_url: string
+    place_url?: string
 }
 interface RestaurantCardProps {
     restaurant: Restaurant
