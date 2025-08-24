@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { OnboardingHeader, RestaurantCard } from '@/components'
+import { RestaurantCard } from '@/components'
 import { useSocket } from '@/contexts/SocketContext'
 import { useAuthStore } from '@/store'
 
@@ -74,13 +74,7 @@ export function RestaurantPage() {
         )
     }, [])
     return (
-        <div className="min-h-screen">
-            <OnboardingHeader
-                title="만남 장소 근처 맛집 중 골라보아요."
-                progress={4}
-                voteLimit="중복 투표"
-            />
-
+        <>
             <div className="flex flex-col gap-10">
                 {restaurantList.map((restaurant, index) => (
                     <RestaurantCard
@@ -90,6 +84,6 @@ export function RestaurantPage() {
                     />
                 ))}
             </div>
-        </div>
+        </>
     )
 }

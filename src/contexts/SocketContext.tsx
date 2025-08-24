@@ -10,7 +10,6 @@ import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 import { useAuthStore } from '@/store/authStore'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { useLogin } from '@/hooks/useLogin'
 
 interface ChatMessageDto {
     messageId: string
@@ -52,6 +51,14 @@ const SocketContext = createContext<{
     setParticipantCount: (participantCount: number) => void
     isSelfReady: boolean
     setIsSelfReady: (isSelfReady: boolean) => void
+    finalState: any
+    setFinalState: (finalState: any) => void
+    finalStateMessage: {
+        location: string | undefined
+        'exclude-menu': string[] | undefined
+        menu: string | undefined
+        restaurant: string | undefined
+    }
 } | null>(null)
 export const useSocket = () => {
     const ctx = useContext(SocketContext)
@@ -75,6 +82,13 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     const [participantCount, setParticipantCount] = useState(0)
     const [stage, setStage] = useState('waiting')
     const [isSelfReady, setIsSelfReady] = useState(false)
+    const [finalState, setFinalState] = useState<any>(null)
+    const [finalStateMessage, setFinalStateMessage] = useState({
+        'exclude-menu': undefined,
+        location: undefined,
+        menu: undefined,
+        restaurant: undefined
+    })
     useEffect(() => {
         fetch(`${import.meta.env.VITE_CDN_URL}/categories.json`)
             .then(res => res.json())
@@ -85,7 +99,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
     // token이 설정된 후에 socket 생성
     useEffect(() => {
-        if (!accessToken) return // token이 없으면 socket 생성하지 않음
+        // if (!accessToken) return // token이 없으면 socket 생성하지 않음
         const s = io(`${import.meta.env.VITE_WEBSOCKET_URL}/${matchType}`, {
             query: { roomId: roomId || '' },
             auth: {
@@ -116,7 +130,45 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
             setStage(data.stage)
             setIsSelfReady(false)
         })
-    }, [socket])
+        socket?.on('initial-state-response', data => {
+            setInitialState(data)
+        })
+        socket?.on('join-room', data => {
+            setParticipants(data)
+        })
+        socket?.on('final-state-response', data => {
+            setFinalState(data)
+            const excludeMenu = data?.excludeMenu?.map(
+                (menu: any) => menu.label
+            )
+            const location = data?.location?.address
+            const menu = data?.menu?.label
+            const restaurant = data?.restaurant?.place_name
+            setFinalStateMessage({
+                'exclude-menu': excludeMenu,
+                location,
+                menu,
+                restaurant
+            })
+        })
+    }, [socket, matchType])
+
+    // useEffect(() => {
+    //     if (finalState) {
+    //         const excludeMenu = finalState.finalState?.excludeMenu?.map(
+    //             (menu: any) => menu.label
+    //         )
+    //         const location = finalState.finalState?.location?.address
+    //         const menu = finalState.finalState?.menu?.label
+    //         const restaurant = finalState.finalState?.restaurant?.place_name
+    //         setFinalStateMessage({
+    //             excludeMenu,
+    //             location,
+    //             menu,
+    //             restaurant
+    //         })
+    //     }
+    // }, [finalState])
 
     if (!socket) return null // 초기 연결 중 스켈레톤 UI를 보여줘도 됨
     return (
@@ -138,7 +190,10 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
                 setReadyCount,
                 setParticipantCount,
                 isSelfReady,
-                setIsSelfReady
+                setIsSelfReady,
+                finalState,
+                setFinalState,
+                finalStateMessage
             }}>
             {children}
         </SocketContext.Provider>

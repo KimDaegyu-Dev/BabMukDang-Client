@@ -17,7 +17,7 @@ precacheAndRoute(self.__WB_MANIFEST)
 
 // API 요청 캐싱
 registerRoute(
-    ({ url }) => url.pathname.startsWith('/index.html'),
+    ({ url }) => url.origin === self.location.origin,
     new NetworkFirst({
         cacheName: 'api-cache',
         plugins: [

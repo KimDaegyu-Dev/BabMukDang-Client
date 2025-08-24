@@ -43,7 +43,7 @@ export function ChatModal({
     const inputRef = useCallback(
         (node: HTMLInputElement | null) => {
             if (node && isOpen) {
-                node.focus()
+                // node.focus()
                 scrollToBottom(false)
             }
         },
@@ -221,10 +221,7 @@ export function ChatButton({
                 }}
                 className={`shadow-drop-1 border-primary-400 flex items-center justify-center rounded-full border bg-white p-18 ${className}`}
                 aria-label="채팅 열기">
-                <CommentIcon
-                    bgcolor={COLORS.primaryMain}
-                    strokecolor={COLORS.primary900}
-                />
+                <CommentIcon strokecolor={COLORS.primaryMain} />
             </button>
         </>
     )
