@@ -1,15 +1,35 @@
+import { CommentResponse } from '@/apis/dto'
 import { CommentItem, ReplyCommentItem } from '@/components'
+import { MockPostList } from '@/constants/mockData'
+import { useGetArticleComments } from '@/query'
+import { useEffect, useState } from 'react'
 
-type Comment = {
-    id: number
-    profileImageUrl: string
-    name: string
-    comment: string
+interface Comment {
+    commentId: number
+    authorId: number
+    authorUsername: string
+    parentCommentId: number | null
+    content: string
     createdAt: string
-    isReply: boolean
+    replies?: Comment[] // 트리 변환 후에만 생김
 }
 
-export function CommentList({ comments }: { comments: Comment[] }) {
+export function CommentList({
+    postId,
+    onClickReply
+}: {
+    postId: number
+    onClickReply: (commentId: number) => void
+}) {
+    const { data: commentsData, error } = useGetArticleComments(postId)
+    const [comments, setComments] = useState<Comment[]>([])
+    useEffect(() => {
+        if (commentsData) {
+            setComments(commentsData)
+        }
+        setComments(buildCommentTree(MockPostList[postId - 1].comments))
+        console.log(buildCommentTree(MockPostList[postId - 1].comments))
+    }, [commentsData])
     return (
         <div className="flex flex-col gap-20">
             <div className="flex flex-row items-center gap-4">
@@ -19,28 +39,35 @@ export function CommentList({ comments }: { comments: Comment[] }) {
                 </span>
             </div>
             <div className="flex flex-col gap-15">
-                {comments.map(comment =>
-                    comment.isReply ? (
-                        <ReplyCommentItem
-                            key={comment.id}
-                            profileImageUrl={comment.profileImageUrl}
-                            name={comment.name}
-                            comment={comment.comment}
+                {comments.map(comment => (
+                    <>
+                        <CommentItem
+                            key={comment.commentId}
+                            profileImageUrl={comment?.profileImageUrl}
+                            commentAuthorName={comment.authorUsername}
+                            comment={comment.content}
                             createdAt={comment.createdAt}
+                            authorId={comment.authorId}
+                            onClickReply={() => onClickReply(comment.commentId)}
                         />
-                    ) : (
-                        <>
-                            <Separator />
-                            <CommentItem
-                                key={comment.id}
-                                profileImageUrl={comment.profileImageUrl}
-                                name={comment.name}
-                                comment={comment.comment}
-                                createdAt={comment.createdAt}
-                            />
-                        </>
-                    )
-                )}
+                        {comment?.replies?.length > 0 &&
+                            comment.replies.map(reply => (
+                                <ReplyCommentItem
+                                    key={reply.commentId}
+                                    profileImageUrl={reply?.profileImageUrl}
+                                    commentAuthorName={reply.authorUsername}
+                                    comment={reply.content}
+                                    createdAt={reply.createdAt}
+                                    authorId={reply.authorId}
+                                    onClickReply={() =>
+                                        onClickReply(reply.commentId)
+                                    }
+                                />
+                            ))}
+
+                        <Separator />
+                    </>
+                ))}
             </div>
         </div>
     )
@@ -48,4 +75,23 @@ export function CommentList({ comments }: { comments: Comment[] }) {
 
 const Separator = () => {
     return <div className="border-gray-2 -ml-20 h-0 w-screen border-b" />
+}
+
+function buildCommentTree(comments: CommentResponse[]) {
+    const map: Record<number, Comment> = {}
+    const roots: Comment[] = []
+
+    comments.forEach(comment => {
+        map[comment.commentId] = { ...comment, replies: [] }
+    })
+
+    comments.forEach(comment => {
+        if (comment.parentCommentId !== 0) {
+            map[comment.parentCommentId].replies?.push(map[comment.commentId])
+        } else {
+            roots.push(map[comment.commentId])
+        }
+    })
+
+    return roots
 }
