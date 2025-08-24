@@ -30,6 +30,7 @@ client.interceptors.response.use(
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true
             const { logout, setTokens } = useAuthStore.getState()
+            logout()
             // 발급 시도 프로미스, 이미 발급 중이면 대기
             if (!isRefreshing) {
                 isRefreshing = true
