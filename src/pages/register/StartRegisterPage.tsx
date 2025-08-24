@@ -1,10 +1,9 @@
 import { CardBobGraphic } from '@/assets/graphics'
-import { HungryIcon, KakaoIcon, LogoTextIcon } from '@/assets/icons'
+import { KakaoIcon, LogoTextIcon } from '@/assets/icons'
 import SplashImg from '@/assets/images/SplashImg.png'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export function StartRegisterPage() {
-    const navigate = useNavigate()
     return (
         <div className="fixed inset-0 z-2000 flex h-screen w-screen flex-col items-center justify-center">
             {/* 딤드 배경 */}
@@ -23,11 +22,7 @@ export function StartRegisterPage() {
                     <LogoTextIcon fillcolor="#fff" />
                 </div>
                 <div className="flex w-full flex-col items-center gap-20">
-                    <KakaoLoginButton
-                        onClick={() => {
-                            navigate('/make-profile')
-                        }}
-                    />
+                    <KakaoLoginButton />
                     <span className="text-caption-medium text-primary-100">
                         로그인 후 식사 취향 테스트를 완료해주세요
                     </span>
@@ -37,22 +32,15 @@ export function StartRegisterPage() {
     )
 }
 
-function KakaoLoginButton({
-    className,
-    onClick
-}: {
-    className?: string
-    onClick?: () => void
-}) {
+function KakaoLoginButton({ className }: { className?: string }) {
     return (
-        <button
+        <Link
             className={`flex w-full cursor-pointer items-center justify-center gap-12 rounded-full bg-[#FEDC2C] py-14 pr-16 pl-17 ${className} `}
-            onClick={onClick}
-            onTouchEnd={onClick}>
+            to="https://babmuckdang.site/oauth2/authorization/kakao">
             <KakaoIcon />
             <span className="text-body1-semibold text-gray-8">
                 카카오톡으로 시작하기
             </span>
-        </button>
+        </Link>
     )
 }

@@ -38,7 +38,7 @@ client.interceptors.response.use(
                         withCredentials: true
                     })
                     .then(res => {
-                        const { accessToken, refreshToken } = res.data
+                        const { accessToken, refreshToken } = res.data.data
                         console.log(accessToken, refreshToken, res.data)
                         setTokens({ accessToken, refreshToken })
                         return accessToken
