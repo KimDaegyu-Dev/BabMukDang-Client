@@ -78,6 +78,14 @@ export function useBottomSheet({
         end: SUPPORT_TOUCH ? 'touchend' : 'mouseup'
     }
 
+    // 인터랙티브 요소 여부 판단 (클릭/포커스 허용)
+    const isInteractiveTarget = (target: EventTarget | null) => {
+        if (!(target instanceof Element)) return false
+        return !!target.closest(
+            'input, textarea, select, button, a, label, [contenteditable="true"], [data-no-drag], .no-drag'
+        )
+    }
+
     // 위치 추출 함수
     const getPosition = (event: any) => {
         return SUPPORT_TOUCH ? event.changedTouches[0].clientY : event.clientY
@@ -145,6 +153,8 @@ export function useBottomSheet({
         (container: HTMLDivElement) => {
             // 시작 이벤트
             const start$ = fromEvent(container, EVENTS.start).pipe(
+                // 인풋/텍스트에어리어/버튼 등에서는 드래그 시작 자체를 막아서 클릭/포커스가 가능하도록 함
+                filter((e: any) => !isInteractiveTarget(e.target)),
                 map((e: any) => {
                     e.preventDefault()
                     const startY = getPosition(e)

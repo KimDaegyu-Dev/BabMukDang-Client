@@ -14,28 +14,9 @@ export function AddAnnouncementCard() {
     const decParticipants = () =>
         setParticipants(prev => (prev > 0 ? prev - 1 : 0))
     const incParticipants = () => setParticipants(prev => prev + 1)
-    const focusInput = (
-        ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>
-    ) => {
-        if (ref.current) {
-            ref.current.focus()
-        }
-    }
-    const blurInput = (
-        ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>
-    ) => {
-        if (ref.current) {
-            ref.current.blur()
-        }
-    }
-    const blurAll = () => {
-        blurInput(messageRef)
-        blurInput(placeRef)
-    }
-
     return (
         <div
-            className={`shadow-drop-1 rounded-16 h-353 w-full bg-white px-16 pt-16 pb-14`}>
+            className={`shadow-drop-1 rounded-16 z-10000 h-353 w-full bg-white px-16 pt-16 pb-14`}>
             {/* 메시지 */}
             <div className="relative mb-16">
                 <div className="rounded-12 border-gray-2 h-90 border px-12 py-12">
@@ -43,8 +24,6 @@ export function AddAnnouncementCard() {
                         id="message"
                         value={message}
                         ref={messageRef}
-                        onClick={() => focusInput(messageRef)}
-                        onBlur={() => blurInput(messageRef)}
                         onChange={e => setMessage(e.target.value)}
                         placeholder={`친구들에게 전할 메시지를 적어보세요\n(20자 내)`}
                         className="text-body2-medium h-full w-full resize-none"
@@ -98,8 +77,6 @@ export function AddAnnouncementCard() {
                 <input
                     value={place}
                     onChange={e => setPlace(e.target.value)}
-                    onClick={() => focusInput(placeRef)}
-                    onBlur={() => blurInput(placeRef)}
                     ref={placeRef}
                     placeholder=""
                     className="rounded-6 text-body2-medium px-12"
