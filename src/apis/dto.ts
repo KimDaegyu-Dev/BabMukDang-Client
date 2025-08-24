@@ -3,6 +3,10 @@ export interface BaseResponse<T> {
     message: string
     data: T
 }
+export interface Menu {
+    code: string
+    label: string
+}
 export interface Post {
     targetCount: number
     meetingAt: string //2025-08-08T22:30
@@ -139,56 +143,15 @@ export interface Onboarding {
 }
 export interface OnboardingPreferenceRequest extends Onboarding {}
 export interface OnboardingPreferenceResponse extends Onboarding {}
-// interface AnnouncementResponse {
-//     meetingId: string
-//     meetingAt: string
-//     location: string
-//     participantNames: string[]
-//     participants: [
-//         {
-//             userId: string
-//             userName: string
-//             userProfileImageURL: string
-//         }
-//     ]
-//     recentMenu: [
-//         {
-//             userId: string
-//             menu: string[]
-//         }
-//     ]
-// }
 
-// interface AnnouncementRequestBody {
-//     location: string
-//     locationDetail: {
-//         placeName: string
-//         placeAddress: string
-//         lat: number
-//         lng: number
-//     }
-//     restaurant: {
-//         restaurantId: string
-//         restaurantName: string
-//         restaurantAddress: string
-//         restaurantPhone: string
-//         restaurantPlaceURL: string
-//     }
-// }
-// interface InvitationRequestBody {
-//     location: string
-//     locationDetail: {
-//         placeName: string
-//         placeAddress: string
-//         lat: number
-//         lng: number
-//     }
-//     restaurant: {
-//         restaurantId: string
-//         restaurantName: string
-//         restaurantAddress: string
-//         restaurantPhone: string
-//         restaurantPlaceURL: string
-//     }
-//     meetingAt: string
-// }
+export interface PreferenceSummaryResponse {
+    likes: Menu[]
+    dislikes: Menu[]
+    allergies: Menu[]
+}
+
+export interface PreferenceMetaResponse {
+    onboardedAt: string
+    lastUpdatedAt: string
+    revision: number
+}

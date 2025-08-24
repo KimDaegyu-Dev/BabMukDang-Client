@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { client } from './client'
 import { BaseResponse, TokenResponse } from './dto'
 
