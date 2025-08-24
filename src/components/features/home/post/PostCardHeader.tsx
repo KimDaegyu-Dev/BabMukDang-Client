@@ -3,15 +3,14 @@ import { KebabButton, TagPerson } from '@/components'
 import { ProfileDefaultIcon } from '@/assets/icons'
 
 export const PostCardHeader = ({
-    author,
+    authorId,
+    authorUsername,
     tags,
     postedAt
 }: {
-    author: {
-        id: number
-        username: string
-    }
-    tags: string[]
+    authorId: number
+    authorUsername: string
+    tags?: number[]
     postedAt: string
 }) => {
     const { userId } = useAuthStore()
@@ -23,14 +22,15 @@ export const PostCardHeader = ({
                 <div className="flex flex-shrink-0 flex-row items-center gap-10">
                     <ProfileDefaultIcon />
                     <span className="text-body1-bold text-black">
-                        {author.username}
+                        {authorUsername}
                     </span>
                 </div>
                 {/* 태그 */}
                 <div className="flex flex-row flex-wrap items-center gap-8">
-                    {moreTagged(tags).map(tag => (
-                        <TagPerson name={tag} />
-                    ))}
+                    {tags &&
+                        moreTagged(tags).map(tag => (
+                            <TagPerson name={tag.toString()} />
+                        ))}
                 </div>
             </div>
             {/* 시간 케밥 */}
@@ -40,7 +40,7 @@ export const PostCardHeader = ({
                     {formatTime(postedAt)}
                 </span>
                 {/* 케밥 버튼 */}
-                {Number(userId) === author.id && (
+                {Number(userId) === authorId && (
                     <KebabButton onClick={() => {}} />
                 )}
             </div>
@@ -48,7 +48,8 @@ export const PostCardHeader = ({
     )
 }
 
-const moreTagged = (tags: string[]) => {
+const moreTagged = (tags?: number[]) => {
+    if (!tags) return []
     if (tags.length > 2) {
         return [tags[0], `${tags[1]} 외 ${tags.length - 2}명`]
     }

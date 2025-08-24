@@ -1,17 +1,21 @@
 import { PostCardContent, PostCardHeader, PostCardFooter } from '@/components'
 import { useLikeArticle } from '@/query'
 import { useNavigate } from 'react-router-dom'
+import { MealTimeText } from '@/constants/post'
 type Post = {
-    postId: number
-    author: {
-        id: number
-        username: string
-    }
-    tags: string[]
-    postedAt: string
-    postImageUrl: string
-    postType: 'mornings' | 'lunch' | 'dinner'
-    restaurantInfo: RestaurantInfo
+    articleId: number
+    authorId: number
+    authorUsername: string
+    imageUrl: string
+    mealDate: string
+    mealTime: string
+    restaurantName: RestaurantInfo
+    likeCount: number
+    commentCount: number
+    likedByMe: boolean
+    createdAt: string
+    expiresAt: string
+    taggedMemberIds: number[]
 }
 
 type RestaurantInfo = {
@@ -39,17 +43,21 @@ export function PostCard({
     return (
         <div className="flex w-full flex-col gap-12">
             <PostCardHeader
-                author={post.author}
-                tags={post.tags}
-                postedAt={post.postedAt}
+                authorId={post.authorId}
+                authorUsername={post.authorUsername}
+                tags={post.taggedMemberIds}
+                postedAt={post.createdAt}
             />
             <PostCardContent
-                postImageUrl={post.postImageUrl}
-                postId={post.postId}
-                postType={post.postType}
+                postImageUrl={post.imageUrl}
+                postId={post.articleId}
+                likedByMe={post.likedByMe}
+                likeCount={post.likeCount}
+                commentCount={post.commentCount}
+                mealTime={post.mealTime as MealTimeText}
                 isComment={isComment}
             />
-            <PostCardFooter restaurantInfo={post.restaurantInfo} />
+            <PostCardFooter restaurantInfo={post.restaurantName} />
         </div>
     )
 }

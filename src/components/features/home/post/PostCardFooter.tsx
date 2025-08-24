@@ -5,7 +5,7 @@ type RestaurantInfo = {
     addressName: string
     roadAddressName: string
     phoneNumber: string
-    placeUrl: string
+    placeUrl?: string
     distance?: string
     categoryGroupCode: string
     categoryGroupName: string
@@ -16,13 +16,13 @@ type RestaurantInfo = {
 export const PostCardFooter = ({
     restaurantInfo
 }: {
-    restaurantInfo: RestaurantInfo
+    restaurantInfo: RestaurantInfo | null
 }) => {
     return (
         <div className="shadow-drop-1 rounded-12 flex h-72 w-full flex-row items-center gap-12 bg-white">
             {/* Left: Restaurant Image */}
             <img
-                src={restaurantInfo.placeUrl}
+                src={restaurantInfo?.placeUrl || ''}
                 alt="restaurant"
                 className="rounded-l-12 h-72 w-72 object-cover"
             />
@@ -30,10 +30,10 @@ export const PostCardFooter = ({
             <div className="flex w-188 flex-col justify-center gap-6">
                 <div className="flex flex-row items-center gap-8">
                     <span className="text-body1-bold">
-                        {restaurantInfo.placeName}
+                        {restaurantInfo?.placeName}
                     </span>
                     <span className="text-caption-medium text-gray-3">
-                        {restaurantInfo.categoryGroupName}
+                        {restaurantInfo?.categoryGroupName}
                     </span>
                 </div>
                 <div className="flex w-full flex-row items-center gap-6">
@@ -43,11 +43,11 @@ export const PostCardFooter = ({
                             <LocationGrayIcon className="size-16" />
                         </span>
                         <span className="text-caption-medium text-gray-5">
-                            {restaurantInfo.distance}
+                            {restaurantInfo?.distance}
                         </span>
                     </div>
                     <span className="text-caption-medium text-gray-6">
-                        {restaurantInfo.roadAddressName}
+                        {restaurantInfo?.roadAddressName}
                     </span>
                 </div>
             </div>
