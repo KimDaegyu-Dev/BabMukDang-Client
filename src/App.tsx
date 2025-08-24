@@ -38,7 +38,6 @@ import {
 import { Layout, OnboardingLayout, RegisterLayout } from '@/components'
 import { register } from '@/lib/serviceWorkerRegistration'
 import { useEffect } from 'react'
-import { useLogin } from './hooks/useLogin'
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -50,7 +49,6 @@ const queryClient = new QueryClient({
 })
 function App() {
     const randomUserId = Math.random().toString(36).substring(2, 15)
-    useLogin('김대규', randomUserId)
     useEffect(() => {
         register()
     }, [])

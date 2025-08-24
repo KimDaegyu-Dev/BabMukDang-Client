@@ -1,24 +1,16 @@
-import { login } from '@/lib/login'
-import { useAuthStore } from '@/store/authStore'
+import { login } from '@/apis'
 import { useEffect } from 'react'
 
-export const useLogin = (username: string, userId: string) => {
-    const { setTokens, setUsername, setUserId } = useAuthStore()
+export const useLogin = () => {
     useEffect(() => {
-        const loginAsync = async (username: string, userId: string) => {
+        const loginAsync = async () => {
             try {
-                const tokenData = await login(username, userId)
+                const tokenData = await login()
                 console.log('tokenData', tokenData)
-                setTokens({
-                    accessToken: tokenData,
-                    refreshToken: tokenData
-                })
-                setUsername(username)
-                setUserId(userId)
             } catch (error) {
                 // 에러 처리
             }
         }
-        loginAsync(username, userId)
+        loginAsync()
     }, [])
 }
