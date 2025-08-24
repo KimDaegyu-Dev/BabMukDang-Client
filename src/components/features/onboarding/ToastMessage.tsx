@@ -26,9 +26,12 @@ export function ToastMessage() {
                 }
                 break
             case 'exclude-menu':
-                if (finalStateMessage.excludeMenu?.length > 0) {
+                if (
+                    finalStateMessage['exclude-menu'] &&
+                    finalStateMessage['exclude-menu'].length > 0
+                ) {
                     setMessage(
-                        `${finalStateMessage.excludeMenu?.join(', ')} 제외`
+                        `${finalStateMessage['exclude-menu']?.join(', ')} 제외`
                     )
                 } else {
                     setMessage('메뉴 제외 없이 진행해요!')

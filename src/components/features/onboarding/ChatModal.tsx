@@ -116,7 +116,9 @@ export function ChatModal({
                 {/* 입력 영역 */}
                 <div className="absolute right-0 bottom-40 left-0 px-20">
                     <ChatInput
-                        inputRef={inputRef}
+                        inputRef={
+                            inputRef as unknown as React.RefObject<HTMLInputElement>
+                        }
                         newMessage={newMessage}
                         setNewMessage={setNewMessage}
                         handleKeyPress={handleKeyPress}
