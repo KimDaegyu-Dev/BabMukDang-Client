@@ -22,8 +22,6 @@ export const OnboardingLayout = () => {
     }>()
 
     const [stage, setStage] = useState('waiting')
-    const [toastOpen, setToastOpen] = useState(false)
-    const [toastMessage, setToastMessage] = useState('')
     const isFirstStageEffect = useRef(true)
     useEffect(() => {
         hideHeader()
@@ -45,8 +43,6 @@ export const OnboardingLayout = () => {
             isFirstStageEffect.current = false
             return
         }
-        setToastMessage('다음 단계로 이동했어요')
-        setToastOpen(true)
     }, [stage])
     return (
         <SocketProvider>
@@ -88,31 +84,16 @@ const ContentBlocker = () => {
     )
 }
 const SocketInner = ({ setStage }: { setStage: (stage: string) => void }) => {
-    const { socket, setInitialState, setParticipants, setFinalState } =
-        useSocket()
+    const { socket } = useSocket()
     const { matchType } = useParams<{
         matchType: 'announcement' | 'invitation'
     }>()
     useLayoutEffect(() => {
         socket?.on('stage-changed', data => {
-            console.log('stage-changed layout', data)
             setStage(data.stage)
-        })
-        socket?.on('initial-state-response', data => {
-            setInitialState(data)
-        })
-        socket?.on('join-room', data => {
-            setParticipants(data)
-        })
-        socket?.on('final-state-response', data => {
-            console.log('final-state-response', data)
-            setFinalState(data)
         })
         return () => {
             socket?.off('stage-changed')
-            socket?.off('initial-state-response')
-            socket?.off('join-room')
-            socket?.off('final-state-response')
         }
     }, [matchType, socket])
     return <></>

@@ -10,6 +10,7 @@ import {
     invitationRouteTitleMap,
     invitationRouteVoteLimitMap
 } from '@/constants/onboardingRoute'
+import { cn } from '@/lib/utils'
 export function OnboardingHeader({
     isSkipable = false,
     subTitle = ''
@@ -17,11 +18,24 @@ export function OnboardingHeader({
     isSkipable?: boolean
     subTitle?: string
 }) {
-    const { participants } = useSocket()
-    const [peopleTags, setPeopleTags] = useState<string[]>([])
+    const { participants, finalStateMessage, finalState, stage } = useSocket()
+    const [finalTags, setFinalTags] = useState<string[]>([])
+    const pathname = useLocation()
     useEffect(() => {
-        setPeopleTags(participants.map((item: any) => item.username))
-    }, [participants])
+        setFinalTags(
+            Object.entries(finalStateMessage)
+                .filter(([key, value]) => value !== undefined)
+                .filter(
+                    ([key, value]) => key !== pathname.pathname.split('/')[2]
+                )
+                .map(([key, value]) => {
+                    if (key === 'exclude-menu') {
+                        return (value as string[]).join(', ') + ' 제외'
+                    }
+                    return value as string
+                })
+        )
+    }, [stage])
 
     const title = getByMatchType(
         announcementRouteTitleMap,
@@ -44,12 +58,7 @@ export function OnboardingHeader({
                 <div className="flex flex-col gap-12">
                     {/* 태그 목록 */}
                     <div className="flex flex-row gap-8">
-                        {peopleTags.map(tag => (
-                            <TagPerson
-                                key={tag}
-                                name={tag}
-                            />
-                        ))}
+                        {finalTags.map(tag => finalTag(tag))}
                     </div>
                     {/* 서브 타이틀 */}
                     {subTitle && (
@@ -96,4 +105,16 @@ const getByMatchType = (map1: any, map2: any) => {
     return matchType === 'announcement'
         ? getText(map1, pathname)
         : getText(map2, pathname)
+}
+const finalTag = (text: string) => {
+    return (
+        <div
+            className={cn('box-border rounded-full bg-white px-6 py-5')}
+            style={{
+                // @ts-expect-error: Non-standard CSS property used for text-box trimming support
+                textBox: 'trim-both cap alphabetic'
+            }}>
+            <span className="text-caption-medium text-gray-700">{text}</span>
+        </div>
+    )
 }
