@@ -71,7 +71,7 @@ const ChallengeHeader = () => {
 
 const ChallengeCompleteBox = () => {
     return (
-        <div className="rounded-12 drop-shadow-1 flex w-full items-center justify-between gap-20 bg-white px-18 py-23">
+        <div className="rounded-12 shadow-drop-1 flex w-full items-center justify-between gap-20 bg-white px-18 py-23">
             <RandomCouponGraphic className="h-96 w-122" />
             <div className="flex flex-grow flex-col items-center justify-center gap-8">
                 <span className="text-body2-medium text-gray-8 text-center">

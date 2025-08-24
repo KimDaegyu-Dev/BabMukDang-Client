@@ -99,7 +99,7 @@ function App() {
                             element={<SendInvitationPage />}
                         />
                         <Route
-                            path="/read-invitation"
+                            path="/read-invitation/:invitationId"
                             element={<ReadInvitationPage />}
                         />
 
@@ -140,7 +140,7 @@ function App() {
                                 element={<MakeProfilePage />}
                             />
                             <Route
-                                path="/start-register"
+                                path="/start"
                                 element={<StartRegisterPage />}
                             />
                             <Route
