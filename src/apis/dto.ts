@@ -37,6 +37,7 @@ export interface CommentResponse {
     createdAt: string
     profileImageUrl?: string
     distance?: string
+    replies?: CommentResponse[]
 }
 export interface ArticleSummaryResponse {
     articleId: number

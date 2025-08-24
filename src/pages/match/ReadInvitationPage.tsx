@@ -1,10 +1,30 @@
 import { InvitationCard } from '@/components'
 import { CardBobGraphic } from '@/assets/graphics'
 import { useHeader } from '@/hooks'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import {
+    useAcceptInvitation,
+    useRejectInvitation
+} from '@/query/invitationQuery'
 
 export function ReadInvitationPage() {
     const { setTitle, resetHeader } = useHeader()
+    const { invitationId } = useParams()
+    const [invitationText, setInvitationText] = useState('')
+    const navigate = useNavigate()
+    const { mutate: acceptInvitation } = useAcceptInvitation({
+        onSuccess: () => {
+            navigate('/matching')
+        },
+        onError: () => {}
+    })
+    const { mutate: rejectInvitation } = useRejectInvitation({
+        onSuccess: () => {
+            navigate('/matching')
+        },
+        onError: () => {}
+    })
     useEffect(() => {
         setTitle('초대장')
         return () => {
@@ -15,18 +35,22 @@ export function ReadInvitationPage() {
         <div className="flex h-full w-full flex-col justify-center gap-18">
             <InvitationCard
                 Graphic={<CardBobGraphic />}
+                editText={invitationText}
                 bgColor="bg-gradient-to-b to-[#FF5E27] from-[#FFA484]"
-                text="우리 같이 밥 먹으러 갈래?"
                 from="초대장"
             />
             <div className="flex flex-row gap-10">
                 <AcceptButton
                     text="수락하기"
-                    onClick={() => {}}
+                    onClick={() => {
+                        acceptInvitation(Number(invitationId))
+                    }}
                 />
                 <RejectButton
                     text="거절하기"
-                    onClick={() => {}}
+                    onClick={() => {
+                        rejectInvitation(Number(invitationId))
+                    }}
                 />
             </div>
         </div>

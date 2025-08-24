@@ -12,6 +12,7 @@ import {
 } from '@/assets/graphics'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSendInvitation } from '@/query/invitationQuery'
 
 export function SendInvitationPage() {
     const cardList = [
@@ -23,7 +24,20 @@ export function SendInvitationPage() {
         { graphic: <CardGiftboxGraphic />, bgColor: 'bg-[#FFBF48]' },
         { graphic: <CardMailGraphic />, bgColor: 'bg-[#AD50FF]' }
     ]
+
     const [selectedCard, setSelectedCard] = useState<number>(0)
+    const [editText, setEditText] = useState<string>('')
+    const [isEditing, setIsEditing] = useState<boolean>(false)
+    const { mutate: sendInvitation } = useSendInvitation({
+        onSuccess: () => {},
+        onError: () => {}
+    })
+    const handleSendInvitation = () => {
+        sendInvitation({
+            inviteeId: { id: 1 },
+            message: editText
+        })
+    }
     const navigate = useNavigate()
     return (
         <div
@@ -45,13 +59,19 @@ export function SendInvitationPage() {
             <InvitationCard
                 Graphic={cardList[selectedCard].graphic}
                 bgColor={cardList[selectedCard].bgColor}
-                text="우리 같이 밥 먹으러 갈래?"
                 from="초대장"
                 showEditButton={true}
+                isEditing={isEditing}
+                editText={editText}
+                setEditText={setEditText}
+                setIsEditing={setIsEditing}
             />
             {/* 보내기 버튼 */}
             <ModalTrigger forId="send-invitation-modal">
-                <MutalButton text="초대장 보내기" />
+                <MutalButton
+                    text="초대장 보내기"
+                    onClick={handleSendInvitation}
+                />
             </ModalTrigger>
             <JoinCompleteModal
                 title="가은님에게 발송됩니다."
