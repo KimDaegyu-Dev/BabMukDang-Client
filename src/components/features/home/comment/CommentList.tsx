@@ -1,8 +1,5 @@
 import { CommentResponse } from '@/apis/dto'
 import { CommentItem, ReplyCommentItem } from '@/components'
-import { MockPostList } from '@/constants/mockData'
-import { useGetArticleComments } from '@/query'
-import { useEffect, useState } from 'react'
 
 interface Comment {
     commentId: number
@@ -16,27 +13,21 @@ interface Comment {
 }
 
 export function CommentList({
-    postId,
+    comments,
+    totalCommentCount,
     onClickReply
 }: {
-    postId: number
-    onClickReply: (commentId: number) => void
+    comments: Comment[]
+    totalCommentCount: number
+    onClickReply: (commentId: number, authorUsername: string) => void
 }) {
-    const { data: commentsData, error } = useGetArticleComments(postId)
-    const [comments, setComments] = useState<Comment[]>([])
-    useEffect(() => {
-        if (commentsData) {
-            setComments(commentsData as Comment[])
-        }
-        setComments(buildCommentTree(MockPostList[postId - 1].comments))
-        console.log(buildCommentTree(MockPostList[postId - 1].comments))
-    }, [commentsData])
+    console.log(comments)
     return (
         <div className="flex flex-col gap-20">
             <div className="flex flex-row items-center gap-4">
                 <span className="text-title2-semibold text-gray-5">댓글</span>
                 <span className="text-body2-medium text-gray-3">
-                    · {comments.length}
+                    · {totalCommentCount}
                 </span>
             </div>
             <div className="flex flex-col gap-15">
@@ -49,9 +40,14 @@ export function CommentList({
                             comment={comment.content}
                             createdAt={comment.createdAt}
                             authorId={comment.authorId}
-                            onClickReply={() => onClickReply(comment.commentId)}
+                            onClickReply={() =>
+                                onClickReply(
+                                    comment.commentId,
+                                    comment.authorUsername
+                                )
+                            }
                         />
-                        {comment?.replies?.length &&
+                        {comment?.replies &&
                             comment.replies.length > 0 &&
                             comment.replies.map(reply => (
                                 <ReplyCommentItem
@@ -62,11 +58,13 @@ export function CommentList({
                                     createdAt={reply.createdAt}
                                     authorId={reply.authorId}
                                     onClickReply={() =>
-                                        onClickReply(reply.commentId)
+                                        onClickReply(
+                                            reply.commentId,
+                                            reply.authorUsername
+                                        )
                                     }
                                 />
                             ))}
-
                         <Separator />
                     </>
                 ))}
@@ -77,23 +75,4 @@ export function CommentList({
 
 const Separator = () => {
     return <div className="border-gray-2 -ml-20 h-0 w-screen border-b" />
-}
-
-function buildCommentTree(comments: CommentResponse[]) {
-    const map: Record<number, Comment> = {}
-    const roots: Comment[] = []
-
-    comments.forEach(comment => {
-        map[comment.commentId] = { ...comment, replies: [] }
-    })
-
-    comments.forEach(comment => {
-        if (comment.parentCommentId !== 0) {
-            map[comment.parentCommentId].replies?.push(map[comment.commentId])
-        } else {
-            roots.push(map[comment.commentId])
-        }
-    })
-
-    return roots
 }

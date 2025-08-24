@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { PostCard, CommentList, ChatInput } from '@/components'
 import { useHeader, useBottomNav } from '@/hooks'
 import { useLocation, useParams } from 'react-router-dom'
-import { useCommentArticle } from '@/query'
-
+import { useCommentArticle, useGetArticleComments } from '@/query'
+import { CommentResponse } from '@/apis/dto'
+import { buildCommentTree } from '@/lib'
+type TreeComment = ReturnType<typeof buildCommentTree>[number]
 export function CommentPage() {
     const { resetHeader, setTitle } = useHeader()
     const { hideBottomNav, resetBottomNav } = useBottomNav()
@@ -12,7 +14,7 @@ export function CommentPage() {
     const [replyCommentId, setReplyCommentId] = useState<number | null>(null)
     const { mutate: sendMessage } = useCommentArticle(
         () => {
-            console.log('success')
+            refetch()
         },
         e => {
             console.log('error', e)
@@ -33,6 +35,19 @@ export function CommentPage() {
         }
     }
 
+    const {
+        data: commentsData,
+        error,
+        refetch
+    } = useGetArticleComments(Number(postId))
+    const [comments, setComments] = useState<TreeComment[]>([])
+    const [totalCommentCount, setTotalCommentCount] = useState(0)
+    useEffect(() => {
+        if (commentsData) {
+            setComments(buildCommentTree(commentsData))
+            setTotalCommentCount(commentsData.length)
+        }
+    }, [commentsData])
     const handleSendMessage = () => {
         sendMessage({
             articleId: Number(postId),
@@ -43,11 +58,12 @@ export function CommentPage() {
         })
         setNewMessage('')
         setReplyCommentId(null)
+        refetch()
     }
 
-    const handleReply = (commentId: number) => {
-        console.log('reply', commentId)
+    const handleReply = (commentId: number, authorUsername: string) => {
         setReplyCommentId(commentId)
+        setNewMessage(`@${authorUsername} `)
     }
 
     return (
@@ -58,7 +74,8 @@ export function CommentPage() {
             /> */}
             {/* 댓글 영역 */}
             <CommentList
-                postId={Number(postId)}
+                comments={comments}
+                totalCommentCount={totalCommentCount}
                 onClickReply={handleReply}
             />
             <ChatInput
