@@ -1,6 +1,8 @@
-import { CallIcon, LocationGrayIcon } from '@/assets/icons'
+import { CallIcon, LocationGrayIcon, ShareIcon } from '@/assets/icons'
 import { useAuthStore } from '@/store'
 import { FriendProfileList } from '../features/onboarding'
+import { Link } from 'react-router-dom'
+import { COLORS } from '@/constants/colors'
 // import { Restaurant } from '@/types/restaurant'
 
 interface Restaurant {
@@ -13,6 +15,7 @@ interface Restaurant {
     address_name: string
     phone: string
     selectUsers: string[]
+    place_url: string
 }
 interface RestaurantCardProps {
     restaurant: Restaurant
@@ -68,6 +71,21 @@ export function RestaurantCard({
                                 {restaurant.phone}
                             </span>
                         </div>
+                    )}
+                    {/* 링크 */}
+                    {restaurant.place_url && (
+                        <Link
+                            to={restaurant.place_url}
+                            target="_blank"
+                            className="flex items-center gap-2">
+                            <ShareIcon
+                                strokecolor={COLORS.gray5}
+                                className="size-16"
+                            />
+                            <span className="text-caption-medium text-gray-5">
+                                식당 정보 보러가기
+                            </span>
+                        </Link>
                     )}
                 </div>
             </div>
