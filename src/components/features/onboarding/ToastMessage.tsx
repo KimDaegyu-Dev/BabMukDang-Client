@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useSocket } from '../../../contexts/SocketContext'
 
 type ToastMessageProps = {
     isOpen: boolean
@@ -7,20 +8,28 @@ type ToastMessageProps = {
     durationMs?: number
 }
 
-export function ToastMessage({
-    isOpen,
-    message,
-    onClose,
-    durationMs = 2000
-}: ToastMessageProps) {
+export function ToastMessage() {
+    const { finalState } = useSocket()
+    const [isOpen, setIsOpen] = useState(false)
+    const [message, setMessage] = useState('')
+
     useEffect(() => {
         if (!isOpen) return
-        const timer = setTimeout(() => {
-            onClose?.()
-        }, durationMs)
-        return () => clearTimeout(timer)
-    }, [isOpen, durationMs, onClose])
 
+        const durationMs = 3000
+        const timer = setTimeout(() => {
+            setIsOpen(false)
+        }, durationMs)
+
+        return () => clearTimeout(timer)
+    }, [isOpen])
+
+    useEffect(() => {
+        if (finalState) {
+            setMessage('다음 단계로 이동했어요')
+            setIsOpen(true)
+        }
+    }, [finalState])
     return (
         <div
             className={`fixed bottom-114 left-1/2 z-50 w-full -translate-x-1/2 transform px-20 transition-opacity duration-300 ${

@@ -84,7 +84,8 @@ const ContentBlocker = () => {
     )
 }
 const SocketInner = ({ setStage }: { setStage: (stage: string) => void }) => {
-    const { socket, setInitialState, setParticipants } = useSocket()
+    const { socket, setInitialState, setParticipants, setFinalState } =
+        useSocket()
     const { matchType } = useParams<{
         matchType: 'announcement' | 'invitation'
     }>()
@@ -99,9 +100,16 @@ const SocketInner = ({ setStage }: { setStage: (stage: string) => void }) => {
         socket?.on('join-room', data => {
             setParticipants(data)
         })
+        socket?.on('final-state-response', data => {
+            console.log('final-state-response', data)
+            setFinalState(data)
+        })
         return () => {
             socket?.off('stage-changed')
+            socket?.off('initial-state-response')
+            socket?.off('join-room')
+            socket?.off('final-state-response')
         }
-    }, [matchType])
+    }, [matchType, socket])
     return <></>
 }

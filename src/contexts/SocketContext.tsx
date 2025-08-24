@@ -52,6 +52,8 @@ const SocketContext = createContext<{
     setParticipantCount: (participantCount: number) => void
     isSelfReady: boolean
     setIsSelfReady: (isSelfReady: boolean) => void
+    finalState: any
+    setFinalState: (finalState: any) => void
 } | null>(null)
 export const useSocket = () => {
     const ctx = useContext(SocketContext)
@@ -75,6 +77,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     const [participantCount, setParticipantCount] = useState(0)
     const [stage, setStage] = useState('waiting')
     const [isSelfReady, setIsSelfReady] = useState(false)
+    const [finalState, setFinalState] = useState<any>(null)
     useEffect(() => {
         fetch(`${import.meta.env.VITE_CDN_URL}/categories.json`)
             .then(res => res.json())
@@ -138,7 +141,9 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
                 setReadyCount,
                 setParticipantCount,
                 isSelfReady,
-                setIsSelfReady
+                setIsSelfReady,
+                finalState,
+                setFinalState
             }}>
             {children}
         </SocketContext.Provider>
