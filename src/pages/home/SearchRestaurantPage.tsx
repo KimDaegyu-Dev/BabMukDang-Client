@@ -7,6 +7,7 @@ import { RestaurantCard, MutalButton, SearchInput } from '@/components'
 import { useBottomNav, useKakaoMap } from '@/hooks'
 import { useUploadArticle } from '@/query'
 import { useAuthStore } from '@/store'
+import { RestaurantInfo } from '@/apis/dto'
 
 export function SearchRestaurantPage() {
     const { image, setRestaurant } = useArticleStore()
@@ -77,22 +78,20 @@ export function SearchRestaurantPage() {
     }
     const handleSelectRestaurant = (restaurant: any) => {
         setSelectedRestaurant(restaurant)
-        setRestaurant(
-            restaurant.map((item: any) => ({
-                ...item,
-                addressName: item.address_name,
-                roadAddressName: item.road_address_name,
-                phoneNumber: item.phone,
-                placeUrl: item.place_url,
-                categoryName: item.category_name,
-                categoryGroupCode: item.category_group_code,
-                categoryGroupName: item.category_group_name,
-                placeId: item.id,
-                placeName: item.place_name,
-                x: item.x,
-                y: item.y
-            }))
-        )
+        console.log(restaurant)
+        setRestaurant({
+            addressName: restaurant.address_name,
+            roadAddressName: restaurant.road_address_name,
+            phoneNumber: restaurant.phone,
+            placeUrl: restaurant.place_url,
+            categoryName: restaurant.category_name,
+            categoryGroupCode: restaurant.category_group_code,
+            categoryGroupName: restaurant.category_group_name,
+            placeId: restaurant.id,
+            placeName: restaurant.place_name,
+            x: restaurant.x,
+            y: restaurant.y
+        })
     }
 
     const { showBottomNav, hideBottomNav } = useBottomNav()
