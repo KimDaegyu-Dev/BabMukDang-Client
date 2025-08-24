@@ -35,6 +35,8 @@ export interface CommentResponse {
     parentCommentId: number
     content: string
     createdAt: string
+    profileImageUrl?: string
+    distance?: string
 }
 export interface ArticleSummaryResponse {
     articleId: number
@@ -94,6 +96,7 @@ export interface RestaurantInfo {
     roadAddressName: string
     phoneNumber: string
     placeUrl: string
+    distance?: string
     categoryGroupCode: string
     categoryGroupName: string
     categoryName: string

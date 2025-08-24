@@ -11,6 +11,7 @@ interface Comment {
     parentCommentId: number | null
     content: string
     createdAt: string
+    profileImageUrl?: string
     replies?: Comment[] // 트리 변환 후에만 생김
 }
 
@@ -25,7 +26,7 @@ export function CommentList({
     const [comments, setComments] = useState<Comment[]>([])
     useEffect(() => {
         if (commentsData) {
-            setComments(commentsData)
+            setComments(commentsData as Comment[])
         }
         setComments(buildCommentTree(MockPostList[postId - 1].comments))
         console.log(buildCommentTree(MockPostList[postId - 1].comments))
@@ -50,7 +51,8 @@ export function CommentList({
                             authorId={comment.authorId}
                             onClickReply={() => onClickReply(comment.commentId)}
                         />
-                        {comment?.replies?.length > 0 &&
+                        {comment?.replies?.length &&
+                            comment.replies.length > 0 &&
                             comment.replies.map(reply => (
                                 <ReplyCommentItem
                                     key={reply.commentId}

@@ -3,7 +3,10 @@ import { useLikeArticle } from '@/query'
 import { useNavigate } from 'react-router-dom'
 type Post = {
     postId: number
-    author: string
+    author: {
+        id: number
+        username: string
+    }
     tags: string[]
     postedAt: string
     postImageUrl: string
@@ -12,11 +15,18 @@ type Post = {
 }
 
 type RestaurantInfo = {
-    restaurantImageUrl: string
-    restaurantName: string
-    restaurantType: string
-    restaurantLocation: string
-    restaurantDistance: string
+    placeId: string
+    placeName: string
+    addressName: string
+    roadAddressName: string
+    phoneNumber: string
+    placeUrl: string
+    distance?: string
+    categoryGroupCode: string
+    categoryGroupName: string
+    categoryName: string
+    x: number
+    y: number
 }
 
 export function PostCard({

@@ -298,10 +298,17 @@ export const MockPostList: {
         postType: 'mornings',
         restaurantInfo: {
             placeId: '1234567890',
-            restaurantName: '더 맛있는 일식집',
-            restaurantType: '일식집',
-            restaurantLocation: '서울시 노원구 공릉동 30-2',
-            restaurantDistance: '300m'
+            placeName: '더 맛있는 일식집',
+            categoryName: '일식집',
+            roadAddressName: '서울시 노원구 공릉동 30-2',
+            distance: '300m',
+            addressName: '서울시 노원구 공릉동 30-2',
+            phoneNumber: '010-1234-5678',
+            placeUrl: 'https://www.google.com',
+            categoryGroupCode: '1234567890',
+            categoryGroupName: '일식집',
+            x: 127.06112,
+            y: 37.65141
         },
         comments: [
             {
@@ -363,10 +370,17 @@ export const MockPostList: {
         postType: 'lunch',
         restaurantInfo: {
             placeId: '1234567890',
-            restaurantName: '더 맛있는 일식집',
-            restaurantType: '일식집',
-            restaurantLocation: '서울시 노원구 공릉동 30-2',
-            restaurantDistance: '300m'
+            placeName: '더 맛있는 일식집',
+            categoryName: '일식집',
+            roadAddressName: '서울시 노원구 공릉동 30-2',
+            distance: '300m',
+            addressName: '서울시 노원구 공릉동 30-2',
+            phoneNumber: '010-1234-5678',
+            placeUrl: 'https://www.google.com',
+            categoryGroupCode: '1234567890',
+            categoryGroupName: '일식집',
+            x: 127.06112,
+            y: 37.65141
         },
         comments: [
             {
@@ -388,11 +402,18 @@ export const MockPostList: {
         postImageUrl: '/test/card-post.png',
         postType: 'dinner',
         restaurantInfo: {
-            restaurantImageUrl: '/test/post-restaurant.png',
-            restaurantName: '더 맛있는 일식집',
-            restaurantType: '일식집',
-            restaurantLocation: '서울시 노원구 공릉동 30-2',
-            restaurantDistance: '300m'
+            placeId: '1234567890',
+            placeName: '더 맛있는 일식집',
+            categoryName: '일식집',
+            roadAddressName: '서울시 노원구 공릉동 30-2',
+            distance: '300m',
+            addressName: '서울시 노원구 공릉동 30-2',
+            phoneNumber: '010-1234-5678',
+            placeUrl: 'https://www.google.com',
+            categoryGroupCode: '1234567890',
+            categoryGroupName: '일식집',
+            x: 127.06112,
+            y: 37.65141
         },
         comments: [
             {
@@ -415,10 +436,17 @@ export const MockPostList: {
         postType: 'mornings',
         restaurantInfo: {
             placeId: '1234567890',
-            restaurantName: '더 맛있는 일식집',
-            restaurantType: '일식집',
-            restaurantLocation: '서울시 노원구 공릉동 30-2',
-            restaurantDistance: '300m'
+            placeName: '더 맛있는 일식집',
+            categoryName: '일식집',
+            roadAddressName: '서울시 노원구 공릉동 30-2',
+            distance: '300m',
+            addressName: '서울시 노원구 공릉동 30-2',
+            phoneNumber: '010-1234-5678',
+            placeUrl: 'https://www.google.com',
+            categoryGroupCode: '1234567890',
+            categoryGroupName: '일식집',
+            x: 127.06112,
+            y: 37.65141
         },
         comments: [
             {

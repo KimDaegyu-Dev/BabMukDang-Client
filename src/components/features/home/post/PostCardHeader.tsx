@@ -7,7 +7,10 @@ export const PostCardHeader = ({
     tags,
     postedAt
 }: {
-    author: string
+    author: {
+        id: number
+        username: string
+    }
     tags: string[]
     postedAt: string
 }) => {
@@ -19,7 +22,9 @@ export const PostCardHeader = ({
                 {/* 프로필 */}
                 <div className="flex flex-shrink-0 flex-row items-center gap-10">
                     <ProfileDefaultIcon />
-                    <span className="text-body1-bold text-black">{author}</span>
+                    <span className="text-body1-bold text-black">
+                        {author.username}
+                    </span>
                 </div>
                 {/* 태그 */}
                 <div className="flex flex-row flex-wrap items-center gap-8">
@@ -35,7 +40,9 @@ export const PostCardHeader = ({
                     {formatTime(postedAt)}
                 </span>
                 {/* 케밥 버튼 */}
-                {userId === author.id && <KebabButton onClick={() => {}} />}
+                {Number(userId) === author.id && (
+                    <KebabButton onClick={() => {}} />
+                )}
             </div>
         </div>
     )

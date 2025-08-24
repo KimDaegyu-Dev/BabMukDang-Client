@@ -11,7 +11,7 @@ export function CommentItem({
     authorId,
     onClickReply
 }: {
-    profileImageUrl: string
+    profileImageUrl?: string
     commentAuthorName: string
     comment: string
     createdAt: string
