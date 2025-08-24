@@ -45,7 +45,9 @@ export function ThumbImg({
         return (
             <div
                 onClick={handleClick}
-                className={`bg-gray-2 h-${size} w-${size} rounded-12 flex items-center justify-center`}>
+                className={`bg-gray-2 h-${size} w-${size} rounded-12 flex items-center justify-center ${
+                    isExcluded ? 'opacity-20' : ''
+                }`}>
                 <span className="text-body2-medium text-gray-7">
                     이미지 준비 중
                 </span>

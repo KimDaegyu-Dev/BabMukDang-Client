@@ -20,7 +20,7 @@ export const MenuCard = ({
             onClick={onClick}>
             {/* 이미지 */}
             <div
-                className={`bg-gray-2 rounded-12 relative w-full overflow-hidden ${selectedUsers && currentUser && selectedUsers.includes(currentUser) ? 'border-primary-main border-2' : ''}`}>
+                className={`bg-gray-2 rounded-12 relative flex w-full flex-col items-center justify-center overflow-hidden ${selectedUsers && currentUser && selectedUsers.includes(currentUser) ? 'border-primary-main border-2' : ''}`}>
                 <div className="-gap-4 absolute top-8 left-8 z-100 flex h-full w-full flex-row flex-wrap">
                     {/* 사람 프로필 */}
                     <FriendProfileList selectedUsers={selectedUsers || []} />

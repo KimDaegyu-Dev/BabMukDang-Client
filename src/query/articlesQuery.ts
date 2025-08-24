@@ -8,14 +8,20 @@ import {
     presignArticle,
     uploadArticleS3
 } from '@/apis'
-import { ArticlePostRequest } from '@/apis/dto'
+import { ArticlePostRequest, CommentPostRequest } from '@/apis/dto'
+import {
+    deleteArticle,
+    deleteArticleComment,
+    likeArticle,
+    postArticleComment
+} from '@/apis/article'
 
 export const useGetArticle = (articleId: number) => {
     const { data, isLoading, error } = useQuery({
         queryKey: ['article', articleId],
         queryFn: () => getArticle(articleId)
     })
-    return { data: data?.data, isLoading, error }
+    return { data: data, isLoading, error }
 }
 
 export const useGetArticleComments = (articleId: number) => {
@@ -23,7 +29,7 @@ export const useGetArticleComments = (articleId: number) => {
         queryKey: ['articleComments', articleId],
         queryFn: () => getArticleComments(articleId)
     })
-    return { data: data?.data, isLoading, error }
+    return { data: data, isLoading, error }
 }
 
 export const useGetHomeArticles = () => {
@@ -31,7 +37,7 @@ export const useGetHomeArticles = () => {
         queryKey: ['homeArticles'],
         queryFn: getHomeArticles
     })
-    return { data: data?.data, isLoading, error }
+    return { data: data, isLoading, error }
 }
 
 export const useGetArticlesByAuthor = (authorId: number) => {
@@ -39,7 +45,7 @@ export const useGetArticlesByAuthor = (authorId: number) => {
         queryKey: ['articlesByAuthor', authorId],
         queryFn: () => getArticlesByAuthor(authorId)
     })
-    return { data: data?.data, isLoading, error }
+    return { data: data, isLoading, error }
 }
 
 type UploadAndPostVars = {
@@ -98,3 +104,60 @@ export const useUploadArticle = (
 //       taggedMemberIds,   // number[]
 //     }),
 //   });
+
+export const useLikeArticle = (
+    onSuccess: () => void,
+    onError: (e: Error) => void
+) => {
+    const { mutate, isPending, error } = useMutation({
+        mutationFn: ({ articleId }: { articleId: number }) =>
+            likeArticle(articleId),
+        onSuccess,
+        onError
+    })
+    return { mutate, isPending, error }
+}
+
+export const useCommentArticle = (
+    onSuccess: () => void,
+    onError: (e: Error) => void
+) => {
+    const { mutate, isPending, error } = useMutation({
+        mutationFn: ({
+            articleId,
+            comment
+        }: {
+            articleId: number
+            comment: CommentPostRequest
+        }) => postArticleComment(articleId, comment),
+        onSuccess,
+        onError
+    })
+    return { mutate, isPending, error }
+}
+
+export const useDeleteArticle = (
+    onSuccess: () => void,
+    onError: (e: Error) => void
+) => {
+    const { mutate, isPending, error } = useMutation({
+        mutationFn: ({ articleId }: { articleId: number }) =>
+            deleteArticle(articleId),
+        onSuccess,
+        onError
+    })
+    return { mutate, isPending, error }
+}
+
+export const useDeleteArticleComment = (
+    onSuccess: () => void,
+    onError: (e: Error) => void
+) => {
+    const { mutate, isPending, error } = useMutation({
+        mutationFn: ({ commentId }: { commentId: number }) =>
+            deleteArticleComment(commentId),
+        onSuccess,
+        onError
+    })
+    return { mutate, isPending, error }
+}

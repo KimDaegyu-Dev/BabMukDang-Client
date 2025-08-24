@@ -28,9 +28,12 @@ export default defineConfig({
                 type: 'module',
                 navigateFallback: 'index.html'
             },
-            strategies: 'injectManifest',
+            workbox: {
+                disableDevLogs: true
+            },
             srcDir: './src',
             filename: 'service-worker.js',
+            includeManifestIcons: true,
             manifest: {
                 name: '밥먹댕',
                 short_name: '밥먹댕',

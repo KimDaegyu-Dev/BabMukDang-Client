@@ -4,18 +4,21 @@ import { useSocket } from '@/contexts/SocketContext'
 import { TagPerson, OnboardingHeader, ThumbImg } from '@/components'
 import { useAuthStore } from '@/store'
 
-type CategoryId = string
+interface Menu {
+    code: string
+    label: string
+}
 interface ExcludeMenuUpdateItem {
     userId: string
-    exclusions: CategoryId[]
+    exclusions: Menu[]
 }
 type ExcludeMenuUpdate = ExcludeMenuUpdateItem[]
 
 type InitialState = UserRecentMenus[]
 interface UserRecentMenus {
     userId: string
-    categoryIds: CategoryId[]
-    excludedCategoryIds?: CategoryId[]
+    menuList: Menu[]
+    excludedMenuList?: Menu[]
 }
 export function MenuExcludePage() {
     const [userRecentMenus, setUserRecentMenus] = useState<InitialState>([])
@@ -38,7 +41,7 @@ export function MenuExcludePage() {
                     if (updateItem) {
                         return {
                             ...item,
-                            excludedCategoryIds: updateItem.exclusions
+                            excludedMenuList: updateItem.exclusions
                         }
                     }
                     return item
@@ -47,24 +50,19 @@ export function MenuExcludePage() {
         })
     }, [socket])
     return (
-        <div className="min-h-screen">
-            <OnboardingHeader
-                title="최근에 먹은 메뉴예요.
-                또 먹어도 괜찮아요?"
-                progress={1}
-                voteLimit="중복 투표"
-            />
+        <>
             <div className="flex flex-col gap-30">
-                {userRecentMenus.map((user: UserRecentMenus, index) => (
-                    <MenuExcludeList
-                        key={index}
-                        menuList={user.categoryIds}
-                        userId={user.userId}
-                        excludedCategoryIds={user.excludedCategoryIds}
-                    />
-                ))}
+                {userRecentMenus.length > 0 &&
+                    userRecentMenus.map((user: UserRecentMenus, index) => (
+                        <MenuExcludeList
+                            key={index}
+                            menuList={user.menuList}
+                            userId={user.userId}
+                            excludedMenuList={user.excludedMenuList}
+                        />
+                    ))}
             </div>
-        </div>
+        </>
     )
 }
 
@@ -72,18 +70,19 @@ export function MenuExcludePage() {
 const MenuExcludeList = ({
     menuList,
     userId,
-    excludedCategoryIds
+    excludedMenuList
 }: {
-    menuList: CategoryId[]
+    menuList: Menu[]
     userId: string
-    excludedCategoryIds?: CategoryId[]
+    excludedMenuList?: Menu[]
 }) => {
     const { categories, socket } = useSocket()
     const { userId: currentUserId } = useAuthStore()
-    const handleClick = (categoryId: CategoryId) => {
-        if (userId === currentUserId) {
-            socket?.emit('exclude-menu', { categoryId })
-        }
+    const handleClick = (menu: Menu) => {
+        console.log('menu', menu, excludedMenuList)
+        // if (userId === currentUserId) {
+        socket?.emit('exclude-menu', menu)
+        // }
     }
     return (
         <div className="flex flex-col gap-10">
@@ -91,21 +90,26 @@ const MenuExcludeList = ({
                 name={userId}
                 className="w-fit px-18"
             />
-            <div className="-ml-20 flex h-120 w-screen gap-10 overflow-x-auto pl-20">
-                {menuList.map((categoryId, index) => (
+            <div className="-ml-20 flex h-fit w-screen gap-10 overflow-x-auto pl-20">
+                {menuList.map((menu, index) => (
                     <div
                         key={index}
-                        className="h-full flex-shrink-0">
-                        <ThumbImg
-                            item={categories.find(
-                                category => category.id === categoryId
-                            )}
-                            size={120}
-                            onClick={() => handleClick(categoryId)}
-                            isExcluded={excludedCategoryIds?.includes(
-                                categoryId
-                            )}
-                        />
+                        className="flex flex-col items-center gap-8">
+                        <div
+                            key={index}
+                            className="h-120 w-120 flex-shrink-0">
+                            <ThumbImg
+                                item={categories.find(
+                                    category => category.id === menu.code
+                                )}
+                                size={120}
+                                onClick={() => handleClick(menu)}
+                                isExcluded={excludedMenuList?.includes(menu)}
+                            />
+                        </div>
+                        <span className="text-caption-medium text-gray-8">
+                            {menu.label}
+                        </span>
                     </div>
                 ))}
             </div>

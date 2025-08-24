@@ -3,6 +3,10 @@ export interface BaseResponse<T> {
     message: string
     data: T
 }
+export interface Menu {
+    code: string
+    label: string
+}
 export interface Post {
     targetCount: number
     meetingAt: string //2025-08-08T22:30
@@ -119,4 +123,35 @@ export interface ArticlePostRequest {
     mealTime: string
     restaurant: RestaurantInfo
     taggedMemberIds: number[]
+    camera: boolean
+    album: boolean
+}
+export interface LikePostResponse {
+    liked: boolean
+    likeCount: number
+}
+
+export interface CommentPostRequest {
+    content: string
+    parentCommentId?: number
+}
+
+export interface Onboarding {
+    likedCodes: string[]
+    dislikedCodes: string[]
+    allergyCodes: string[]
+}
+export interface OnboardingPreferenceRequest extends Onboarding {}
+export interface OnboardingPreferenceResponse extends Onboarding {}
+
+export interface PreferenceSummaryResponse {
+    likes: Menu[]
+    dislikes: Menu[]
+    allergies: Menu[]
+}
+
+export interface PreferenceMetaResponse {
+    onboardedAt: string
+    lastUpdatedAt: string
+    revision: number
 }

@@ -1,10 +1,7 @@
-import axios from 'axios'
 import { client } from './client'
 import { BaseResponse, TokenResponse } from './dto'
 
-export const login = async (
-    code: string
-): Promise<BaseResponse<TokenResponse>> => {
+export const login = async (): Promise<BaseResponse<TokenResponse>> => {
     const res = await client.get(`/auth2/authorization/kakao`)
     console.log(res.data)
     return res.data

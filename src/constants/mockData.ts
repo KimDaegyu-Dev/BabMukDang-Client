@@ -1,3 +1,5 @@
+import { CommentResponse, RestaurantInfo } from '@/apis/dto'
+
 export const MockAnnouncements = [
     {
         id: 1,
@@ -277,16 +279,25 @@ export const MockFriendList = [
     }
 ]
 
-export const MockPostList = [
+export const MockPostList: {
+    postId: number
+    author: string
+    tags: string[]
+    postedAt: string
+    postImageUrl: string
+    postType: string
+    restaurantInfo: RestaurantInfo
+    comments: CommentResponse[]
+}[] = [
     {
         postId: 1,
         author: '유가은',
         tags: ['김대규', '김성휘', '이민수'],
-        postedAt: '1시간 전',
+        postedAt: '2025-08-23 12:00',
         postImageUrl: '/test/card-post.png',
         postType: 'mornings',
         restaurantInfo: {
-            restaurantImageUrl: '/test/post-restaurant.png',
+            placeId: '1234567890',
             restaurantName: '더 맛있는 일식집',
             restaurantType: '일식집',
             restaurantLocation: '서울시 노원구 공릉동 30-2',
@@ -294,29 +305,52 @@ export const MockPostList = [
         },
         comments: [
             {
-                id: 1,
-                profileImageUrl: 'https://picsum.photos/200/300',
-                name: '유가은',
-                comment: '댓글 1',
-                createdAt: '2025-01-01 12:00',
-                isReply: false
-            },
-
-            {
-                id: 2,
-                profileImageUrl: 'https://picsum.photos/200/300',
-                name: '유가은',
-                comment: '댓글 1',
-                createdAt: '2025-01-01 12:00',
-                isReply: true
+                commentId: 1,
+                authorId: 101,
+                authorUsername: 'Alice',
+                parentCommentId: 0,
+                content: '첫 번째 댓글입니다!',
+                createdAt: '2025-08-24T10:00:00Z'
             },
             {
-                id: 3,
-                profileImageUrl: 'https://picsum.photos/200/300',
-                name: '유가은',
-                comment: '댓글 1',
-                createdAt: '2025-01-01 12:00',
-                isReply: false
+                commentId: 2,
+                authorId: 102,
+                authorUsername: 'Bob',
+                parentCommentId: 1,
+                content: 'Alice님 댓글에 답글 남겨요 😃',
+                createdAt: '2025-08-24T10:05:00Z'
+            },
+            {
+                commentId: 3,
+                authorId: 103,
+                authorUsername: 'Charlie',
+                parentCommentId: 1,
+                content: '저도 첫 댓글에 의견 남깁니다.',
+                createdAt: '2025-08-24T10:07:00Z'
+            },
+            {
+                commentId: 4,
+                authorId: 104,
+                authorUsername: 'David',
+                parentCommentId: 2,
+                content: 'Bob님 말씀에 동의합니다!',
+                createdAt: '2025-08-24T10:10:00Z'
+            },
+            {
+                commentId: 5,
+                authorId: 105,
+                authorUsername: 'Eve',
+                parentCommentId: 0,
+                content: '두 번째 루트 댓글 ✨',
+                createdAt: '2025-08-24T11:00:00Z'
+            },
+            {
+                commentId: 6,
+                authorId: 106,
+                authorUsername: 'Frank',
+                parentCommentId: 5,
+                content: 'Eve님 댓글에 답글 남깁니다~',
+                createdAt: '2025-08-24T11:05:00Z'
             }
         ]
     },
@@ -324,11 +358,11 @@ export const MockPostList = [
         postId: 2,
         author: '유가은',
         tags: ['김대규', '김성휘', '이민수', '박소영'],
-        postedAt: '2025-01-01 12:00',
+        postedAt: '2025-08-23 12:00',
         postImageUrl: '/test/card-post.png',
         postType: 'lunch',
         restaurantInfo: {
-            restaurantImageUrl: '/test/post-restaurant.png',
+            placeId: '1234567890',
             restaurantName: '더 맛있는 일식집',
             restaurantType: '일식집',
             restaurantLocation: '서울시 노원구 공릉동 30-2',
@@ -336,12 +370,13 @@ export const MockPostList = [
         },
         comments: [
             {
-                id: 1,
+                commentId: 1,
                 profileImageUrl: 'https://picsum.photos/200/300',
-                name: '유가은',
-                comment: '댓글 1',
+                authorUsername: '유가은',
+                content: '댓글 1',
                 createdAt: '2025-01-01 12:00',
-                isReply: true
+                authorId: 1,
+                parentCommentId: 0
             }
         ]
     },
@@ -349,7 +384,7 @@ export const MockPostList = [
         postId: 3,
         author: '유가은',
         tags: ['김대규', '김성휘', '이민수', '박소영'],
-        postedAt: '2025-01-01 12:00',
+        postedAt: '2025-08-23 18:00',
         postImageUrl: '/test/card-post.png',
         postType: 'dinner',
         restaurantInfo: {
@@ -361,12 +396,13 @@ export const MockPostList = [
         },
         comments: [
             {
-                id: 1,
+                commentId: 1,
                 profileImageUrl: 'https://picsum.photos/200/300',
-                name: '유가은',
-                comment: '댓글 1',
+                authorUsername: '유가은',
+                content: '댓글 1',
                 createdAt: '2025-01-01 12:00',
-                isReply: false
+                authorId: 1,
+                parentCommentId: 0
             }
         ]
     },
@@ -374,11 +410,11 @@ export const MockPostList = [
         postId: 4,
         author: '유가은',
         tags: ['김대규', '김성휘', '이민수', '박소영'],
-        postedAt: '2025-01-01 12:00',
+        postedAt: '2025-08-23 12:00',
         postImageUrl: '/test/card-post.png',
         postType: 'mornings',
         restaurantInfo: {
-            restaurantImageUrl: '/test/post-restaurant.png',
+            placeId: '1234567890',
             restaurantName: '더 맛있는 일식집',
             restaurantType: '일식집',
             restaurantLocation: '서울시 노원구 공릉동 30-2',
@@ -386,12 +422,13 @@ export const MockPostList = [
         },
         comments: [
             {
-                id: 1,
+                commentId: 1,
                 profileImageUrl: 'https://picsum.photos/200/300',
-                name: '유가은',
-                comment: '댓글 1',
+                authorUsername: '유가은',
+                content: '댓글 1',
                 createdAt: '2025-01-01 12:00',
-                isReply: false
+                authorId: 1,
+                parentCommentId: 0
             }
         ]
     }

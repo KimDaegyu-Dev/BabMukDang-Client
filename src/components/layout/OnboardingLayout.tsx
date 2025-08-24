@@ -1,12 +1,14 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Outlet, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { SocketProvider, useSocket } from '@/contexts/SocketContext'
 import {
     ChatButton,
     ChatModal,
     ToastMessage,
-    OnboardingButton
+    OnboardingButton,
+    ProgressBar,
+    OnboardingHeader
 } from '@/components'
 import { useHeader, useBottomNav } from '@/hooks'
 
@@ -20,8 +22,6 @@ export const OnboardingLayout = () => {
     }>()
 
     const [stage, setStage] = useState('waiting')
-    const [toastOpen, setToastOpen] = useState(false)
-    const [toastMessage, setToastMessage] = useState('')
     const isFirstStageEffect = useRef(true)
     useEffect(() => {
         hideHeader()
@@ -43,8 +43,6 @@ export const OnboardingLayout = () => {
             isFirstStageEffect.current = false
             return
         }
-        setToastMessage('다음 단계로 이동했어요')
-        setToastOpen(true)
     }, [stage])
     return (
         <SocketProvider>
@@ -66,42 +64,37 @@ export const OnboardingLayout = () => {
                 onClose={() => setIsChatOpen(false)}
                 roomId="1"
             />
-            <ToastMessage
-                isOpen={toastOpen}
-                message={toastMessage}
-                onClose={() => setToastOpen(false)}
-            />
+            <ToastMessage />
             <SocketInner setStage={setStage} />
         </SocketProvider>
     )
 }
 const ContentBlocker = () => {
     const { isSelfReady } = useSocket()
+    const { pathname } = useLocation()
+    const isWaiting = pathname.split('/')[2] === 'waiting'
+    const isFinish = pathname.split('/')[2] === 'finish'
     return (
         <div className={isSelfReady ? 'pointer-events-none' : ''}>
+            {!(isWaiting || isFinish) && (
+                <OnboardingHeader isSkipable={false} />
+            )}
             <Outlet />
         </div>
     )
 }
 const SocketInner = ({ setStage }: { setStage: (stage: string) => void }) => {
-    const { socket, setInitialState, setParticipants } = useSocket()
+    const { socket } = useSocket()
     const { matchType } = useParams<{
         matchType: 'announcement' | 'invitation'
     }>()
     useLayoutEffect(() => {
         socket?.on('stage-changed', data => {
-            console.log('stage-changed layout', data)
             setStage(data.stage)
-        })
-        socket?.on('initial-state-response', data => {
-            setInitialState(data)
-        })
-        socket?.on('join-room', data => {
-            setParticipants(data)
         })
         return () => {
             socket?.off('stage-changed')
         }
-    }, [matchType])
+    }, [matchType, socket])
     return <></>
 }
