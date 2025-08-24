@@ -1,5 +1,6 @@
 import { CommentIcon, ProfileDefaultIcon } from '@/assets/icons'
 import { KebabButton } from '@/components'
+import { COLORS } from '@/constants/colors'
 import { useAuthStore } from '@/store'
 
 export function CommentItem({
@@ -45,7 +46,10 @@ export function CommentItem({
                 </span>
             </div>
             <div className="flex flex-row items-center gap-4">
-                <CommentIcon onClick={onClickReply} />
+                <CommentIcon
+                    strokecolor={COLORS.gray5}
+                    onClick={onClickReply}
+                />
                 {Number(userId) === authorId && (
                     <KebabButton onClick={() => {}} />
                 )}

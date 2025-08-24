@@ -57,6 +57,11 @@ export function RestaurantCard({
                                 {formatDistance(restaurant.distance)}{' '}
                             </span>
                         )}
+                        {restaurant?.distance && (
+                            <span className="text-caption-medium text-gray-5">
+                                {formatDistance(restaurant.distance)}{' '}
+                            </span>
+                        )}
                         <span className="text-caption-medium text-gray-5">
                             {restaurant.road_address_name ||
                                 restaurant.address_name}

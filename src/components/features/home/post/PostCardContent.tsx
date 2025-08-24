@@ -7,6 +7,7 @@ import {
 import { useLikeArticle } from '@/query'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { COLORS } from '@/constants/colors'
 
 export const PostCardContent = ({
     postImageUrl,
@@ -65,7 +66,7 @@ export const PostCardContent = ({
                     <div
                         className="flex size-40 items-center justify-center rounded-full bg-white/30"
                         onClick={onClickComment}>
-                        <CommentIcon />
+                        <CommentIcon strokecolor={COLORS.gray5} />
                     </div>
                 )}
             </div>
