@@ -1,20 +1,20 @@
-import { TagPerson } from '@/components'
+import { ProgressBar, TagPerson } from '@/components'
 import { useSocket } from '@/contexts/SocketContext'
 import { useEffect, useState } from 'react'
-
+import { useLocation } from 'react-router-dom'
+import {
+    announcementRouteDescriptionMap,
+    announcementRouteTitleMap,
+    announcementRouteVoteLimitMap,
+    invitationRouteDescriptionMap,
+    invitationRouteTitleMap,
+    invitationRouteVoteLimitMap
+} from '@/constants/onboardingRoute'
 export function OnboardingHeader({
-    title,
-    description,
     isSkipable = false,
-    progress = 0,
-    subTitle = '',
-    voteLimit = ''
+    subTitle = ''
 }: {
-    title: string
-    description?: string
-    voteLimit?: string
     isSkipable?: boolean
-    progress: number
     subTitle?: string
 }) {
     const { participants } = useSocket()
@@ -22,10 +22,24 @@ export function OnboardingHeader({
     useEffect(() => {
         setPeopleTags(participants.map((item: any) => item.username))
     }, [participants])
+
+    const title = getByMatchType(
+        announcementRouteTitleMap,
+        invitationRouteTitleMap
+    )
+    const description = getByMatchType(
+        announcementRouteDescriptionMap,
+        invitationRouteDescriptionMap
+    )
+
+    const voteLimit = getByMatchType(
+        announcementRouteVoteLimitMap,
+        invitationRouteVoteLimitMap
+    )
     return (
         <div className="mt-20 mb-20 -ml-20 flex w-screen flex-col gap-30">
             {/* 프로그레스 바 */}
-            <ProgressBar progress={progress} />
+            <ProgressBar />
             <div className="flex flex-col gap-10 px-20">
                 <div className="flex flex-col gap-12">
                     {/* 태그 목록 */}
@@ -73,15 +87,13 @@ export function OnboardingHeader({
     )
 }
 
-const ProgressBar = ({ progress }: { progress: number }) => {
-    return (
-        <div className="relative flex flex-row">
-            <div className="w-full border-5 border-gray-200"></div>
-            <div
-                className="border-primary-500 absolute top-0 left-0 rounded-r-full border-5"
-                style={{
-                    width: `${(100 / progress) * 100}%`
-                }}></div>
-        </div>
-    )
+const getText = (map: any, pathname: string) => {
+    return map[pathname.split('/')[2] as keyof typeof map]
+}
+const getByMatchType = (map1: any, map2: any) => {
+    const { matchType } = useSocket()
+    const { pathname } = useLocation()
+    return matchType === 'announcement'
+        ? getText(map1, pathname)
+        : getText(map2, pathname)
 }

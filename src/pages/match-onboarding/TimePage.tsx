@@ -1,16 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { OnboardingHeader } from '@/components'
-
 export function TimePage() {
     return (
         <div className="min-h-screen">
-            <OnboardingHeader
-                title={`${new Date().getDate()} 일에 만날 시간을 정해보아요.`}
-                description="가능한 시간대를 모두 선택해주세요."
-                progress={5}
-                voteLimit="1인 1투표"
-            />
             <div className="px-4 py-6">
                 <TimePicker />
             </div>

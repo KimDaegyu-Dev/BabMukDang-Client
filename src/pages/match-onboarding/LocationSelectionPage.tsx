@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 
 import { useSocket } from '@/contexts/SocketContext'
-import { OnboardingHeader, KakaoMap, LocationCadidateItem } from '@/components'
+import { KakaoMap, LocationCadidateItem } from '@/components'
 
 interface LocationCandidateDto {
     placeName: string
@@ -90,19 +90,7 @@ export function LocationSelectionPage() {
     }
 
     return (
-        <div className="min-h-screen">
-            <OnboardingHeader
-                title={
-                    matchType === 'announcement'
-                        ? '만날 장소를 더 구체화 해봐요.'
-                        : '만날 장소를 정해보아요.'
-                }
-                description="지도에 위치를 클릭하거나, 장소 검색을 통해 장소를 추가 할 수 있어요. 
-                장소 추가 후 투표해보아요! "
-                progress={1}
-                voteLimit="1인 최대 2개 추가"
-            />
-
+        <>
             {/* Map */}
             <div className="relative">
                 <div
@@ -133,6 +121,6 @@ export function LocationSelectionPage() {
                     />
                 ))}
             </div>
-        </div>
+        </>
     )
 }

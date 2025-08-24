@@ -65,12 +65,7 @@ export function MenuPage() {
         })
     }, [socket])
     return (
-        <div className="min-h-screen">
-            <OnboardingHeader
-                title="오늘의 메뉴를 골라보아요."
-                progress={3}
-                voteLimit="중복 투표"
-            />
+        <>
             <div className="grid grid-cols-3 gap-10">
                 {menuRecommendations.map((menu, index) => (
                     <MenuCard
@@ -85,6 +80,6 @@ export function MenuPage() {
                     />
                 ))}
             </div>
-        </div>
+        </>
     )
 }

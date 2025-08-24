@@ -1,12 +1,14 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Outlet, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { SocketProvider, useSocket } from '@/contexts/SocketContext'
 import {
     ChatButton,
     ChatModal,
     ToastMessage,
-    OnboardingButton
+    OnboardingButton,
+    ProgressBar,
+    OnboardingHeader
 } from '@/components'
 import { useHeader, useBottomNav } from '@/hooks'
 
@@ -66,19 +68,21 @@ export const OnboardingLayout = () => {
                 onClose={() => setIsChatOpen(false)}
                 roomId="1"
             />
-            <ToastMessage
-                isOpen={toastOpen}
-                message={toastMessage}
-                onClose={() => setToastOpen(false)}
-            />
+            <ToastMessage />
             <SocketInner setStage={setStage} />
         </SocketProvider>
     )
 }
 const ContentBlocker = () => {
     const { isSelfReady } = useSocket()
+    const { pathname } = useLocation()
+    const isWaiting = pathname.split('/')[2] === 'waiting'
+    const isFinish = pathname.split('/')[2] === 'finish'
     return (
         <div className={isSelfReady ? 'pointer-events-none' : ''}>
+            {!(isWaiting || isFinish) && (
+                <OnboardingHeader isSkipable={false} />
+            )}
             <Outlet />
         </div>
     )
