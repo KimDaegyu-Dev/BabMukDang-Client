@@ -183,6 +183,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
             setInitialState(data)
             if (stage === 'waiting') {
                 console.log('initial-state-participants', data)
+
                 setParticipants(data.participants)
                 setLocationInitial(data.locationInitial)
                 setMeetingAtInitial(data.meetingAt)
