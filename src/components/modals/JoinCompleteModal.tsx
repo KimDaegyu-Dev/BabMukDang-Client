@@ -11,7 +11,7 @@ type JoinCompleteModalProps = {
     title: string
     description: string
     acceptText: string
-    announcementId: string
+    announcementId?: string
 }
 
 export function JoinCompleteModal({
@@ -75,7 +75,7 @@ function JoinCompleteModalContent({
                 {/* CTA */}
                 <MutalButtonSmall
                     text={acceptText}
-                    onClick={() => onAccept(announcementId)}
+                    onClick={() => onAccept?.(announcementId)}
                 />
             </div>
         </div>
