@@ -30,7 +30,7 @@ export function Layout() {
         }
     }, [myProfile])
     useEffect(() => {
-        if (!accessToken && !refreshToken) {
+        if (!accessToken) {
             navigate('/login')
         }
     }, [])
