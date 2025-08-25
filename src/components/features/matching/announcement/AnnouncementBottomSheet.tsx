@@ -23,7 +23,6 @@ export function AnnouncementBottomSheet({
         targetCount: 0,
         meetingAt: ''
     })
-    const { mutate: deleteAnnouncement } = useDeleteAnnouncement()
     return (
         <BottomSheet initialExposure={75}>
             <div className="relative flex h-full w-full flex-col items-center justify-baseline gap-35 bg-gradient-to-b from-white to-[#FED9CB] pt-12">
