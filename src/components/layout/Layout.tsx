@@ -33,7 +33,7 @@ export function Layout() {
         if (!accessToken && !refreshToken) {
             navigate('/login')
         }
-    }, [accessToken, refreshToken])
+    }, [])
     return (
         <div className="bg-gray-1 flex h-screen min-h-screen w-screen min-w-screen flex-col">
             {/* Header */}
