@@ -43,7 +43,7 @@ export function FinishPage() {
                     </div>
 
                     {/* 사용자 이름 */}
-                    <h2 className="text-title1-semibold mb-32 text-black">
+                    {/* <h2 className="text-title1-semibold mb-32 text-black"> 
                         {participants
                             .map(participant => participant.username)
                             .join(', ')}{' '}
