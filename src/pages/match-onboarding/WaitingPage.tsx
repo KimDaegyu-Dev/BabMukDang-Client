@@ -10,7 +10,7 @@ import {
 
 export function WaitingPage() {
     const navigate = useNavigate()
-    const { matchType, participants } = useSocket()
+    const { matchType, participants, stage } = useSocket()
     const matchedUser = {
         id: '1',
         name: '김사자',
@@ -39,21 +39,23 @@ export function WaitingPage() {
 
                 {/* 프로필 이미지 */}
                 <div className="ml-10 flex items-center justify-center">
-                    {participants?.map(participant => (
-                        <div
-                            key={participant.userId}
-                            className="shadow-drop-1 mb-20 -ml-10 size-120 overflow-hidden rounded-full">
-                            {participant?.userProfileImageURL ? (
-                                <img
-                                    src={participant.userProfileImageURL}
-                                    alt={`${participant.username} 프로필`}
-                                    className="bg-gray-3 h-full w-full object-cover"
-                                />
-                            ) : (
-                                <ProfileDefaultIcon className="size-full" />
-                            )}
-                        </div>
-                    ))}
+                    {stage === 'waiting' &&
+                        participants.length > 0 &&
+                        participants?.map(participant => (
+                            <div
+                                key={participant.userId}
+                                className="shadow-drop-1 mb-20 -ml-10 size-120 overflow-hidden rounded-full">
+                                {participant?.userProfileImageURL ? (
+                                    <img
+                                        src={participant.userProfileImageURL}
+                                        alt={`${participant.username} 프로필`}
+                                        className="bg-gray-3 h-full w-full object-cover"
+                                    />
+                                ) : (
+                                    <ProfileDefaultIcon className="size-full" />
+                                )}
+                            </div>
+                        ))}
                 </div>
 
                 {/* 사용자 이름 */}

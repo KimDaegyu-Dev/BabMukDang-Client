@@ -9,7 +9,13 @@ import React, {
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 import { useAuthStore } from '@/store/authStore'
-import { useLocation, useParams, useSearchParams } from 'react-router-dom'
+import {
+    useLocation,
+    useNavigate,
+    useParams,
+    useSearchParams
+} from 'react-router-dom'
+import { refresh } from '@/apis'
 
 interface ChatMessageDto {
     messageId: string
@@ -59,6 +65,8 @@ const SocketContext = createContext<{
         menu: string | undefined
         restaurant: string | undefined
     }
+    dateSelections: { userId: string; dates: string[] }[]
+    timeSelections: { userId: string; times: string[] }[]
 } | null>(null)
 export const useSocket = () => {
     const ctx = useContext(SocketContext)
@@ -74,7 +82,8 @@ interface Participant {
 export function SocketProvider({ children }: { children: React.ReactNode }) {
     const [socket, setSocket] = useState<Socket | null>(null)
     const mounted = useRef(false)
-    const { accessToken } = useAuthStore()
+    const { accessToken, refreshToken, setTokens } = useAuthStore()
+    const navigate = useNavigate()
     const { roomId } = useParams<{ roomId: string }>()
     const { matchType } = useParams<{
         matchType: 'announcement' | 'invitation'
@@ -94,6 +103,12 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         menu: undefined,
         restaurant: undefined
     })
+    const [dateSelections, setDateSelections] = useState<
+        { userId: string; dates: string[] }[]
+    >([])
+    const [timeSelections, setTimeSelections] = useState<
+        { userId: string; times: string[] }[]
+    >([])
     useEffect(() => {
         fetch(`${import.meta.env.VITE_CDN_URL}/categories.json`)
             .then(res => res.json())
@@ -104,7 +119,21 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
     // token이 설정된 후에 socket 생성
     useEffect(() => {
-        // if (!accessToken) return // token이 없으면 socket 생성하지 않음
+        const refreshTokenFunction = async () => {
+            if (!refreshToken) {
+                navigate('/')
+                return
+            }
+            const res = await refresh()
+            setTokens({
+                accessToken: res.data.accessToken,
+                refreshToken: res.data.refreshToken
+            })
+        }
+        if (!accessToken) {
+            refreshTokenFunction()
+            return
+        }
         const s = io(`${import.meta.env.VITE_WEBSOCKET_URL}/${matchType}`, {
             query: { roomId: roomId || '' },
             auth: {
@@ -142,9 +171,21 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
                 console.log('initial-state-participants', data)
                 setParticipants(data)
             }
+            if (data?.stage === 'date' && Array.isArray(data?.initialState)) {
+                setDateSelections(data.initialState as any)
+            }
+            if (data?.stage === 'time' && Array.isArray(data?.initialState)) {
+                setTimeSelections(data.initialState as any)
+            }
         })
         socket?.on('join-room', data => {
             setParticipants(data)
+        })
+        socket?.on('date-updated', (data: any) => {
+            if (Array.isArray(data)) setDateSelections(data)
+        })
+        socket?.on('time-updated', (data: any) => {
+            if (Array.isArray(data)) setTimeSelections(data)
         })
         socket?.on('final-state-response', data => {
             setFinalState(data)
@@ -161,6 +202,9 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
                 restaurant
             })
         })
+        return () => {
+            socket?.removeAllListeners()
+        }
     }, [socket, matchType])
 
     // useEffect(() => {
@@ -180,7 +224,6 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     //     }
     // }, [finalState])
 
-    if (!socket) return null // 초기 연결 중 스켈레톤 UI를 보여줘도 됨
     return (
         <SocketContext.Provider
             value={{
@@ -203,7 +246,9 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
                 setIsSelfReady,
                 finalState,
                 setFinalState,
-                finalStateMessage
+                finalStateMessage,
+                dateSelections,
+                timeSelections
             }}>
             {children}
         </SocketContext.Provider>

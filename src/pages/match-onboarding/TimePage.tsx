@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useSocket } from '@/contexts/SocketContext'
 
 export function TimePage() {
     return (
@@ -28,6 +29,7 @@ const TimePicker = ({
     defaultSelected,
     onChange
 }: TimePickerProps) => {
+    const { socket } = useSocket()
     const hours = endHour - startHour
     const totalSlots = hours * slotsPerHour
     const [selected, setSelected] = useState<boolean[]>(
@@ -62,8 +64,6 @@ const TimePicker = ({
             return next
         })
     }, [])
-
-    // Reserved for future range operations if needed
 
     const formatTime = useCallback(
         (slotIndex: number) => {
@@ -100,14 +100,19 @@ const TimePicker = ({
     }, [onChange, ranges, selected])
 
     useEffect(() => {
-        const handleMouseUp = () => setIsDragging(false)
+        const handleMouseUp = () => {
+            setIsDragging(false)
+            // 드래그 종료 시 서버에 전송
+            const times = ranges.map(r => `${r.start}–${r.end}`)
+            socket?.emit('pick-times', { times })
+        }
         window.addEventListener('mouseup', handleMouseUp)
         window.addEventListener('touchend', handleMouseUp)
         return () => {
             window.removeEventListener('mouseup', handleMouseUp)
             window.removeEventListener('touchend', handleMouseUp)
         }
-    }, [])
+    }, [ranges, socket])
 
     // row 기준으로 slot 선택
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
