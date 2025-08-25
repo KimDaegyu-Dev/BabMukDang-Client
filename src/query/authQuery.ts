@@ -8,9 +8,6 @@ export const useLogout = () => {
     const { logout: logoutToken } = useAuthStore()
     return useMutation({
         mutationFn: logout,
-        onSuccess: () => {
-            logoutToken()
-            navigate('/start')
-        }
+        onSuccess: () => {}
     })
 }
