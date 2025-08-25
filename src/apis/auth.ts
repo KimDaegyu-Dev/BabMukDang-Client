@@ -14,12 +14,9 @@ export const logout = async (): Promise<BaseResponse<void>> => {
     return res.data
 }
 
-export const refresh = async (
-    data: TokenResponse
-): Promise<BaseResponse<TokenResponse>> => {
+export const refresh = async (): Promise<BaseResponse<TokenResponse>> => {
     const res = await client.post(
-        `${import.meta.env.VITE_BASE_API_URL}/auth/refresh`,
-        data
+        `${import.meta.env.VITE_BASE_API_URL}/auth/refresh`
     )
     return res.data
 }

@@ -6,7 +6,10 @@ export { InvitationToggleButton } from './invitation/InvitationToggleButton'
 export { RecieveInvitationList } from './invitation/RecieveInvitationList'
 export { AnnouncementBottomSheet } from './announcement/AnnouncementBottomSheet'
 export { CloseAnnouncementCard } from './announcement/CloseAnnouncementCard'
-export { CloseAnnouncementButton } from './announcement/CloseAnnouncementButton'
+export {
+    AddAnnouncementButton,
+    CloseAnnouncementButton
+} from './announcement/AnnouncementButton'
 export { AddAnnouncementCard } from './announcement/AddAnnouncementCard'
 export { FriendCard } from './invitation/InvitationFriendCard'
 export { FriendListSection } from './invitation/FriendListSection'

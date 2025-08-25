@@ -6,19 +6,19 @@ import {
     getArticlesByAuthor,
     postArticle,
     presignArticle,
-    uploadArticleS3
+    uploadArticleS3,
+    getArticlesByMember,
+    getMyArticles,
+    deleteArticle,
+    deleteArticleComment,
+    likeArticle,
+    postArticleComment
 } from '@/apis'
 import {
     ArticlePostRequest,
     CommentPostRequest,
     LikePostResponse
 } from '@/apis/dto'
-import {
-    deleteArticle,
-    deleteArticleComment,
-    likeArticle,
-    postArticleComment
-} from '@/apis/article'
 
 export const useGetArticle = (articleId: number) => {
     const { data, isLoading, error } = useQuery({
@@ -164,4 +164,20 @@ export const useDeleteArticleComment = (
         onError
     })
     return { mutate, isPending, error }
+}
+
+export const useGetArticlesByMember = (memberId: number) => {
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['articlesByMember', memberId],
+        queryFn: () => getArticlesByMember(memberId)
+    })
+    return { data: data, isLoading, error }
+}
+
+export const useGetMyArticles = () => {
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['myArticles'],
+        queryFn: getMyArticles
+    })
+    return { data: data, isLoading, error }
 }

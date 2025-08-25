@@ -1,5 +1,5 @@
 import { CommentResponse, RestaurantInfo } from '@/apis/dto'
-import { PreferenceItem } from '@/apis/profile'
+import { PreferenceItem, ProfileDetailResponse } from '@/apis/profile'
 
 export const MockAnnouncements = [
     {
@@ -153,7 +153,8 @@ type MyProfileData = {
     meetingCount: number
 }
 
-export const MockMyProfileData = {
+export const MockMyProfileData: ProfileDetailResponse = {
+    memberId: 1,
     profileImageUrl: '/src/assets/icons/icon_profile_default.svg',
     userName: '서은우',
     bio: '기억이 아닌 추억으로',

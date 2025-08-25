@@ -2,9 +2,30 @@ import { useEffect, useMemo } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { Header, BottomNavigation } from '@/components'
-import { useBottomNavStore } from '@/store'
+import { useAuthStore, useBottomNavStore } from '@/store'
+import { useGetMyProfile } from '@/query'
 
 export function Layout() {
+    const { userId, username, setUserId, setUsername, setProfile } =
+        useAuthStore()
+    const { data: myProfile, refetch } = useGetMyProfile()
+    useEffect(() => {
+        if (!userId && !username) {
+            if (myProfile) {
+                setUserId(myProfile.data.memberId.toString())
+                setUsername(myProfile.data.userName)
+                setProfile({
+                    profileImageUrl: myProfile.data.profileImageUrl,
+                    userName: myProfile.data.userName,
+                    bio: myProfile.data.bio,
+                    meetingCount: myProfile.data.meetingCount
+                })
+                console.log(myProfile.data)
+            } else {
+                refetch()
+            }
+        }
+    }, [myProfile])
     return (
         <div className="bg-gray-1 flex h-screen min-h-screen w-screen min-w-screen flex-col">
             {/* Header */}

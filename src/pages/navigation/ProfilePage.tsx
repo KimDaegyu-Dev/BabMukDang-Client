@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { BOTTOM_NAVIGATION_HEIGHT } from '@/constants/bottomNav'
 import { MockMyProfileData } from '@/constants/mockData'
@@ -11,18 +11,35 @@ import {
     ProfileSection
 } from '@/components'
 import { useGetMyProfileDetail, useLogout } from '@/query'
+import { ProfileDetailResponse } from '@/apis/profile'
 
 export function ProfilePage() {
     const { hideHeader, resetHeader } = useHeader()
     const { data: profileData } = useGetMyProfileDetail()
     const { mutate: logout } = useLogout()
-    const profile = profileData?.data ?? MockMyProfileData
+    const [profile, setProfile] = useState<ProfileDetailResponse>(
+        profileData?.data ?? MockMyProfileData
+    )
     useEffect(() => {
         hideHeader()
         return () => {
             resetHeader()
         }
     }, [])
+    useEffect(() => {
+        if (profileData) {
+            setProfile({
+                memberId: profileData.data.memberId,
+                profileImageUrl: profileData.data.profileImageUrl,
+                userName: profileData.data.userName,
+                bio: profileData.data.bio,
+                meetingCount: profileData.data.meetingCount,
+                likes: profileData.data.likes,
+                allergies: profileData.data.allergies,
+                dislikes: profileData.data.dislikes
+            })
+        }
+    }, [profileData])
     return (
         <main className="relative h-full min-h-full">
             {/* 프로필 섹션 */}

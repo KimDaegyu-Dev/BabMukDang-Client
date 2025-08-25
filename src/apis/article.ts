@@ -5,7 +5,8 @@ import {
     CommentPostRequest,
     CommentResponse,
     LikePostResponse,
-    PageArticleSummaryResponse
+    PageArticleSummaryResponse,
+    BaseResponse
 } from './dto'
 
 export const getArticle = async (
@@ -86,4 +87,32 @@ export const deleteArticleComment = async (
         `${import.meta.env.VITE_BASE_API_URL}/articles/comments/${commentId}`
     )
     return res.data as void
+}
+
+export const getArticlesByMember = async (
+    memberId: number
+): Promise<BaseResponse<PageArticleSummaryResponse>> => {
+    const res = await client.get(
+        `${import.meta.env.VITE_BASE_API_URL}/members/${memberId}/articles`,
+        {
+            params: {
+                page: 0
+            }
+        }
+    )
+    return res.data as BaseResponse<PageArticleSummaryResponse>
+}
+
+export const getMyArticles = async (): Promise<
+    BaseResponse<PageArticleSummaryResponse>
+> => {
+    const res = await client.get(
+        `${import.meta.env.VITE_BASE_API_URL}/members/me/articles`,
+        {
+            params: {
+                page: 0
+            }
+        }
+    )
+    return res.data as BaseResponse<PageArticleSummaryResponse>
 }

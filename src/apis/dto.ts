@@ -16,10 +16,17 @@ export interface Post {
 
 export interface PostRequest extends Post {}
 export interface PostResponse extends Post {
-    id: number
-    authorName: string
+    postId: number
+    author: {
+        authorId: number
+        name: string
+        profileImageUrl: string
+    }
     createdAt: string
-    participantNames: string[]
+    participants: {
+        name: string
+        profileImageUrl: string
+    }[]
 }
 
 export interface TokenResponse {

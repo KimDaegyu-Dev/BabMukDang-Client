@@ -12,7 +12,13 @@ export {
     getArticleComments,
     getHomeArticles,
     getArticlesByAuthor,
-    postArticle
+    postArticle,
+    getArticlesByMember,
+    getMyArticles,
+    deleteArticle,
+    deleteArticleComment,
+    likeArticle,
+    postArticleComment
 } from './article'
 
 export {

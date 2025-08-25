@@ -8,11 +8,11 @@ import {
 } from '@/apis'
 
 export const useGetAnnouncements = () => {
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, error, refetch } = useQuery({
         queryKey: ['announcements'],
         queryFn: getAnnouncements
     })
-    return { data: data?.data, isLoading, error }
+    return { data: data?.data, isLoading, error, refetch }
 }
 
 export const usePostAnnouncement = (
@@ -51,10 +51,13 @@ export const useJoinAnnouncement = (
     return { mutate, isPending, error }
 }
 
-export const useSubscribeAnnouncement = (
-    onSuccess: () => void,
+export const useSubscribeAnnouncement = ({
+    onSuccess,
+    onError
+}: {
+    onSuccess: () => void
     onError: (error: Error) => void
-) => {
+}) => {
     const { mutate, isPending, error } = useMutation({
         mutationFn: subscribeAnnouncement,
         onSuccess,
