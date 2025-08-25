@@ -69,12 +69,12 @@ export function WaitingPage() {
                 </div>
 
                 {/* 사용자 이름 */}
-                <h2 className="text-title1-semibold mb-32 text-black">
+                {/* <h2 className="text-title1-semibold mb-32 text-black">
                     {participants
                         .map(participant => participant.username)
                         .join(', ')}{' '}
                     님
-                </h2>
+                </h2> */}
 
                 {/* Time and Location Info */}
                 <div className="rounded-12 border-primary-400 mb-14 border p-16">

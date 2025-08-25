@@ -176,6 +176,9 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         })
         socket?.on('stage-changed', data => {
             setStage(data.stage)
+            navigate(`/${matchType}/${data.stage}/${roomId}`, {
+                replace: true
+            })
             setIsSelfReady(false)
         })
 
