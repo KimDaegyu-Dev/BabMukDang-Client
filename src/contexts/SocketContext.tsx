@@ -9,7 +9,7 @@ import React, {
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 import { useAuthStore } from '@/store/authStore'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 
 interface ChatMessageDto {
     messageId: string
@@ -65,7 +65,12 @@ export const useSocket = () => {
     if (!ctx) throw new Error('useSocket must be used inside <SocketProvider>')
     return ctx
 }
-
+interface Participant {
+    userId: string
+    username: string
+    userProfileImageURL: string
+    ready: boolean
+}
 export function SocketProvider({ children }: { children: React.ReactNode }) {
     const [socket, setSocket] = useState<Socket | null>(null)
     const mounted = useRef(false)
@@ -77,7 +82,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     const [chatMessages, setChatMessages] = useState<ChatMessageDto[]>([])
     const [initialState, setInitialState] = useState<any>(null)
     const [categories, setCategories] = useState<Category[]>([])
-    const [participants, setParticipants] = useState<any[]>([])
+    const [participants, setParticipants] = useState<Participant[]>([])
     const [readyCount, setReadyCount] = useState(0)
     const [participantCount, setParticipantCount] = useState(0)
     const [stage, setStage] = useState('waiting')
@@ -116,7 +121,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
             s.close()
         }
     }, [accessToken, roomId, matchType]) // token과 roomId가 변경될 때마다 재생성
-
+    const location = useLocation()
     useEffect(() => {
         if (!socket) return
         socket.onAny((event, ...args) => {
@@ -130,8 +135,13 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
             setStage(data.stage)
             setIsSelfReady(false)
         })
+
         socket?.on('initial-state-response', data => {
             setInitialState(data)
+            if (location.pathname.split('/')[2] === 'waiting') {
+                console.log('initial-state-participants', data)
+                setParticipants(data)
+            }
         })
         socket?.on('join-room', data => {
             setParticipants(data)

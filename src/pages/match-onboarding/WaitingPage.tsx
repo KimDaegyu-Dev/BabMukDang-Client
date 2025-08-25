@@ -1,11 +1,16 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useMatchStore } from '@/store/matchStore'
 import { useSocket } from '@/contexts/SocketContext'
-import { LocationGrayIcon, PeopleGrayIcon, TimeGrayIcon } from '@/assets/icons'
+import {
+    LocationGrayIcon,
+    PeopleGrayIcon,
+    ProfileDefaultIcon,
+    TimeGrayIcon
+} from '@/assets/icons'
 
 export function WaitingPage() {
     const navigate = useNavigate()
-    const { matchType } = useSocket()
+    const { matchType, participants } = useSocket()
     const matchedUser = {
         id: '1',
         name: '김사자',
@@ -33,45 +38,30 @@ export function WaitingPage() {
                 </h1>
 
                 {/* 프로필 이미지 */}
-                <div className="shadow-drop-1 mb-20 h-[169px] w-[169px] overflow-hidden rounded-full">
-                    {matchedUser?.profileImage ? (
-                        <img
-                            src={matchedUser.profileImage}
-                            alt={`${matchedUser.name} 프로필`}
-                            className="h-full w-full object-cover"
-                        />
-                    ) : (
-                        <div className="bg-gray-3 flex h-full w-full items-center justify-center">
-                            <svg
-                                width="48"
-                                height="48"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
-                                    stroke="#979797"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
+                <div className="ml-10 flex items-center justify-center">
+                    {participants?.map(participant => (
+                        <div
+                            key={participant.userId}
+                            className="shadow-drop-1 mb-20 -ml-10 size-120 overflow-hidden rounded-full">
+                            {participant?.userProfileImageURL ? (
+                                <img
+                                    src={participant.userProfileImageURL}
+                                    alt={`${participant.username} 프로필`}
+                                    className="bg-gray-3 h-full w-full object-cover"
                                 />
-                                <circle
-                                    cx="12"
-                                    cy="7"
-                                    r="4"
-                                    stroke="#979797"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
+                            ) : (
+                                <ProfileDefaultIcon className="size-full" />
+                            )}
                         </div>
-                    )}
+                    ))}
                 </div>
 
                 {/* 사용자 이름 */}
                 <h2 className="text-title1-semibold mb-32 text-black">
-                    {matchedUser?.name || '사용자'} 님
+                    {participants
+                        .map(participant => participant.username)
+                        .join(', ')}{' '}
+                    님
                 </h2>
 
                 {/* Time and Location Info */}
