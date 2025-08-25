@@ -9,7 +9,6 @@ import { KebabButton } from '@/components'
 import { Post, PostResponse } from '@/apis/dto'
 import { useState } from 'react'
 import { MockAnnouncements } from '@/constants/mockData'
-import { useDeleteAnnouncement } from '@/query'
 
 export function AnnouncementBottomSheet({
     isAdd,
@@ -31,9 +30,7 @@ export function AnnouncementBottomSheet({
                 {!isAdd && (
                     <KebabButton
                         className="absolute top-8 right-20"
-                        onClick={() => {
-                            deleteAnnouncement(myAnnouncement?.postId)
-                        }}
+                        onClick={() => {}}
                     />
                 )}
                 <span
