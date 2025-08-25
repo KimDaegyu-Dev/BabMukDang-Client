@@ -67,6 +67,8 @@ const SocketContext = createContext<{
     }
     dateSelections: { userId: string; dates: string[] }[]
     timeSelections: { userId: string; times: string[] }[]
+    locationInitial: string | undefined
+    meetingAtInitial: string | undefined
 } | null>(null)
 export const useSocket = () => {
     const ctx = useContext(SocketContext)
@@ -79,6 +81,11 @@ interface Participant {
     userProfileImageURL: string
     ready: boolean
 }
+interface WaitingInitialState {
+    participants: Participant[]
+    locationInitial: string | undefined
+    meetingAt: string | undefined
+}
 export function SocketProvider({ children }: { children: React.ReactNode }) {
     const [socket, setSocket] = useState<Socket | null>(null)
     const mounted = useRef(false)
@@ -89,7 +96,8 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         matchType: 'announcement' | 'invitation'
     }>()
     const [chatMessages, setChatMessages] = useState<ChatMessageDto[]>([])
-    const [initialState, setInitialState] = useState<any>(null)
+    const [initialState, setInitialState] =
+        useState<WaitingInitialState | null>(null)
     const [categories, setCategories] = useState<Category[]>([])
     const [participants, setParticipants] = useState<Participant[]>([])
     const [readyCount, setReadyCount] = useState(0)
@@ -103,6 +111,12 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         menu: undefined,
         restaurant: undefined
     })
+    const [locationInitial, setLocationInitial] = useState<string | undefined>(
+        undefined
+    )
+    const [meetingAtInitial, setMeetingAtInitial] = useState<
+        string | undefined
+    >(undefined)
     const [dateSelections, setDateSelections] = useState<
         { userId: string; dates: string[] }[]
     >([])
@@ -169,13 +183,23 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
             setInitialState(data)
             if (location.pathname.split('/')[2] === 'waiting') {
                 console.log('initial-state-participants', data)
-                setParticipants(data)
+                setParticipants(data.participants)
+                setLocationInitial(data.locationInitial)
+                setMeetingAtInitial(data.meetingAt)
             }
             if (data?.stage === 'date' && Array.isArray(data?.initialState)) {
                 setDateSelections(data.initialState as any)
             }
             if (data?.stage === 'time' && Array.isArray(data?.initialState)) {
                 setTimeSelections(data.initialState as any)
+            }
+        })
+        // 방이 자동 할당되었을 때, URL을 갱신하여 roomId를 반영
+        socket?.on('room-assigned', (data: { roomId: string }) => {
+            if (!roomId && data?.roomId) {
+                navigate(`/${matchType}/${stage}/${data.roomId}`, {
+                    replace: true
+                })
             }
         })
         socket?.on('join-room', data => {
@@ -248,7 +272,9 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
                 setFinalState,
                 finalStateMessage,
                 dateSelections,
-                timeSelections
+                timeSelections,
+                locationInitial,
+                meetingAtInitial
             }}>
             {children}
         </SocketContext.Provider>

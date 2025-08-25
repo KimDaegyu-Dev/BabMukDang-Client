@@ -135,7 +135,7 @@ function App() {
                                 element={<PreferMenuPage />}
                             />
                             <Route
-                                path="/make-profile"
+                                path="/onboarding"
                                 element={<MakeProfilePage />}
                             />
                             <Route
@@ -150,6 +150,43 @@ function App() {
 
                         {/* 매칭 온보딩 페이지 */}
                         <Route element={<OnboardingLayout />}>
+                            {/* Auto-join routes without explicit roomId */}
+                            <Route
+                                path="/:matchType/waiting"
+                                element={<WaitingPage />}
+                            />
+                            <Route
+                                path="/:matchType/location"
+                                element={<LocationSelectionPage />}
+                            />
+                            <Route
+                                path="/:matchType/menu"
+                                element={<MenuPage />}
+                            />
+                            <Route
+                                path="/:matchType/restaurant"
+                                element={<RestaurantPage />}
+                            />
+                            <Route
+                                path="/:matchType/exclude-menu"
+                                element={<MenuExcludePage />}
+                            />
+                            <Route
+                                path="/:matchType/location-vote"
+                                element={<LocationVotePage />}
+                            />
+                            <Route
+                                path="/:matchType/finish"
+                                element={<FinishPage />}
+                            />
+                            <Route
+                                path="/:matchType/time"
+                                element={<TimePage />}
+                            />
+                            <Route
+                                path="/:matchType/date"
+                                element={<DatePage />}
+                            />
                             <Route
                                 path="/:matchType/waiting/:roomId"
                                 element={<WaitingPage />}
