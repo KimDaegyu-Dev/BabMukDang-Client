@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, PersistOptions } from 'zustand/middleware'
 
-export const useAuthStore = create<{
+interface AuthState {
     accessToken: string | null
     refreshToken: string | null
     username: string | null
@@ -28,11 +28,37 @@ export const useAuthStore = create<{
         bio: string | null
         meetingCount: number | null
     }) => void
-
     logout: () => void
-}>(
+}
+
+// localStorage에 저장될 상태만 정의 (함수 제외)
+interface PersistedAuthState {
+    accessToken: string | null
+    refreshToken: string | null
+    username: string | null
+    userId: string | null
+    profile: {
+        profileImageUrl: string | null
+        userName: string | null
+        bio: string | null
+        meetingCount: number | null
+    }
+}
+
+const persistConfig: PersistOptions<AuthState, PersistedAuthState> = {
+    name: 'auth-storage',
+    partialize: (state): PersistedAuthState => ({
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
+        username: state.username,
+        userId: state.userId,
+        profile: state.profile
+    })
+}
+
+export const useAuthStore = create<AuthState>()(
     persist(
-        (set) => ({
+        set => ({
             accessToken: null,
             refreshToken: null,
             username: null,
@@ -74,15 +100,6 @@ export const useAuthStore = create<{
                 })
             }
         }),
-        {
-            name: 'auth-storage', // localStorage에 저장될 키 이름
-            partialize: (state) => ({
-                accessToken: state.accessToken,
-                refreshToken: state.refreshToken,
-                username: state.username,
-                userId: state.userId,
-                profile: state.profile
-            })
-        }
+        persistConfig
     )
 )
