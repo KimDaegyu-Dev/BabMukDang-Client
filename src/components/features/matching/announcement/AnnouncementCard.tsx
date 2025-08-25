@@ -24,15 +24,23 @@ export function AnnouncementCard({
     return (
         <div
             ref={currentIndex === index ? cardRef : null}
-            className={`shadow-drop-1 rounded-16 h-353 w-full bg-white px-12 py-8 transition-all duration-200 ${
+            className={`shadow-drop-1 rounded-16 flex h-353 w-full flex-col items-center justify-between bg-white px-12 py-8 transition-all duration-200 ${
                 isActive ? 'cursor-pointer hover:shadow-lg' : 'cursor-pointer'
             }`}>
             {/* Header with creator info and time left */}
-            <div className="mb-12 flex items-center justify-between">
+            <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-8">
-                    <ProfileDefaultIcon className="size-20" />
+                    {announcement.author.profileImageUrl ? (
+                        <img
+                            src={announcement.author.profileImageUrl}
+                            alt="profile"
+                            className="size-20 rounded-full"
+                        />
+                    ) : (
+                        <ProfileDefaultIcon className="size-20" />
+                    )}
                     <span className="text-body1-semibold">
-                        {announcement.authorName}
+                        {announcement.author.name}
                     </span>
                 </div>
                 <span className="text-caption-medium text-gray-5">
@@ -41,55 +49,65 @@ export function AnnouncementCard({
             </div>
 
             {/* Title */}
-            <div className="mb-16 text-center">
-                <span className="text-title1-bold whitespace-pre-line">
-                    {announcement.message}
-                </span>
-            </div>
+            <div className="flex w-218 flex-col gap-20">
+                <div className="text-center">
+                    <span className="text-title1-bold whitespace-pre-line">
+                        {announcement.message}
+                    </span>
+                </div>
 
-            {/* Time and Location Info */}
-            <div className="rounded-12 bg-primary-500 mb-16 p-16">
-                <div className="flex flex-col gap-8">
-                    <div className="flex items-center gap-4">
-                        <TimeWhiteIcon />
-                        <span className="text-body2-semibold text-white">
-                            {formatTime(announcement.meetingAt)}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <LocationWhiteIcon />
-                        <span className="text-body2-semibold text-white">
-                            {announcement.location}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <PeopleWhiteIcon />
-                        <span className="text-body2-semibold text-white">
-                            {announcement.targetCount}명
-                        </span>
+                {/* Time and Location Info */}
+                <div className="rounded-12 bg-primary-500 p-16">
+                    <div className="flex flex-col gap-8">
+                        <div className="flex items-center gap-4">
+                            <TimeWhiteIcon />
+                            <span className="text-body2-semibold text-white">
+                                {formatTime(announcement.meetingAt)}
+                                {/* 2025-08-08T22:30 */}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <LocationWhiteIcon />
+                            <span className="text-body2-semibold text-white">
+                                {announcement.location}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <PeopleWhiteIcon />
+                            <span className="text-body2-semibold text-white">
+                                {announcement.targetCount}명
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            {/* Participants */}
-            <div className="mb-12">
+            <div className="flex w-full flex-col gap-8">
+                {/* Participants */}
                 <span className="text-caption-medium text-gray-4">
                     함께 하는 친구
                 </span>
-            </div>
 
-            <div className="rounded-50 border-primary-200 border p-8">
-                <div className="flex flex-row gap-8">
-                    {announcement.participantNames.map((participant, index) => (
-                        <div
-                            key={index}
-                            className="flex items-center gap-8">
-                            <ProfileDefaultIcon className="size-20" />
-                            <span className="text-body2-medium">
-                                {participant}
-                            </span>
-                        </div>
-                    ))}
+                <div className="rounded-50 border-primary-200 h-40 border p-8">
+                    <div className="flex flex-row gap-8">
+                        {announcement.participants.map((participant, index) => (
+                            <div
+                                key={index}
+                                className="flex items-center gap-8">
+                                {participant.profileImageUrl ? (
+                                    <img
+                                        src={participant.profileImageUrl}
+                                        alt="profile"
+                                        className="size-20 rounded-full"
+                                    />
+                                ) : (
+                                    <ProfileDefaultIcon className="size-20" />
+                                )}
+                                <span className="text-body2-medium">
+                                    {participant.name}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
@@ -112,10 +130,14 @@ export function EmptyAnnouncementCard() {
 }
 
 function calculateTimeLeft(createdAt: string) {
+    // 2025-08-08T22:30 ->1시간 30분 후 종료
+    // GMT+0 기준
+    const now = new Date()
+    const GMTNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000
     const createdAtDate = new Date(createdAt)
     const expiresAtDate = new Date(createdAtDate.getTime() + 2 * 60 * 60 * 1000)
-    const now = new Date()
-    const timeLeft = expiresAtDate.getTime() - now.getTime()
+    const expiresAtGMT = expiresAtDate.getTime()
+    const timeLeft = expiresAtGMT - GMTNow
     const hours = Math.floor(timeLeft / (1000 * 60 * 60))
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))
     const timeLeftString = `${hours}시간 ${minutes}분 후 종료`

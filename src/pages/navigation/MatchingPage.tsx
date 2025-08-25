@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { MockAnnouncements, MockFriendList } from '@/constants/mockData'
-import { PostResponse } from '@/apis/dto'
+import { Post, PostResponse } from '@/apis/dto'
 
 import { useHeader } from '@/hooks'
 import {
@@ -14,7 +14,7 @@ import {
     FriendListSection
 } from '@/components'
 import { BOTTOM_NAVIGATION_HEIGHT } from '@/constants/bottomNav'
-import { useGetAnnouncements } from '@/query/announcementQuery'
+import { useGetAnnouncements, useSubscribeAnnouncement } from '@/query'
 import { useAuthStore } from '@/store'
 import { useGetInvitations } from '@/query/invitationQuery'
 
@@ -38,20 +38,6 @@ export function MatchingPage() {
         }
     }, [])
 
-    const [announcements, setAnnouncements] = useState<PostResponse[]>([])
-
-    const { setTokens } = useAuthStore()
-    const { data: announcementsData } = useGetAnnouncements()
-    useEffect(() => {
-        setTokens({
-            accessToken:
-                'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzU1ODk4NTcwLCJleHAiOjE3NTU5MDIxNzAsInVzZXJuYW1lIjoi6rmA64yA6recIiwiZW1haWwiOiI5dXRhbmdAbmF2ZXIuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIn0.gYC9impIDlIKSmaejT9WVdFGR2uBhu4X3SVrfNsoGBw',
-            refreshToken: ''
-        })
-        console.log('announcementsData', announcementsData)
-        setAnnouncements(announcementsData || [])
-    }, [])
-
     return (
         <div className="absolute top-0 left-0 flex h-full w-screen flex-col">
             <TabHeader
@@ -62,7 +48,7 @@ export function MatchingPage() {
                 }
             />
             {activeTab === 'announcement' ? (
-                <AnnouncementTab announcements={announcements} />
+                <AnnouncementTab />
             ) : (
                 <InvitationTab />
             )}
@@ -70,18 +56,31 @@ export function MatchingPage() {
     )
 }
 
-function AnnouncementTab({ announcements }: { announcements: PostResponse[] }) {
+function AnnouncementTab() {
+    const [announcements, setAnnouncements] = useState<PostResponse[]>([])
+    const { userId } = useAuthStore()
+    const [myAnnouncements, setMyAnnouncements] = useState<PostResponse | null>(
+        null
+    )
+    const { data: announcementsData } = useGetAnnouncements()
+    useEffect(() => {
+        console.log('announcementsData', announcementsData)
+        setMyAnnouncements(
+            announcementsData?.find(
+                announcement => announcement.author.authorId === Number(userId)
+            ) || null
+        )
+        console.log('myAnnouncements', myAnnouncements)
+        setAnnouncements(announcementsData || [])
+    }, [])
     return (
         <div className="bg-primary-100 flex h-full flex-col justify-center pb-90">
             <div className="flex flex-1 flex-col justify-center pb-90">
                 <AnnouncementCarousel announcements={announcements} />
-                <JoinCompleteModal
-                    id="join-complete-modal"
-                    title="참여하기가 완료되었습니다."
-                    description="최종 매칭이 완료되면 알림을 보내드릴게요."
-                    acceptText="알림 받기"
+                <AnnouncementBottomSheet
+                    isAdd={myAnnouncements === null}
+                    myAnnouncement={myAnnouncements || null}
                 />
-                <AnnouncementBottomSheet />
             </div>
         </div>
     )

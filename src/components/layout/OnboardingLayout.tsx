@@ -8,7 +8,8 @@ import {
     ToastMessage,
     OnboardingButton,
     ProgressBar,
-    OnboardingHeader
+    OnboardingHeader,
+    Header
 } from '@/components'
 import { useHeader, useBottomNav } from '@/hooks'
 
@@ -70,16 +71,24 @@ export const OnboardingLayout = () => {
     )
 }
 const ContentBlocker = () => {
-    const { isSelfReady } = useSocket()
+    const { isSelfReady, socket } = useSocket()
     const { pathname } = useLocation()
     const isWaiting = pathname.split('/')[2] === 'waiting'
     const isFinish = pathname.split('/')[2] === 'finish'
+    const navigate = useNavigate()
     return (
         <div className={isSelfReady ? 'pointer-events-none' : ''}>
             {!(isWaiting || isFinish) && (
                 <OnboardingHeader isSkipable={false} />
             )}
-            <Outlet />
+            {socket ? (
+                <Outlet />
+            ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                    오류가 발생했습니다. 다시 시도해주세요.
+                    <button onClick={() => navigate('/')}>홈으로 이동</button>
+                </div>
+            )}
         </div>
     )
 }
