@@ -24,7 +24,7 @@ export function FinishPage() {
                     </h1>
 
                     {/* 프로필 이미지 */}
-                    <div className="ml-10 flex items-center justify-center">
+                    {/* <div className="ml-10 flex items-center justify-center">
                         {participants?.map(participant => (
                             <div
                                 key={participant.userId}
@@ -48,7 +48,7 @@ export function FinishPage() {
                             .map(participant => participant.username)
                             .join(', ')}{' '}
                         님
-                    </h2>
+                    </h2> */}
 
                     {/* Time and Location Info */}
                     <div className="rounded-12 border-primary-400 mb-14 border p-16">
