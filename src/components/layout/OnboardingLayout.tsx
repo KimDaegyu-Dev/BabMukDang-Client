@@ -28,7 +28,7 @@ export const OnboardingLayout = () => {
         hideHeader()
         hideBottomNav()
         isFirstStageEffect.current = true
-        navigate(`/${matchType}/${stage}/1`, {
+        navigate(`/${matchType}/${stage}`, {
             replace: true
         })
         return () => {
@@ -37,7 +37,7 @@ export const OnboardingLayout = () => {
         }
     }, [])
     useLayoutEffect(() => {
-        navigate(`/${matchType}/${stage}/1`, {
+        navigate(`/${matchType}/${stage}`, {
             replace: true
         })
         if (isFirstStageEffect.current) {
@@ -63,7 +63,7 @@ export const OnboardingLayout = () => {
             <ChatModal
                 isOpen={isChatOpen}
                 onClose={() => setIsChatOpen(false)}
-                roomId="1"
+                roomId={undefined}
             />
             <ToastMessage />
             <SocketInner setStage={setStage} />

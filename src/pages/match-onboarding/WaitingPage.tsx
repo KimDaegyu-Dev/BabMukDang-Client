@@ -7,21 +7,31 @@ import {
     ProfileDefaultIcon,
     TimeGrayIcon
 } from '@/assets/icons'
+import { useMemo } from 'react'
 
 export function WaitingPage() {
     const navigate = useNavigate()
-    const { matchType, participants, stage } = useSocket()
+    const {
+        matchType,
+        participants,
+        stage,
+        locationInitial,
+        meetingAtInitial
+    } = useSocket()
     const matchedUser = {
         id: '1',
         name: '김사자',
         profileImage: undefined
     }
 
-    const meetingInfo = {
-        location: '서울시 강남구 역삼동 근처',
-        time: '오후 1시 약속',
-        maxParticipants: 2
-    }
+    const meetingInfo = useMemo(
+        () => ({
+            location: locationInitial,
+            time: meetingAtInitial,
+            maxParticipants: participants.length
+        }),
+        [locationInitial, meetingAtInitial]
+    )
     return (
         <div className="relative flex h-full w-full flex-col items-center justify-baseline pt-100">
             {/* 메인 컨텐츠 */}
@@ -72,7 +82,8 @@ export function WaitingPage() {
                         <div className="flex items-center gap-4">
                             <TimeGrayIcon />
                             <span className="text-body2-semibold text-black">
-                                {meetingInfo.time}
+                                {meetingInfo.time &&
+                                    formatTime(meetingInfo.time)}
                             </span>
                         </div>
                         <div className="flex items-center gap-4">
@@ -99,4 +110,17 @@ export function WaitingPage() {
             </div>
         </div>
     )
+}
+
+function formatTime(meetingAt: string) {
+    // 2025-08-08T22:30 -> 8월 7일 오후 7시 30분
+    const date = new Date(meetingAt)
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours()
+    const minutes = date.getMinutes()
+
+    const ampm = date.getHours() >= 12 ? '오후' : '오전'
+    const timeString = `${month}월 ${day}일 ${ampm} ${hours}시 ${minutes}분`
+    return timeString
 }
