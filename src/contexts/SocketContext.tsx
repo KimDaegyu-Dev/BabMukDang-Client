@@ -181,7 +181,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
         socket?.on('initial-state-response', data => {
             setInitialState(data)
-            if (location.pathname.split('/')[2] === 'waiting') {
+            if (stage === 'waiting') {
                 console.log('initial-state-participants', data)
                 setParticipants(data.participants)
                 setLocationInitial(data.locationInitial)

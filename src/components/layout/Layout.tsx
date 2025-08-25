@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 import { Header, BottomNavigation } from '@/components'
 import { useAuthStore, useBottomNavStore } from '@/store'
@@ -9,7 +9,10 @@ export function Layout() {
     const { userId, username, setUserId, setUsername, setProfile } =
         useAuthStore()
     const { data: myProfile, refetch } = useGetMyProfile()
+    const { accessToken, refreshToken } = useAuthStore()
+    const navigate = useNavigate()
     useEffect(() => {
+        console.log('myProfile', myProfile, userId, username)
         if (!userId && !username) {
             if (myProfile) {
                 setUserId(myProfile.data.memberId.toString())
@@ -26,6 +29,11 @@ export function Layout() {
             }
         }
     }, [myProfile])
+    useEffect(() => {
+        if (!accessToken && !refreshToken) {
+            navigate('/login')
+        }
+    }, [accessToken, refreshToken])
     return (
         <div className="bg-gray-1 flex h-screen min-h-screen w-screen min-w-screen flex-col">
             {/* Header */}
