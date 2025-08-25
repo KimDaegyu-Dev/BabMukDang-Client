@@ -9,6 +9,7 @@ import { KebabButton } from '@/components'
 import { Post, PostResponse } from '@/apis/dto'
 import { useState } from 'react'
 import { MockAnnouncements } from '@/constants/mockData'
+import { useDeleteAnnouncement } from '@/query'
 
 export function AnnouncementBottomSheet({
     isAdd,
@@ -23,13 +24,16 @@ export function AnnouncementBottomSheet({
         targetCount: 0,
         meetingAt: ''
     })
+    const { mutate: deleteAnnouncement } = useDeleteAnnouncement()
     return (
         <BottomSheet initialExposure={75}>
             <div className="relative flex h-full w-full flex-col items-center justify-baseline gap-35 bg-gradient-to-b from-white to-[#FED9CB] pt-12">
                 {!isAdd && (
                     <KebabButton
                         className="absolute top-8 right-20"
-                        onClick={() => {}}
+                        onClick={() => {
+                            deleteAnnouncement(myAnnouncement?.postId)
+                        }}
                     />
                 )}
                 <span

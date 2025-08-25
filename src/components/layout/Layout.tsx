@@ -6,7 +6,7 @@ import { useAuthStore, useBottomNavStore } from '@/store'
 import { useGetMyProfile } from '@/query'
 
 export function Layout() {
-    const { userId, username, setUserId, setUsername, setProfile } =
+    const { userId, username, setUserId, setUsername, setProfile, logout } =
         useAuthStore()
     const { data: myProfile, refetch } = useGetMyProfile()
     const { accessToken, refreshToken } = useAuthStore()
@@ -30,7 +30,9 @@ export function Layout() {
         }
     }, [myProfile])
     useEffect(() => {
+        console.log('accessToken is accessToken', accessToken)
         if (!accessToken) {
+            logout()
             navigate('/login')
         }
     }, [])
