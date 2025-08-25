@@ -3,6 +3,9 @@ import { PostResponse } from '@/apis/dto'
 import { AnnouncementCard, EmptyAnnouncementCard } from './AnnouncementCard'
 import { JoinButton } from './AnnouncementJoinButton'
 import { useAuthStore } from '@/store'
+import { useState } from 'react'
+import { JoinCompleteModal } from '@/components'
+import { useSubscribeAnnouncement } from '@/query'
 
 export function AnnouncementCarousel({
     announcements
@@ -24,6 +27,16 @@ export function AnnouncementCarousel({
         clickThreshold: 5 // 5px 이내 움직임만 클릭으로 인정
     })
     const { userId } = useAuthStore()
+    const [selectedAnnouncement, setSelectedAnnouncement] =
+        useState<PostResponse | null>(null)
+    const { mutate: subscribeAnnouncement } = useSubscribeAnnouncement({
+        onSuccess: () => {
+            console.log('subscribeAnnouncement')
+        },
+        onError: () => {
+            console.log('subscribeAnnouncement error')
+        }
+    })
     return (
         <div
             className="flex w-full flex-row overflow-hidden select-none"
@@ -61,7 +74,7 @@ export function AnnouncementCarousel({
 
                             return (
                                 <div
-                                    key={announcement.id}
+                                    key={announcement.postId}
                                     className="z-100 flex w-280 flex-col gap-16 transition-all duration-300 ease-out"
                                     style={{
                                         transform: `scale(${scale}) rotate(${rotate}deg)`,
@@ -85,8 +98,30 @@ export function AnnouncementCarousel({
                                         isActive={isActive}
                                     />
                                     {isActive && (
-                                        <JoinButton disabled={isDragging} />
+                                        <JoinButton
+                                            disabled={isDragging}
+                                            announcement={announcement}
+                                            setSelectedAnnouncement={
+                                                setSelectedAnnouncement
+                                            }
+                                        />
                                     )}
+                                    <JoinCompleteModal
+                                        announcementId={
+                                            selectedAnnouncement?.postId.toString() ||
+                                            ''
+                                        }
+                                        onAccept={() => {
+                                            subscribeAnnouncement(
+                                                selectedAnnouncement?.postId ||
+                                                    0
+                                            )
+                                        }}
+                                        id="join-complete-modal"
+                                        title="참여하기가 완료되었습니다."
+                                        description="최종 매칭이 완료되면 알림을 보내드릴게요."
+                                        acceptText="알림 받기"
+                                    />
                                 </div>
                             )
                         })}

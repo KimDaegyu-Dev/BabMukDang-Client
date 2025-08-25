@@ -1,19 +1,57 @@
+import { Post } from '@/apis/dto'
 import { DownIcon, UpIcon } from '@/assets/icons'
 import { useRef, useState } from 'react'
 
-export function AddAnnouncementCard() {
-    const [message, setMessage] = useState('')
+export function AddAnnouncementCard({
+    announcementAddData,
+    setAnnouncementAddData
+}: {
+    announcementAddData: Post
+    setAnnouncementAddData: (data: Post) => void
+}) {
+    const [message, setMessage] = useState(announcementAddData.message)
     const [period, setPeriod] = useState<'오전' | '오후'>('오전')
     const [hour, setHour] = useState<number>(12)
     const [minute, setMinute] = useState<number>(0)
-    const [place, setPlace] = useState('')
-    const [participants, setParticipants] = useState<number>(0)
+    const [place, setPlace] = useState(announcementAddData.location)
+    const [participants, setParticipants] = useState<number>(
+        announcementAddData.targetCount
+    )
     const [unlimited, setUnlimited] = useState<boolean>(false)
     const placeRef = useRef<HTMLInputElement>(null)
     const messageRef = useRef<HTMLTextAreaElement>(null)
+    const updateMeetingAt = (
+        nextHour: number = hour,
+        nextMinute: number = minute
+    ) => {
+        const datePart = (
+            announcementAddData.meetingAt || new Date().toISOString()
+        ).split('T')[0]
+        const hh = String(nextHour).padStart(2, '0')
+        const mm = String(nextMinute).padStart(2, '0')
+        setAnnouncementAddData({
+            ...announcementAddData,
+            meetingAt: `${datePart}T${hh}:${mm}`
+        })
+    }
     const decParticipants = () =>
-        setParticipants(prev => (prev > 0 ? prev - 1 : 0))
-    const incParticipants = () => setParticipants(prev => prev + 1)
+        setParticipants(prev => {
+            const next = prev > 0 ? prev - 1 : 0
+            setAnnouncementAddData({
+                ...announcementAddData,
+                targetCount: next
+            })
+            return next
+        })
+    const incParticipants = () =>
+        setParticipants(prev => {
+            const next = prev + 1
+            setAnnouncementAddData({
+                ...announcementAddData,
+                targetCount: next
+            })
+            return next
+        })
     return (
         <div
             className={`shadow-drop-1 rounded-16 z-10000 h-353 w-full bg-white px-16 pt-16 pb-14`}>
@@ -24,7 +62,14 @@ export function AddAnnouncementCard() {
                         id="message"
                         value={message}
                         ref={messageRef}
-                        onChange={e => setMessage(e.target.value)}
+                        onChange={e => {
+                            const val = e.target.value
+                            setMessage(val)
+                            setAnnouncementAddData({
+                                ...announcementAddData,
+                                message: val
+                            })
+                        }}
                         placeholder={`친구들에게 전할 메시지를 적어보세요\n(20자 내)`}
                         className="text-body2-medium h-full w-full resize-none"
                         style={{
@@ -59,13 +104,25 @@ export function AddAnnouncementCard() {
                     <button
                         type="button"
                         className="text-body2-medium"
-                        onClick={() => setHour(h => (h === 23 ? 0 : h + 1))}>
+                        onClick={() =>
+                            setHour(h => {
+                                const next = h === 23 ? 0 : h + 1
+                                updateMeetingAt(next, minute)
+                                return next
+                            })
+                        }>
                         {hour.toString().padStart(2, '0')}
                     </button>
                     <button
                         type="button"
                         className="text-body2-medium"
-                        onClick={() => setMinute(m => (m >= 45 ? 0 : m + 15))}>
+                        onClick={() =>
+                            setMinute(m => {
+                                const next = m >= 45 ? 0 : m + 15
+                                updateMeetingAt(hour, next)
+                                return next
+                            })
+                        }>
                         {minute.toString().padStart(2, '0')}
                     </button>
                 </div>
@@ -76,7 +133,14 @@ export function AddAnnouncementCard() {
                 <span className="text-body2-medium text-gray-6">만날 장소</span>
                 <input
                     value={place}
-                    onChange={e => setPlace(e.target.value)}
+                    onChange={e => {
+                        const val = e.target.value
+                        setPlace(val)
+                        setAnnouncementAddData({
+                            ...announcementAddData,
+                            location: val
+                        })
+                    }}
                     ref={placeRef}
                     placeholder=""
                     className="rounded-6 text-body2-medium px-12"
