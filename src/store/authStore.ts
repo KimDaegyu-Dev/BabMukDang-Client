@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export const useAuthStore = create<{
     accessToken: string | null
@@ -9,6 +10,7 @@ export const useAuthStore = create<{
         profileImageUrl: string | null
         userName: string | null
         bio: string | null
+        meetingCount: number | null
     }
     setTokens: ({
         accessToken,
@@ -28,39 +30,59 @@ export const useAuthStore = create<{
     }) => void
 
     logout: () => void
-}>(set => ({
-    accessToken: null,
-    refreshToken: null,
-    username: null,
-    userId: null,
-    profile: {
-        profileImageUrl: null,
-        userName: null,
-        bio: null,
-        meetingCount: null
-    },
-    setTokens: ({
-        accessToken,
-        refreshToken
-    }: {
-        accessToken: string
-        refreshToken: string
-    }) => set({ accessToken, refreshToken }),
-    clearTokens: () => set({ accessToken: null, refreshToken: null }),
-    setUsername: (username: string) => set({ username }),
-    setUserId: (userId: string) => set({ userId }),
-    setProfile: (profile: {
-        profileImageUrl: string | null
-        userName: string | null
-        bio: string | null
-        meetingCount: number | null
-    }) => set({ profile }),
-    logout: () => {
-        set({
+}>(
+    persist(
+        (set) => ({
             accessToken: null,
             refreshToken: null,
             username: null,
-            userId: null
-        })
-    }
-}))
+            userId: null,
+            profile: {
+                profileImageUrl: null,
+                userName: null,
+                bio: null,
+                meetingCount: null
+            },
+            setTokens: ({
+                accessToken,
+                refreshToken
+            }: {
+                accessToken: string
+                refreshToken: string
+            }) => set({ accessToken, refreshToken }),
+            clearTokens: () => set({ accessToken: null, refreshToken: null }),
+            setUsername: (username: string) => set({ username }),
+            setUserId: (userId: string) => set({ userId }),
+            setProfile: (profile: {
+                profileImageUrl: string | null
+                userName: string | null
+                bio: string | null
+                meetingCount: number | null
+            }) => set({ profile }),
+            logout: () => {
+                set({
+                    accessToken: null,
+                    refreshToken: null,
+                    username: null,
+                    userId: null,
+                    profile: {
+                        profileImageUrl: null,
+                        userName: null,
+                        bio: null,
+                        meetingCount: null
+                    }
+                })
+            }
+        }),
+        {
+            name: 'auth-storage', // localStorage에 저장될 키 이름
+            partialize: (state) => ({
+                accessToken: state.accessToken,
+                refreshToken: state.refreshToken,
+                username: state.username,
+                userId: state.userId,
+                profile: state.profile
+            })
+        }
+    )
+)
