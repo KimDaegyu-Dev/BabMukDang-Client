@@ -48,7 +48,6 @@ const queryClient = new QueryClient({
     }
 })
 function App() {
-    const randomUserId = Math.random().toString(36).substring(2, 15)
     useEffect(() => {
         register()
     }, [])

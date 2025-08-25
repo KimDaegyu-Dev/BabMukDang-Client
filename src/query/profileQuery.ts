@@ -11,7 +11,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 export const useGetMyProfile = () => {
     return useQuery({
         queryKey: ['myProfile'],
-        queryFn: () => getMyProfile()
+        queryFn: getMyProfile
     })
 }
 

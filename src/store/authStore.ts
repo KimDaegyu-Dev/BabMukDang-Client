@@ -5,7 +5,11 @@ export const useAuthStore = create<{
     refreshToken: string | null
     username: string | null
     userId: string | null
-
+    profile: {
+        profileImageUrl: string | null
+        userName: string | null
+        bio: string | null
+    }
     setTokens: ({
         accessToken,
         refreshToken
@@ -16,6 +20,12 @@ export const useAuthStore = create<{
     clearTokens: () => void
     setUsername: (username: string) => void
     setUserId: (userId: string) => void
+    setProfile: (profile: {
+        profileImageUrl: string | null
+        userName: string | null
+        bio: string | null
+        meetingCount: number | null
+    }) => void
 
     logout: () => void
 }>(set => ({
@@ -23,7 +33,12 @@ export const useAuthStore = create<{
     refreshToken: null,
     username: null,
     userId: null,
-
+    profile: {
+        profileImageUrl: null,
+        userName: null,
+        bio: null,
+        meetingCount: null
+    },
     setTokens: ({
         accessToken,
         refreshToken
@@ -34,7 +49,12 @@ export const useAuthStore = create<{
     clearTokens: () => set({ accessToken: null, refreshToken: null }),
     setUsername: (username: string) => set({ username }),
     setUserId: (userId: string) => set({ userId }),
-
+    setProfile: (profile: {
+        profileImageUrl: string | null
+        userName: string | null
+        bio: string | null
+        meetingCount: number | null
+    }) => set({ profile }),
     logout: () => {
         set({
             accessToken: null,
